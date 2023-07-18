@@ -17,6 +17,8 @@
   <!-- Custom styles for this template-->
   <link href="<?= base_url() ?>vendor/css/sb-admin.css" rel="stylesheet">
 
+  
+
 </head>
 
 <body id="page-top">
@@ -56,6 +58,12 @@
         <a class="nav-link" href="<?= base_url('Kas') ?>">
           <i class="fas fa-fw fa-table"></i>
           <span>Data Kas</span></a>
+      </li>
+
+      <li class="nav-item <?php if($page == 'Tipe'){echo 'active';} ?>">
+        <a class="nav-link" href="<?= base_url('Tipe') ?>">
+          <i class="fas fa-fw fa-tag"></i>
+          <span>Data Tipe</span></a>
       </li>
       
       <li class="nav-item <?php if($page == 'Laporan'){echo 'active';} ?>">

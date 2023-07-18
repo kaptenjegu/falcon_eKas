@@ -1,3 +1,15 @@
+<style>
+    #tgl_data_edit::-webkit-calendar-picker-indicator {
+		background: transparent;
+		color: transparent;
+		cursor: pointer;
+		height: 20px;
+		left: 0;
+		position: absolute;
+		right: 0;
+		width: auto;
+	}
+  </style>
 <div class="container-fluid">
 
     <!-- Breadcrumbs-->
@@ -53,7 +65,8 @@
                                     <td>Rp. ' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td>
                                     <td>' . $v->pic_data . '</td>
                                     <td>
-                                    <a href="#" class="btn btn-warning" onclick="get_data(\'' . $v->id_data . '\')"><i class="fa fa-list"></i> Detail</a>
+                                    <a href="#" class="btn btn-warning" onclick="get_data(\'' . $v->id_data . '\')"><i class="fa fa-list"></i> Detail</a>&emsp;
+                                    <a href="'. base_url('Kas_breakdown/hapus_data/' . $this->uri->segment(3) . '/' . $this->uri->segment(4) . '/' . $v->id_data) . '" class="btn btn-danger" style="margin: 5px;" onclick="return confirm(\'Apakah anda ingin menghapus data ' . $v->deskripsi_data . ' ?\')"><i class="fa fa-trash"></i> Hapus Data</a>
                                     </td>
                                     </tr>';
                             $no += 1;
@@ -130,26 +143,49 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Edit Data Minggu</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit Data Kas</h4>
             </div>
-            <form method="POST" action="<?= base_url('Kas_bulan/edit_data/') ?>">
+            <form method="POST" action="<?= base_url('Kas_breakdown/edit_data/') ?>">
                 <div class="modal-body">
                     <input type="hidden" name="id_data_kas" value="<?= $this->db->escape_str($this->uri->segment(3)) ?>">
-                    <input type="hidden" name="id_lokasi" value="<?= $_SESSION['id_lokasi'] ?>">
-                    <input type="hidden" name="id_minggu" id="id_minggu">
+                    <input type="hidden" name="id_minggu" value="<?= $this->db->escape_str($this->uri->segment(4)) ?>">
+                    <input type="hidden" name="id_data" id="id_data">
                     <div class="form-group">
-                        <label>Nama Data</label>
-                        <input type="text" class="form-control" name="nama_minggu" id="nama_minggu" required>
+                        <label>Tanggal</label>
+                        <input type="date" class="form-control" name="tgl_data" id="tgl_data_edit" required>
                     </div>
                     <div class="form-group">
-                        <label>Dana Pengajuan</label>
-                        <input type="text" class="form-control" name="dana_pengajuan" id="dana_pengajuan_edit" required>
+                        <label>Uraian</label>
+                        <input type="text" class="form-control" name="uraian_data" id="uraian_data_edit" required>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <label>Status Anggaran</label>
+                        <input type="text" class="form-control" id="status_data_edit" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipe</label>
+                        <input type="text" class="form-control" id="tipe_data_edit" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" class="form-control" name="qty_data" id="qty_data_edit" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nominal</label>
+                        <input type="number" class="form-control" name="nominal_data" id="nominal_data_edit" required>
+                    </div>
+                    <div class="form-group">
+                        <label>PIC</label>
+                        <input type="text" class="form-control" name="pic_data" id="pic_data_edit" required>
+                    </div>
+                </div>                
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
                 </div>
+                <br>
+                <br>
+                
             </form>
         </div>
     </div>

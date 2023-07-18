@@ -90,11 +90,11 @@
                             }*/
                             ?>
                         </select>
-                    </div-->
+                    </div>
                     <div class="form-group">
                         <label id="dana_pengajuan2">Dana Pengajuan</label>
                         <input type="text" class="form-control" name="dana_pengajuan" id="dana_pengajuan" required>
-                    </div>
+                    </div-->
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -122,10 +122,10 @@
                         <label>Nama Data</label>
                         <input type="text" class="form-control" name="nama_minggu" id="nama_minggu" required>
                     </div>
-                    <div class="form-group">
+                    <!--div class="form-group">
                         <label>Dana Pengajuan</label>
                         <input type="text" class="form-control" name="dana_pengajuan" id="dana_pengajuan_edit" required>
-                    </div>
+                    </div-->
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>

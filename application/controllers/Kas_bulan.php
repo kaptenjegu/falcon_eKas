@@ -34,9 +34,9 @@ class Kas_bulan extends CI_Controller
             $this->db->from('fki_minggu');
             $this->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
 
-            if ($_SESSION['role_user'] == 2) {
+            //if ($_SESSION['role_user'] == 2) {
                 $this->db->where('id_lokasi', $_SESSION['id_lokasi']);
-            }
+            //}
 
             $this->db->where('fki_minggu.tgl_delete', null);
             $this->db->where('fki_minggu.id_data_kas', $id_data_kas);
@@ -71,7 +71,7 @@ class Kas_bulan extends CI_Controller
                     'nama_minggu' => $nama_minggu,
                     'id_lokasi' => $id_lokasi,
                     'id_data_kas' => $id_data_kas,
-                    'dana_pengajuan' => $dana_pengajuan
+                    //'dana_pengajuan' => $dana_pengajuan
                 );
                 $this->db->insert('fki_minggu', $data);
 
@@ -107,7 +107,7 @@ class Kas_bulan extends CI_Controller
             //if ($this->cek_data($id_data_kas, $nama_minggu, $id_lokasi) == 0) {
 
             $this->db->set('nama_minggu', $nama_minggu);
-            $this->db->set('dana_pengajuan', $dana_pengajuan);
+            //$this->db->set('dana_pengajuan', $dana_pengajuan);
             $this->db->where('id_minggu', $id_minggu);
             $this->db->update('fki_minggu');
 
