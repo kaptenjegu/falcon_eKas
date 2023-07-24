@@ -141,6 +141,7 @@
       var pic = document.getElementsByName('pic_data[]');
       var idt = document.getElementsByName('id_tipe[]');
       var ids = document.getElementsByName('id_status[]');
+      var idjk = document.getElementsByName('id_jenis_kas[]');
       var id_minggu = document.getElementById('id_minggu_data').value;
       var t = [];
       var u = [];
@@ -149,6 +150,7 @@
       var p = [];
       var it = [];
       var is = [];
+      var ijk = [];
 
       //console.log(tgl.length);end;
 
@@ -165,6 +167,7 @@
         p.push(pic[i].value);
         it.push(idt[i].value);
         is.push(ids[i].value);
+        ijk.push(idjk[i].value);
       }
 
       $.ajax({
@@ -177,6 +180,7 @@
           id_minggu: id_minggu,
           id_tipe: it,
           id_status: is,
+          id_jenis_kas: ijk,
           pic_data: p,
           qty_data: q,
           nominal_data: n
@@ -213,6 +217,12 @@
             document.getElementById('status_data_edit').value = 'Luar RAB';
           } else {
             document.getElementById('status_data_edit').value = 'RAB';
+          }
+
+          if (data['id_jenis_kas'] == 1) {
+            document.getElementById('jenis_kas_edit').value = 'Keluar';
+          } else {
+            document.getElementById('jenis_kas_edit').value = 'Masuk';
           }
 
           document.getElementById('tipe_data_edit').value = data['nama_tipe'];

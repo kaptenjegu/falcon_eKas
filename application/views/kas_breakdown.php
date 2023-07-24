@@ -1,15 +1,15 @@
 <style>
     #tgl_data_edit::-webkit-calendar-picker-indicator {
-		background: transparent;
-		color: transparent;
-		cursor: pointer;
-		height: 20px;
-		left: 0;
-		position: absolute;
-		right: 0;
-		width: auto;
-	}
-  </style>
+        background: transparent;
+        color: transparent;
+        cursor: pointer;
+        height: 20px;
+        left: 0;
+        position: absolute;
+        right: 0;
+        width: auto;
+    }
+</style>
 <div class="container-fluid">
 
     <!-- Breadcrumbs-->
@@ -21,8 +21,8 @@
 
 
     <!-- DataTables Example -->
-    
-        <?= $this->session->flashdata('msg') ?>    
+
+    <?= $this->session->flashdata('msg') ?>
     <div class="card mb-3">
         <div class="card-header">
             <i class="fas fa-table"></i>
@@ -31,6 +31,9 @@
 
         <div class="card-body">
             <div class="table-responsive">
+            <a href="<?= base_url('Kas_breakdown/laporan/' . $this->uri->segment(4))?>" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Laporan RAB</a>&emsp;
+            <a href="<?= base_url('Kas_breakdown/laporan2/' . $this->uri->segment(4))?>" target="_blank" class="btn btn-warning" style="background-color:khaki"><i class="fa fa-download"></i> Laporan Luar RAB</a>
+            <br><br>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -50,10 +53,16 @@
                         <?php
                         $no = 1;
                         foreach ($data_kas as $v) {
-                            if($v->id_status == 1){
+                            if ($v->id_status == 1) {
                                 $kkas = 'background-color: aqua;';
-                            }else{
+                            } else {
                                 $kkas = '';
+                            }
+
+                            if ($v->id_jenis_kas == 1) {  //keluar
+                                $kkas .= 'color: #75050a;';
+                            } else {
+                                $kkas .= 'color: green;';
                             }
                             echo '<tr style="' . $kkas . '">
                                     <td>' . $no . '</td>
@@ -65,8 +74,8 @@
                                     <td>Rp. ' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td>
                                     <td>' . $v->pic_data . '</td>
                                     <td>
-                                    <a href="#" class="btn btn-warning" onclick="get_data(\'' . $v->id_data . '\')"><i class="fa fa-list"></i> Detail</a>&emsp;
-                                    <a href="'. base_url('Kas_breakdown/hapus_data/' . $this->uri->segment(3) . '/' . $this->uri->segment(4) . '/' . $v->id_data) . '" class="btn btn-danger" style="margin: 5px;" onclick="return confirm(\'Apakah anda ingin menghapus data ' . $v->deskripsi_data . ' ?\')"><i class="fa fa-trash"></i> Hapus Data</a>
+                                    <button class="btn btn-warning" onclick="get_data(\'' . $v->id_data . '\')"><i class="fa fa-list"></i> Detail</button>&emsp;
+                                    <a href="' . base_url('Kas_breakdown/hapus_data/' . $this->uri->segment(3) . '/' . $this->uri->segment(4) . '/' . $v->id_data) . '" class="btn btn-danger" style="margin: 5px;" onclick="return confirm(\'Apakah anda ingin menghapus data ' . $v->deskripsi_data . ' ?\')"><i class="fa fa-trash"></i> Hapus Data</a>
                                     </td>
                                     </tr>';
                             $no += 1;
@@ -101,34 +110,42 @@
                             <th>Uraian</th>
                             <th>Status Anggaran</th>
                             <th>Tipe</th>
+                            <th>Jenis Kas</th>
                             <th>Qty</th>
                             <th>Nominal</th>
                             <th>PIC</th>
                             <th>Opsi</th>
                         </tr>
-                    </thead>                    
-                        <input type="hidden" id="id_minggu_data" value="<?= $judul_periode->id_minggu ?>">
-                        <tbody id="data_isi">
-                            <tr class="control-group">
-                                <td><input type="date" name="tgl_data[]" required></td>
-                                <td><input type="text" name="uraian_data[]" required></td>
-                                <td>
-                                    <select name="id_status[]" required>
-                                        <option value="2">RAB</option>
-                                        <option value="1">diluar RAB</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="id_tipe[]" required>
-                                        <?= $tipe_list ?>
-                                    </select>
-                                </td>
-                                <td><input type="number" name="qty_data[]" required></td>
-                                <td><input type="number" name="nominal_data[]" required></td>
-                                <td><input type="text" name="pic_data[]" required></td>
-                                <td><button class="btn btn-danger remove"><i class="fa fa-trash"></i></button></td>
-                            </tr>
-                        </tbody>
+                    </thead>
+                    <input type="hidden" id="id_minggu_data" value="<?= $judul_periode->id_minggu ?>">
+                    <tbody id="data_isi">
+                        <tr class="control-group">
+                            <td><input type="date" name="tgl_data[]" required></td>
+                            <td><input type="text" name="uraian_data[]" required></td>
+                            <td>
+                                <select name="id_status[]" required>
+                                    <option value="2">RAB</option>
+                                    <option value="1">diluar RAB</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="id_tipe[]" required>
+                                    <?= $tipe_list ?>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="id_jenis_kas[]" required>
+                                    <option value="1">Keluar</option>
+                                    <option value="2">Masuk</option>
+
+                                </select>
+                            </td>
+                            <td><input type="number" name="qty_data[]" required></td>
+                            <td><input type="number" name="nominal_data[]" required></td>
+                            <td><input type="text" name="pic_data[]" required></td>
+                            <td><button class="btn btn-danger remove"><i class="fa fa-trash"></i></button></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -167,6 +184,10 @@
                         <input type="text" class="form-control" id="tipe_data_edit" readonly>
                     </div>
                     <div class="form-group">
+                        <label>Jenis Kas</label>
+                        <input type="text" class="form-control" id="jenis_kas_edit" readonly>
+                    </div>
+                    <div class="form-group">
                         <label>Quantity</label>
                         <input type="number" class="form-control" name="qty_data" id="qty_data_edit" required>
                     </div>
@@ -178,14 +199,14 @@
                         <label>PIC</label>
                         <input type="text" class="form-control" name="pic_data" id="pic_data_edit" required>
                     </div>
-                </div>                
+                </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
                 </div>
                 <br>
                 <br>
-                
+
             </form>
         </div>
     </div>

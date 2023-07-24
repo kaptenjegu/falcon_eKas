@@ -35,7 +35,7 @@ class Kas_bulan extends CI_Controller
             $this->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
 
             //if ($_SESSION['role_user'] == 2) {
-                $this->db->where('id_lokasi', $_SESSION['id_lokasi']);
+            $this->db->where('id_lokasi', $_SESSION['id_lokasi']);
             //}
 
             $this->db->where('fki_minggu.tgl_delete', null);
@@ -151,4 +151,6 @@ class Kas_bulan extends CI_Controller
         $n = $this->db->get('fki_minggu')->num_rows();
         return $n;
     }
+
+    
 }
