@@ -165,7 +165,7 @@ class Kas extends CI_Controller
             $no = 1;
             foreach ($data as $v) {
                 if ($v->id_tipe == 1 AND $v->id_jenis_kas == 2) {
-                    $table .= '<tr style="text-align: center;font-weight: bold;"><td>' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td>00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
+                    $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
                     $ttl_saldo1 +=  $v->nominal_data * $v->qty_data;
 
                     if ($v->id_tipe > $id_tipe) {
