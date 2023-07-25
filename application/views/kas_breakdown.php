@@ -54,8 +54,10 @@
                         foreach ($data_kas as $v) {
                             if ($v->id_status == 1) {
                                 $kkas = 'background-color: aqua;';
+                                $vcr = '<a href="'. base_url('Kas_breakdown/cetak_voucher/' . $v->id_data) .'" class="btn btn-success" target="_blank"><i class="fa fa-print"></i> Voucher</a>';
                             } else {
                                 $kkas = '';
+                                $vcr = '';
                             }
 
                             if ($v->id_jenis_kas == 1) {  //keluar
@@ -75,6 +77,7 @@
                                     <td>
                                     <button class="btn btn-warning" onclick="get_data(\'' . $v->id_data . '\')"><i class="fa fa-list"></i> Detail</button>&emsp;
                                     <a href="' . base_url('Kas_breakdown/hapus_data/' . $this->uri->segment(3) . '/' . $this->uri->segment(4) . '/' . $v->id_data) . '" class="btn btn-danger" style="margin: 5px;" onclick="return confirm(\'Apakah anda ingin menghapus data ' . $v->deskripsi_data . ' ?\')"><i class="fa fa-trash"></i> Hapus Data</a>
+                                    ' . $vcr . '
                                     </td>
                                     </tr>';
                             $no += 1;
@@ -149,7 +152,20 @@
             </div>
         </div>
     </div>
-    <div class="card-footer small"><button onclick="form_data()" class="btn btn-info">Simpan</button></div>
+    
+    <div class="card-footer small">
+        <span class="">Catatan:
+            <ul>
+                <li>Untuk Tipe Kas, agar bisa ditampilkan di All Kas, maka pilih Jenis Kas Masuk</li>
+                <li>Data dengan jenis kas Keluar dan bertipe Kas, tidak akan dihitung di All Kas</li>
+                <li>Pengajuan Dana diatur ke jenis kas masuk</li>
+                <li>Hati-hati dalam mengisi data, karena data dengan fitur pilih, tidak bisa diedit</li>
+            </ul>
+
+        </span>
+        <br>
+        <button onclick="form_data()" class="btn btn-info">Simpan</button>
+    </div>
 </div>
 <!-- /.container-fluid -->
 
@@ -160,6 +176,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel">Edit Data Kas</h4>
+                
             </div>
             <form method="POST" action="<?= base_url('Kas_breakdown/edit_data/') ?>">
                 <div class="modal-body">

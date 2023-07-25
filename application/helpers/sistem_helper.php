@@ -69,3 +69,60 @@ function logdb($id_user, $page, $function, $table, $txt)
 
 	$ci->db->trans_complete();
 }
+
+function get_total_kas($id_minggu)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+	$ttl = 0;
+
+	$ci->db->select('*');
+	$ci->db->from('fki_data');
+	$ci->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+	$ci->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
+	$ci->db->join('fai_lokasi', 'fai_lokasi.id_lokasi = fki_minggu.id_lokasi');
+	$ci->db->join('fki_tipe', 'fki_tipe.id_tipe = fki_data.id_tipe');
+	$ci->db->where('fki_minggu.id_lokasi', $_SESSION['id_lokasi']);
+	$ci->db->where('fki_data.id_minggu', $id_minggu);
+	$ci->db->where('fki_data.tgl_delete', null);
+	$ci->db->where('fki_data.id_status', 2);  // RAB
+	$ci->db->where('fki_data.id_tipe', 1);  // KAS
+	$ci->db->order_by('fki_data.tgl_data', 'asc');
+	$ci->db->order_by('fki_data.id_tipe', 'asc');
+	$data = $ci->db->get()->result();
+
+	foreach ($data as $v) {
+		$ttl +=  $v->nominal_data * $v->qty_data;
+	}
+
+	return $ttl;
+}
+
+function get_total_pengeluaran($id_minggu)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+	$ttl = 0;
+
+	$ci->db->select('*');
+	$ci->db->from('fki_data');
+	$ci->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+	$ci->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
+	$ci->db->join('fai_lokasi', 'fai_lokasi.id_lokasi = fki_minggu.id_lokasi');
+	$ci->db->join('fki_tipe', 'fki_tipe.id_tipe = fki_data.id_tipe');
+	$ci->db->where('fki_minggu.id_lokasi', $_SESSION['id_lokasi']);
+	$ci->db->where('fki_data.id_minggu', $id_minggu);
+	$ci->db->where('fki_data.tgl_delete', null);
+	$ci->db->where('fki_data.id_status', 2);  // RAB
+	$ci->db->where('fki_data.id_tipe <> 1');  // bukan KAS
+	$ci->db->where('fki_data.id_jenis_kas', 1);  // keluar
+	$ci->db->order_by('fki_data.tgl_data', 'asc');
+	$ci->db->order_by('fki_data.id_tipe', 'asc');
+	$data = $ci->db->get()->result();
+
+	foreach ($data as $v) {
+		$ttl +=  $v->nominal_data * $v->qty_data;
+	}
+
+	return $ttl;
+}

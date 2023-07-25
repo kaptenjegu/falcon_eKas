@@ -38,8 +38,8 @@
                             echo '<tr>
                                     <td>' . $no . '</td>
                                     <td>' . $v->nama_minggu . '</td>
-                                    <td>Rp. ' . number_format($v->dana_pengajuan, 0, ',', '.') . '</td>
-                                    <td>Rp. ' . number_format($v->dana_pengajuan, 0, ',', '.') . '</td>
+                                    <td>Rp. ' . number_format(get_total_pengeluaran($v->id_minggu), 0, ',', '.') . '</td>
+                                    <td>Rp. ' . number_format(get_total_kas($v->id_minggu), 0, ',', '.') . '</td>
                                     <td>
                                         <a href="#" class="btn btn-warning" onclick="get_data(\'' . $v->id_minggu . '\')"><i class="fa fa-edit"></i> Edit</a>&emsp;
                                         <a href="' . base_url('Kas_breakdown/detail/' . $judul_periode->id_data_kas . '/' . $v->id_minggu) . '" class="btn btn-primary"><i class="fa fa-list"></i> Breakdown</a>&emsp;
