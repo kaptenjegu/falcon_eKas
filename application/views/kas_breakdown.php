@@ -32,7 +32,6 @@
         <div class="card-body">
             <div class="table-responsive">
             <a href="<?= base_url('Kas_breakdown/laporan/' . $this->uri->segment(4))?>" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Laporan RAB</a>&emsp;
-            <a href="<?= base_url('Kas_breakdown/laporan2/' . $this->uri->segment(4))?>" target="_blank" class="btn btn-warning" style="background-color:khaki"><i class="fa fa-download"></i> Laporan Luar RAB</a>
             <br><br>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
