@@ -44,7 +44,7 @@ class Login extends CI_Controller
 
             logdb($_SESSION['id_akun'], 'Login', 'cek_akun', 'fai_akun', 'berhasil login');
 
-            redirect('Absen');
+            redirect('Dashboard');
         } else {
             logdb($email, 'Login', 'cek_akun', 'fai_akun', 'gagal login');
             $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">

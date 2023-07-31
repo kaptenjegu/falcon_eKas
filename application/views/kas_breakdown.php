@@ -127,7 +127,7 @@
                             <td>
                                 <select name="id_status[]" required>
                                     <option value="2">RAB</option>
-                                    <option value="1">diluar RAB</option>
+                                    <option value="1">Luar RAB</option>
                                 </select>
                             </td>
                             <td>

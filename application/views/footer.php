@@ -126,6 +126,25 @@
 
   <?php } ?>
 
+  <?php if ($page == "Kas_voucher") { ?>
+    $(document).ready(function() {
+      var add_row = document.getElementById("data_isi").innerHTML;
+
+      $(".add-1").click(function() {
+        //var tbl = document.getElementsByClassName('data_isi').innerHTML;
+        //var add_row = '<tr class="control-group"><td><input type="date" name="tgl_data[]" required></td><td><input type="text" name="uraian_data[]" required></td><td><input type="number" name="qty_data[]" required></td><td><input type="number" name="nominal_data[]" required></td><td><input type="text" name="pic_data[]" required></td><td><button class="btn btn-danger remove"><i class="fa fa-trash"></i></button></td></tr>';
+
+        $("#data_isi").append(add_row);
+        console.log('tabel');
+      });
+
+      // saat tombol remove dklik control group akan dihapus 
+      $("body").on("click", ".remove", function() {
+        $(this).parents(".control-group").remove();
+      });
+    });
+  <?php } ?>
+
   <?php if ($page == "Kas_breakdown") { ?>
     var lbl_dana = document.getElementById('dana_pengajuan2');
     var rupiah = document.getElementById('dana_pengajuan');

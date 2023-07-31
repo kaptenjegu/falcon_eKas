@@ -36,7 +36,7 @@
           <i class="fas fa-user-circle fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+          <a class="dropdown-item" href="<?= base_url('Login/keluar/') ?>">Logout</a>
         </div>
       </li>
     </ul>
@@ -54,7 +54,7 @@
         </a>
       </li>
       
-      <li class="nav-item <?php if($page == 'Kas' OR $page == 'Kas_bulan' OR $page == 'Kas_breakdown'){echo 'active';} ?>">
+      <li class="nav-item <?php if($page == 'Kas' OR $page == 'Kas_bulan' OR $page == 'Kas_breakdown' OR $page == 'Kas_voucher'){echo 'active';} ?>">
         <a class="nav-link" href="<?= base_url('Kas') ?>">
           <i class="fas fa-fw fa-table"></i>
           <span>Data Kas</span></a>
