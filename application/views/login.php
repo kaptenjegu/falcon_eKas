@@ -30,13 +30,13 @@
         <form method="POST" action="<?= base_url('Login/cek_akun/') ?>">
           <div class="form-group">
             <div class="form-label-group">
-              <input type="email" id="inputEmail" class="form-control" name="email" placeholder="Email address" required="required" autofocus="autofocus">
+              <input type="email" id="inputEmail" class="form-control" name="email" required="required" autofocus="autofocus">
               <label for="inputEmail">Email address</label>
             </div>
           </div>
           <div class="form-group">
             <div class="form-label-group">
-              <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required="required">
+              <input type="password" id="inputPassword" name="password" class="form-control"  required="required">
               <label for="inputPassword">Password</label>
             </div>
           </div>
