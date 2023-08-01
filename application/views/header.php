@@ -33,7 +33,7 @@
     <ul class="navbar-nav ml-auto ml-md-0">
       <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-user-circle fa-fw"></i>
+          <?= $_SESSION['nama_user'] . ' - ' . get_lokasi() ?> <i class="fas fa-user-circle fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
           <a class="dropdown-item" href="<?= base_url('Login/keluar/') ?>">Logout</a>
@@ -47,12 +47,12 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item <?php if($page == 'Dashboard'){echo 'active';} ?>">
-        <a class="nav-link" href="<?= base_url('Dashboard') ?>">
+      <!--li class="nav-item <?php //if($page == 'Dashboard'){echo 'active';} ?>">
+        <a class="nav-link" href="<?//= base_url('Dashboard') ?>">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
-      </li>
+      </li-->
       
       <li class="nav-item <?php if($page == 'Kas' OR $page == 'Kas_bulan' OR $page == 'Kas_breakdown' OR $page == 'Kas_voucher'){echo 'active';} ?>">
         <a class="nav-link" href="<?= base_url('Kas') ?>">
@@ -67,7 +67,7 @@
       </li>
       
       <li class="nav-item <?php if($page == 'Laporan'){echo 'active';} ?>">
-        <a class="nav-link" href="<?= base_url('Laporan') ?>">
+        <a class="nav-link" href="#">
           <i class="fas fa-fw fa-print"></i>
           <span>Laporan</span></a>
       </li>

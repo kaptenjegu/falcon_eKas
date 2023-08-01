@@ -7,8 +7,7 @@ class Dashboard extends CI_Controller
 	{
 		parent::__construct();
 		date_default_timezone_set('Asia/Jakarta');
-		//cek_login();
-		//detection();
+		cek_login();
 	}
 
 	public function index()

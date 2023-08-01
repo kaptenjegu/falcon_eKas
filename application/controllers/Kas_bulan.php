@@ -7,8 +7,7 @@ class Kas_bulan extends CI_Controller
     {
         parent::__construct();
         date_default_timezone_set('Asia/Jakarta');
-        //detection();
-        //cek_login();
+        cek_login();
     }
 
     public function index()
