@@ -198,6 +198,15 @@ class Kas_breakdown extends CI_Controller
 
     public function laporan()
     {
+        $this->load->library('pdfgenerator');
+
+
+        // setting paper
+        $paper = 'A4';
+        //orientasi paper potrait / landscape
+        //$orientation = "portrait";
+        $orientation = "landscape";
+
         $id_minggu = $this->db->escape_str($this->uri->segment(3));
 
         $this->db->select('*');
@@ -237,6 +246,8 @@ class Kas_breakdown extends CI_Controller
 
             $id_tipe = 1;
 
+            // filename dari pdf ketika didownload
+            $file_pdf = 'Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas;
 
             $ttl_saldo1 = 0;
             $ttl_saldo2 = 0;
@@ -275,7 +286,13 @@ class Kas_breakdown extends CI_Controller
                             if ($no == 1) {
                                 $table2 .= '<tr style="background-color: aqua;font-weight: bold;text-align: left;"><td colspan="8">' . $v->nama_tipe . '</td></tr>';
                             }
-                            $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . $v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
+
+                            if ($v->nominal_data == 0) {
+                                $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">-</td><td>-</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
+                            } else {
+                                $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . $v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
+                            }
+                            //$table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . $v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
                             $ntipe = $v->nama_tipe;
                             $ttl_saldo += $v->nominal_data * $v->qty_data;
                             $no += 1;
@@ -298,11 +315,10 @@ class Kas_breakdown extends CI_Controller
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1 - $ttl_saldo2, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             $table2 .= '</table>';
 
-            echo $table . $table2;
+            //echo $table . $table2;
+            $this->pdfgenerator->generate($table . $table2, $file_pdf, $paper, $orientation);
         } else {
             echo 'Data kosong';
         }
     }
-
-    
 }
