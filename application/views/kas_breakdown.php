@@ -31,8 +31,8 @@
 
         <div class="card-body">
             <div class="table-responsive">
-            <a href="<?= base_url('Kas_breakdown/laporan/' . $this->uri->segment(4))?>" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Laporan RAB</a>&emsp;
-            <br><br>
+                <a href="<?= base_url('Kas_breakdown/laporan/' . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Laporan RAB</a>&emsp;
+                <br><br>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -54,7 +54,7 @@
                         foreach ($data_kas as $v) {
                             if ($v->id_status == 1) {
                                 $kkas = 'background-color: aqua;';
-                                $vcr = '<a href="'. base_url('Kas_breakdown/cetak_voucher/' . $v->id_data) .'" class="btn btn-success" target="_blank"><i class="fa fa-print"></i> Voucher</a>';
+                                $vcr = '<a href="' . base_url('Kas_breakdown/cetak_voucher/' . $v->id_data) . '" class="btn btn-success" target="_blank"><i class="fa fa-print"></i> Voucher</a>';
                             } else {
                                 $kkas = '';
                                 $vcr = '';
@@ -77,7 +77,6 @@
                                     <td>
                                     <button class="btn btn-warning" onclick="get_data(\'' . $v->id_data . '\')"><i class="fa fa-list"></i> Detail</button>&emsp;
                                     <a href="' . base_url('Kas_breakdown/hapus_data/' . $this->uri->segment(3) . '/' . $this->uri->segment(4) . '/' . $v->id_data) . '" class="btn btn-danger" style="margin: 5px;" onclick="return confirm(\'Apakah anda ingin menghapus data ' . $v->deskripsi_data . ' ?\')"><i class="fa fa-trash"></i> Hapus Data</a>
-                                    ' . $vcr . '
                                     </td>
                                     </tr>';
                             $no += 1;
@@ -152,7 +151,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="card-footer small">
         <span class="">Catatan:
             <ul>
@@ -176,7 +175,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel">Edit Data Kas</h4>
-                
+
             </div>
             <form method="POST" action="<?= base_url('Kas_breakdown/edit_data/') ?>">
                 <div class="modal-body">

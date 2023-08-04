@@ -45,6 +45,13 @@ class Kas_breakdown extends CI_Controller
             $this->db->order_by('fki_data.tgl_data', 'desc');
             $data['data_kas'] = $this->db->get()->result();
 
+            $this->db->select('*');
+            $this->db->from('fki_nota');
+            $this->db->join('fki_tipe', 'fki_tipe.id_tipe = fki_nota.id_tipe');
+            $this->db->where('fki_nota.tgl_delete', null);
+            $this->db->where('fki_nota.id_minggu', $id_minggu);
+            $data['data_nota'] = $this->db->get()->result();
+
             $this->load->view('header', $data);
             $this->load->view('kas_breakdown', $data);
             $this->load->view('footer');
@@ -107,6 +114,81 @@ class Kas_breakdown extends CI_Controller
         echo json_encode($hasil);
     }
 
+    public function tambah_nota()
+    {
+        try {
+            $this->db->trans_start();
+            $id_minggu = $this->db->escape_str($this->input->post('id_minggu'));
+            $id_tipe = $this->db->escape_str($this->input->post('id_tipe'));
+            $id_data_kas = $this->db->escape_str($this->input->post('id_data_kas'));
+            $id = randid();
+
+            $data = array(
+                'id_nota' => $id,
+                'id_minggu' => $id_minggu,
+                'id_tipe' => $id_tipe
+            );
+            $this->db->insert('fki_nota', $data);
+
+            if (!empty($_FILES['nota']['name'])) {
+
+                // Define new $_FILES array - $_FILES['file']
+                $_FILES['file']['name'] = $_FILES['nota']['name'];
+                $_FILES['file']['type'] = $_FILES['nota']['type'];
+                $_FILES['file']['tmp_name'] = $_FILES['nota']['tmp_name'];
+                $_FILES['file']['error'] = $_FILES['nota']['error'];
+                $_FILES['file']['size'] = $_FILES['nota']['size'];
+                // Set preference
+                $config['upload_path'] = 'vendor/nota/';
+                $config['allowed_types'] = 'jpg';
+                $config['max_size'] = '5000'; // max_size in kb
+                $config['file_name'] = $id;
+
+                //Load upload library
+                $this->load->library('upload', $config);
+
+                // File upload
+                if ($this->upload->do_upload('file')) {
+                    $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Nota Sudah Disimpan</b></center></div>');
+                    $this->db->trans_complete();
+                } else {
+                    $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Error Upload gambar + tambah data</b></center></div>');
+                }
+            }
+        } catch (Exception $e) {
+            //echo 'Caught exception: ',  $e->getMessage(), "\n";
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Error :' . $e->getMessage() . '</b></center></div>');
+        }
+        redirect('Kas_breakdown/detail/' . $id_data_kas . '/' . $id_minggu);
+    }
+
+    public function hapus_nota()
+    {
+        try {
+            $this->db->trans_start();
+
+            $id_minggu = $this->db->escape_str($this->uri->segment(5));
+            $id_data_kas = $this->db->escape_str($this->uri->segment(4));
+            $id_nota = $this->db->escape_str($this->uri->segment(3));
+
+            $this->db->set('tgl_delete', date('Y-m-d H:i:s'));
+            $this->db->where('id_nota', $id_nota);
+            $this->db->update('fki_nota');
+
+            $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Nota Berhasil Dihapus</b></center></div>');
+
+            $this->db->trans_complete();
+
+        } catch (\Throwable $e) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Error :' . $e->getMessage() . '</b></center></div>');
+        }
+        redirect('Kas_breakdown/detail/' . $id_data_kas . '/' . $id_minggu);
+    }
 
     public function edit_data()
     {
@@ -200,7 +282,6 @@ class Kas_breakdown extends CI_Controller
     {
         $this->load->library('pdfgenerator');
 
-
         // setting paper
         $paper = 'A4';
         //orientasi paper potrait / landscape
@@ -251,7 +332,7 @@ class Kas_breakdown extends CI_Controller
 
             $ttl_saldo1 = 0;
             $ttl_saldo2 = 0;
-            $table = '<title>Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="9">Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas .  '</td></tr>';
+            $table = '<title>Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas .  '</td></tr>';
             $table .= '<tr style="text-align: center;background-color: #69e842;font-weight: bold;"><td>No</td><td>Tanggal</td><td>Uraian</td><td>Debet</td><td>Kredit(Rp)</td><td>Saldo</td><td>PIC</td><td>Nomor Kas</td></tr>';
             $table .= '<tr style="background-color: aqua;font-weight: bold;text-align: left;"><td colspan="8">UANG MASUK</td></tr>';
 
