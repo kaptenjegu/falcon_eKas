@@ -70,7 +70,7 @@
                                     <td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td>
                                     <td>' . $v->deskripsi_data . '</td>
                                     <td>' . $v->nama_tipe . '</td>
-                                    <td>' . $v->qty_data . '</td>
+                                    <td>' . (float)$v->qty_data . '</td>
                                     <td>Rp. ' . number_format($v->nominal_data, 0, ',', '.') . '</td>
                                     <td>Rp. ' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td>
                                     <td>' . $v->pic_data . '</td>
@@ -141,7 +141,7 @@
 
                                 </select>
                             </td>
-                            <td><input type="number" name="qty_data[]" required></td>
+                            <td><input type="number" name="qty_data[]" step="0.001" required></td>
                             <td><input type="number" name="nominal_data[]" required></td>
                             <td><input type="text" name="pic_data[]" required></td>
                             <td><button class="btn btn-danger remove"><i class="fa fa-trash"></i></button></td>
@@ -204,7 +204,7 @@
                     </div>
                     <div class="form-group">
                         <label>Quantity</label>
-                        <input type="number" class="form-control" name="qty_data" id="qty_data_edit" required>
+                        <input type="number" class="form-control" name="qty_data" step="0.001" id="qty_data_edit" required>
                     </div>
                     <div class="form-group">
                         <label>Nominal</label>
