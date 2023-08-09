@@ -14,15 +14,14 @@
     <div class="card mb-3">
         <div class="card-header">
             <i class="fas fa-table"></i>
-            Data Kas Luar RAB <?= $judul_periode->nama_data_kas . ' <b>' . get_lokasi() ?></b>
+            Voucher Data Kas <?= $judul_periode->nama_data_kas . ' ' . $judul_periode->nama_minggu . ' <b>' . get_lokasi() ?></b>
         </div>
 
         <div class="card-body">
             <div class="table-responsive">
-                <a href="<?= base_url('Kas_voucher/cetak_sps/' . $this->uri->segment(3)) ?>" target="_blank" class="btn btn-info"><i class="fa fa-print"></i> Cetak SPS</a>&emsp;
-                <br><br>
-                <form method="POST" action="<?= base_url('Kas_voucher/cetak_custom/') ?>" target="_blank">
+                 <form method="POST" action="<?= base_url('Kas_voucher/cetak_custom_kas/') ?>" target="_blank">
                     <input type="hidden" name="nama_data_kas" value="<?= $judul_periode->nama_data_kas ?>">
+                    <input type="hidden" name="judul" value="<?= 'Voucher Data Kas ' . $judul_periode->nama_data_kas . ' ' . $judul_periode->nama_minggu . ' ' . get_lokasi() ?>">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 
                         <thead>
@@ -30,8 +29,6 @@
                                 <th>No</th>
                                 <th>Tanggal</th>
                                 <th>Uraian</th>
-
-                                <th>Qty</th>
                                 <th>Nominal</th>
                                 <th>Opsi</th>
                             </tr>
@@ -40,17 +37,15 @@
                         <tbody>
 
                             <?php
+                            
                             $no = 1;
-                            foreach ($data_kas as $v) {
+                            foreach ($hasil as $v) {
                                 echo '<tr>
                                     <td>' . $no . '</td>
-                                    <td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td>
-                                    <td>' . $v->deskripsi_data . '</td>
-                                    
-                                    <td>' . $v->qty_data . '</td>
-                                    <td>Rp. ' . number_format($v->nominal_data, 0, ',', '.') . '</td>
-                                    <td><input type="checkbox" name="id_data[]"  value="' . $v->id_data . '"</td>
-                                    
+                                    <td>' . $v['tgl'] . '</td>
+                                    <td>' . $v['deskripsi'] . '</td>
+                                    <td>Rp. ' . number_format($v['total'], 0, ',', '.') . '</td>
+                                    <td><input type="checkbox" name="all_data[]"  value="' . $v['tgl'] . '|@|' . $v['deskripsi'] . '|@|' . $v['total'] . '"</td>
                                     </tr>';
                                 $no += 1;
                             }

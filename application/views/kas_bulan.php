@@ -43,6 +43,7 @@
                                     <td>
                                         <a href="#" class="btn btn-warning" onclick="get_data(\'' . $v->id_minggu . '\')"><i class="fa fa-edit"></i> Edit</a>&emsp;
                                         <a href="' . base_url('Kas_breakdown/detail/' . $judul_periode->id_data_kas . '/' . $v->id_minggu) . '" class="btn btn-primary"><i class="fa fa-list"></i> Breakdown</a>&emsp;
+                                        <a href="' . base_url('Kas_voucher/list_kas/' . $v->id_minggu) . '" class="btn btn-primary" style="background-color: purple;"><i class="fa fa-download"></i> Voucher Kas</a>&emsp;
                                         
                                     </td>
                                     </tr>';
