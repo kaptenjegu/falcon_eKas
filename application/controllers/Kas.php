@@ -170,7 +170,7 @@ class Kas extends CI_Controller
             $ttl_saldo2 = 0;
             $table = '<title>Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas) .  '</td></tr>';
             $table .= '<tr style="text-align: center;background-color: #69e842;font-weight: bold;"><td>No</td><td>Tanggal</td><td>Uraian</td><td>Debet</td><td>Kredit(Rp)</td><td>Saldo</td><td>PIC</td><td>Nomor Kas</td></tr>';
-            $table .= '<tr style="background-color: aqua;font-weight: bold;text-align: left;"><td colspan="8">UANG MASUK</td></tr>';
+            $table .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="8">UANG MASUK</td></tr>';
 
             $no = 1;
             foreach ($data as $v) {
@@ -190,7 +190,7 @@ class Kas extends CI_Controller
                 }
             }
 
-            $table .= '<tr style="background-color: yellow;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS ' . strtoupper($data[0]->nama_lokasi) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            $table .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS ' . strtoupper($data[0]->nama_lokasi) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             $table .= '</table>';
 
             $table2 = '<table border="1" style="width: 100%;">';
@@ -205,7 +205,7 @@ class Kas extends CI_Controller
                     if ($id->id_tipe == $v->id_tipe) {
                         if ($v->id_jenis_kas == 1) { //keluar
                             if ($no == 1) {
-                                $table2 .= '<tr style="background-color: aqua;font-weight: bold;text-align: left;"><td colspan="8">' . $v->nama_tipe . '</td></tr>';
+                                $table2 .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="8">' . $v->nama_tipe . '</td></tr>';
                             }
 
                             if ($v->nominal_data == 0) {
@@ -222,7 +222,7 @@ class Kas extends CI_Controller
                     }
                 }
 
-                $table2 .= '<tr style="background-color: yellow;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+                $table2 .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
                 $ttl_saldo2 += $ttl_saldo;
                 if ($ttl_pengajuan > 0) {
                     $table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN DANA ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_pengajuan, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
@@ -322,7 +322,7 @@ class Kas extends CI_Controller
                     }
                 }
 
-                $table2 .= '<tr style="background-color: yellow;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+                $table2 .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
                 $ttl_saldo2 += $ttl_saldo;
                 if ($ttl_pengajuan > 0) {
                     $table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN DANA ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_pengajuan, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
@@ -389,7 +389,7 @@ class Kas extends CI_Controller
             $ttl_saldo2 = 0;
             $table = '<title>Laporan Kas Periode ' . $data[0]->nama_data_kas .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="10">KAS PERIODE ' . strtoupper($data[0]->nama_data_kas) .  '</td></tr>';
             $table .= '<tr style="text-align: center;background-color: #69e842;font-weight: bold;"><td>No</td><td>Tanggal</td><td>Uraian</td><td>Debet</td><td>Kredit(Rp)</td><td>Saldo</td><td>PIC</td><td>Nomor Kas</td><td>Proyek</td><td>Minggu</td></tr>';
-            $table .= '<tr style="background-color: aqua;font-weight: bold;text-align: left;"><td colspan="10">UANG MASUK</td></tr>';
+            $table .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="10">UANG MASUK</td></tr>';
 
             $no = 1;
             //data KAS saja
@@ -410,7 +410,7 @@ class Kas extends CI_Controller
                 }
             }
 
-            $table .= '<tr style="background-color: yellow;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS ' . strtoupper($data[0]->nama_lokasi) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="4"></td></tr>';
+            $table .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS ' . strtoupper($data[0]->nama_lokasi) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="4"></td></tr>';
             $table .= '</table>';
 
             $table2 = '<table border="1" style="width: 100%;">';
@@ -425,7 +425,7 @@ class Kas extends CI_Controller
                     if ($id->id_tipe == $v->id_tipe) {
                         if ($v->id_jenis_kas == 1) { //keluar
                             if ($no == 1) {
-                                $table2 .= '<tr style="background-color: aqua;font-weight: bold;text-align: left;"><td colspan="10">' . $v->nama_tipe . '</td></tr>';
+                                $table2 .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="10">' . $v->nama_tipe . '</td></tr>';
                             }
 
                             if ($v->id_status == 2) {//RAB
@@ -435,7 +435,7 @@ class Kas extends CI_Controller
                                     $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . (float)$v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                                 }
                             } else {//Luar RAB
-                                $table2 .= '<tr style="text-align: center;font-weight: normal;color: #0a0af6;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . (float)$v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
+                                $table2 .= '<tr style="text-align: center;font-weight: normal;background-color: #7FFFD4;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . (float)$v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                             }
 
                             $ntipe = $v->nama_tipe;
@@ -447,7 +447,7 @@ class Kas extends CI_Controller
                     }
                 }
 
-                $table2 .= '<tr style="background-color: yellow;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo, 0, ',', '.') . '</td><td colspan="4"></td></tr>';
+                $table2 .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo, 0, ',', '.') . '</td><td colspan="4"></td></tr>';
                 $ttl_saldo2 += $ttl_saldo;
                 if ($ttl_pengajuan > 0) {
                     $table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN DANA ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_pengajuan, 0, ',', '.') . '</td><td colspan="4"></td></tr>';

@@ -163,3 +163,35 @@ function terbilang($nilai) {
 	}     		
 	return $hasil;
 }
+
+function get_dana_kas_pengajuan_minggu($id_minggu)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+
+	//ambil data minggu sekarang, untuk dicarikan minggu selanjutnya 
+	$ci->db->select('*');
+	$ci->db->from('fki_data');
+	$ci->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+	$ci->db->where('fki_minggu.id_lokasi', $_SESSION['id_lokasi']);
+	$ci->db->where('fki_data.id_minggu', $id_minggu);
+	$ci->db->where('fki_data.id_tipe', 1);  // kas
+	$ci->db->where('fki_data.id_jenis_kas', 2);  // masuk
+	$ci->db->where('LEFT(fki_data.deskripsi_data, 3) = "KAS"');  // mencari kata awal KAS
+	$data = $ci->db->get()->first_row();
+
+	//mencari data minggu slanjutnya
+	$ci->db->select('*');
+	$ci->db->from('fki_data');
+	$ci->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+	$ci->db->where('fki_minggu.id_lokasi', $_SESSION['id_lokasi']);
+	//$ci->db->where('fki_data.id_minggu', $id_minggu);
+	$ci->db->where('fki_data.tgl_data > "' . $data->tgl_data . '"');
+	$ci->db->where('fki_data.id_tipe', 1);  // kas
+	$ci->db->where('fki_data.id_jenis_kas', 2);  // masuk
+	$ci->db->where('LEFT(fki_data.deskripsi_data, 3) = "KAS"');  // mencari kata awal KAS
+	$ci->db->order_by('fki_data.tgl_data', 'asc');  // tgl kecil diatas
+	$h = $ci->db->get()->first_row();
+
+	return $h;
+}

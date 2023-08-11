@@ -182,7 +182,6 @@ class Kas_breakdown extends CI_Controller
 					<center><b>Nota Berhasil Dihapus</b></center></div>');
 
             $this->db->trans_complete();
-
         } catch (\Throwable $e) {
             $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Error :' . $e->getMessage() . '</b></center></div>');
@@ -334,7 +333,7 @@ class Kas_breakdown extends CI_Controller
             $ttl_saldo2 = 0;
             $table = '<title>Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas .  '</td></tr>';
             $table .= '<tr style="text-align: center;background-color: #69e842;font-weight: bold;"><td>No</td><td>Tanggal</td><td>Uraian</td><td>Debet</td><td>Kredit(Rp)</td><td>Saldo</td><td>PIC</td><td>Nomor Kas</td></tr>';
-            $table .= '<tr style="background-color: aqua;font-weight: bold;text-align: left;"><td colspan="8">UANG MASUK</td></tr>';
+            $table .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="8">UANG MASUK</td></tr>';
 
             $no = 1;
             foreach ($data as $v) {
@@ -350,7 +349,7 @@ class Kas_breakdown extends CI_Controller
                 }
             }
 
-            $table .= '<tr style="background-color: yellow;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS ' . strtoupper($data[0]->nama_lokasi) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            $table .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS ' . strtoupper($data[0]->nama_lokasi) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             $table .= '</table>';
 
             $table2 = '<table border="1" style="width: 100%;">';
@@ -365,7 +364,7 @@ class Kas_breakdown extends CI_Controller
                     if ($id->id_tipe == $v->id_tipe) {
                         if ($v->id_jenis_kas == 1) { //keluar
                             if ($no == 1) {
-                                $table2 .= '<tr style="background-color: aqua;font-weight: bold;text-align: left;"><td colspan="8">' . $v->nama_tipe . '</td></tr>';
+                                $table2 .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="8">' . $v->nama_tipe . '</td></tr>';
                             }
 
                             if ($v->nominal_data == 0) {
@@ -383,7 +382,7 @@ class Kas_breakdown extends CI_Controller
                     }
                 }
 
-                $table2 .= '<tr style="background-color: yellow;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+                $table2 .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
                 $ttl_saldo2 += $ttl_saldo;
                 if ($ttl_pengajuan > 0) {
                     $table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN DANA ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_pengajuan, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
@@ -391,9 +390,17 @@ class Kas_breakdown extends CI_Controller
                 }
             }
 
+            $data_next = get_dana_kas_pengajuan_minggu($data[0]->id_minggu);
+
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL PENGELUARAN KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo2, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1 - $ttl_saldo2, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            
+            if ($data[0]->nama_minggu !== 'Minggu 4') {
+                $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($data_next->nominal_data + ($ttl_saldo1 - $ttl_saldo2), 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+                $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($data_next->nominal_data, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            }
+
             $table2 .= '</table>';
 
             //echo $table . $table2;
