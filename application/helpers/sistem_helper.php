@@ -127,40 +127,42 @@ function get_total_pengeluaran($id_minggu)
 	return $ttl;
 }
 
-function penyebut($nilai) {
+function penyebut($nilai)
+{
 	$nilai = abs($nilai);
 	$huruf = array("", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas");
 	$temp = "";
 	if ($nilai < 12) {
-		$temp = " ". $huruf[$nilai];
-	} else if ($nilai <20) {
-		$temp = penyebut($nilai - 10). " belas";
+		$temp = " " . $huruf[$nilai];
+	} else if ($nilai < 20) {
+		$temp = penyebut($nilai - 10) . " belas";
 	} else if ($nilai < 100) {
-		$temp = penyebut($nilai/10)." puluh". penyebut($nilai % 10);
+		$temp = penyebut($nilai / 10) . " puluh" . penyebut($nilai % 10);
 	} else if ($nilai < 200) {
 		$temp = " seratus" . penyebut($nilai - 100);
 	} else if ($nilai < 1000) {
-		$temp = penyebut($nilai/100) . " ratus" . penyebut($nilai % 100);
+		$temp = penyebut($nilai / 100) . " ratus" . penyebut($nilai % 100);
 	} else if ($nilai < 2000) {
 		$temp = " seribu" . penyebut($nilai - 1000);
 	} else if ($nilai < 1000000) {
-		$temp = penyebut($nilai/1000) . " ribu" . penyebut($nilai % 1000);
+		$temp = penyebut($nilai / 1000) . " ribu" . penyebut($nilai % 1000);
 	} else if ($nilai < 1000000000) {
-		$temp = penyebut($nilai/1000000) . " juta" . penyebut($nilai % 1000000);
+		$temp = penyebut($nilai / 1000000) . " juta" . penyebut($nilai % 1000000);
 	} else if ($nilai < 1000000000000) {
-		$temp = penyebut($nilai/1000000000) . " milyar" . penyebut(fmod($nilai,1000000000));
+		$temp = penyebut($nilai / 1000000000) . " milyar" . penyebut(fmod($nilai, 1000000000));
 	} else if ($nilai < 1000000000000000) {
-		$temp = penyebut($nilai/1000000000000) . " trilyun" . penyebut(fmod($nilai,1000000000000));
-	}     
+		$temp = penyebut($nilai / 1000000000000) . " trilyun" . penyebut(fmod($nilai, 1000000000000));
+	}
 	return $temp;
 }
 
-function terbilang($nilai) {
-	if($nilai<0) {
-		$hasil = "minus ". trim(penyebut($nilai));
+function terbilang($nilai)
+{
+	if ($nilai < 0) {
+		$hasil = "minus " . trim(penyebut($nilai));
 	} else {
 		$hasil = trim(penyebut($nilai));
-	}     		
+	}
 	return $hasil;
 }
 
@@ -177,6 +179,7 @@ function get_dana_kas_pengajuan_minggu($id_minggu)
 	$ci->db->where('fki_data.id_minggu', $id_minggu);
 	$ci->db->where('fki_data.id_tipe', 1);  // kas
 	$ci->db->where('fki_data.id_jenis_kas', 2);  // masuk
+	$ci->db->where('fki_data.tgl_delete', null);
 	$ci->db->where('LEFT(fki_data.deskripsi_data, 3) = "KAS"');  // mencari kata awal KAS
 	$data = $ci->db->get()->first_row();
 
@@ -189,9 +192,57 @@ function get_dana_kas_pengajuan_minggu($id_minggu)
 	$ci->db->where('fki_data.tgl_data > "' . $data->tgl_data . '"');
 	$ci->db->where('fki_data.id_tipe', 1);  // kas
 	$ci->db->where('fki_data.id_jenis_kas', 2);  // masuk
+	$ci->db->where('fki_data.tgl_delete', null);
 	$ci->db->where('LEFT(fki_data.deskripsi_data, 3) = "KAS"');  // mencari kata awal KAS
 	$ci->db->order_by('fki_data.tgl_data', 'asc');  // tgl kecil diatas
 	$h = $ci->db->get()->first_row();
 
 	return $h;
+}
+
+function get_dana_luar_rab($no, $id_data_kas)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+	$hasil = '';
+	$ttl = 0;
+	$result =  array();
+
+	$ci->db->select('fki_minggu.id_lokasi');
+	$ci->db->from('fki_data');
+	$ci->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+	//$ci->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
+	$ci->db->join('fai_lokasi', 'fai_lokasi.id_lokasi = fki_minggu.id_lokasi');
+	//$ci->db->join('fki_tipe', 'fki_tipe.id_tipe = fki_data.id_tipe');
+	//$ci->db->where('fki_minggu.id_lokasi', $id_lokasi);
+	$ci->db->where('fki_minggu.id_data_kas', $id_data_kas);
+	$ci->db->where('fki_data.tgl_delete', null);
+	$ci->db->where('fki_data.id_status', 1);  // Luar RAB
+	$ci->db->where('fki_data.id_tipe <> 1');  //bukan KAS
+	$ci->db->group_by('fki_minggu.id_lokasi');
+	$lokasi = $ci->db->get()->result();
+
+	foreach ($lokasi as $l) {
+		$ci->db->select('sum(fki_data.nominal_data) as nominal, fki_data.tgl_data, fai_lokasi.nama_lokasi,fki_data_kas.nama_data_kas');
+		$ci->db->from('fki_data');
+		$ci->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+		$ci->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
+		$ci->db->join('fai_lokasi', 'fai_lokasi.id_lokasi = fki_minggu.id_lokasi');
+		$ci->db->join('fki_tipe', 'fki_tipe.id_tipe = fki_data.id_tipe');
+		$ci->db->where('fki_minggu.id_lokasi', $l->id_lokasi);
+		$ci->db->where('fki_minggu.id_data_kas', $id_data_kas);
+		$ci->db->where('fki_data.tgl_delete', null);
+		$ci->db->where('fki_data.id_status', 1);  // Luar RAB
+		$ci->db->where('fki_data.id_tipe <> 1');  //kecuali KAS
+		$ci->db->order_by('fki_data.tgl_data', 'asc');
+		//$ci->db->order_by('fki_data.id_tipe', 'asc');
+		$data = $ci->db->get()->first_row();
+
+		//$hasil .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($l->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">KAS LUAR RAB ' . $l->nama_lokasi . ' ' . $l->nama_data_kas . '</td><td></td><td style="text-align: right;">' . $l->nominal . '</td><td style="text-align: right;">' . $l->nominal . '</td><td>-</td><td style="font-weight: bold;">00' . date('m', strtotime($l->tgl_data)) . '</td><td>' . $l->nama_lokasi . '</td><td>-</td></tr>';
+		$hasil .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($data->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">KAS LUAR RAB ' . $data->nama_lokasi . ' ' . $data->nama_data_kas . '</td><td></td><td style="text-align: right;">' . $data->nominal . '</td><td style="text-align: right;">' . $data->nominal . '</td><td>Pak Fitri</td><td style="font-weight: bold;">00' . date('m', strtotime($data->tgl_data)) . '</td><td>' . $data->nama_lokasi . '</td><td>-</td></tr>';
+		$ttl += $data->nominal;
+	}
+	$result[0] = $hasil;
+	$result[1] = $ttl;
+	return $result;
 }
