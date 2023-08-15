@@ -223,7 +223,7 @@ function get_dana_luar_rab($no, $id_data_kas)
 	$lokasi = $ci->db->get()->result();
 
 	foreach ($lokasi as $l) {
-		$ci->db->select('sum(fki_data.nominal_data) as nominal, fki_data.tgl_data, fai_lokasi.nama_lokasi,fki_data_kas.nama_data_kas');
+		$ci->db->select('sum(fki_data.nominal_data * fki_data.qty_data) as nominal, fki_data.tgl_data, fai_lokasi.nama_lokasi,fki_data_kas.nama_data_kas');
 		$ci->db->from('fki_data');
 		$ci->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
 		$ci->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
@@ -239,7 +239,7 @@ function get_dana_luar_rab($no, $id_data_kas)
 		$data = $ci->db->get()->first_row();
 
 		//$hasil .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($l->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">KAS LUAR RAB ' . $l->nama_lokasi . ' ' . $l->nama_data_kas . '</td><td></td><td style="text-align: right;">' . $l->nominal . '</td><td style="text-align: right;">' . $l->nominal . '</td><td>-</td><td style="font-weight: bold;">00' . date('m', strtotime($l->tgl_data)) . '</td><td>' . $l->nama_lokasi . '</td><td>-</td></tr>';
-		$hasil .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($data->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">KAS LUAR RAB ' . $data->nama_lokasi . ' ' . $data->nama_data_kas . '</td><td></td><td style="text-align: right;">' . $data->nominal . '</td><td style="text-align: right;">' . $data->nominal . '</td><td>Pak Fitri</td><td style="font-weight: bold;">00' . date('m', strtotime($data->tgl_data)) . '</td><td>' . $data->nama_lokasi . '</td><td>-</td></tr>';
+		$hasil .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($data->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">KAS LUAR RAB ' . $data->nama_lokasi . ' ' . $data->nama_data_kas . '</td><td></td><td style="text-align: right;">' . number_format($data->nominal, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($data->nominal, 0, ',', '.') . '</td><td>Pak Fitri</td><td style="font-weight: bold;">00' . date('m', strtotime($data->tgl_data)) . '</td><td>' . $data->nama_lokasi . '</td><td>-</td></tr>';
 		$ttl += $data->nominal;
 	}
 	$result[0] = $hasil;

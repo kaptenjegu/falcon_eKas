@@ -398,9 +398,9 @@ class Kas extends CI_Controller
                 if ($v->id_tipe == 1 and $v->id_jenis_kas == 2) {
                     
                     if ($v->nominal_data == 0) {
-                        $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . $v->nominal_data . '</td><td style="text-align: right;">' . $v->nominal_data * $v->qty_data . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
+                        $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                     } else {
-                        $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . $v->nominal_data . '</td><td style="text-align: right;">' . $v->nominal_data * $v->qty_data . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
+                        $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                     }
 
                     $ttl_saldo1 +=  $v->nominal_data * $v->qty_data;
@@ -413,11 +413,11 @@ class Kas extends CI_Controller
                 }
             }
 
-            $luar_rab= get_dana_luar_rab($no, $id_data_kas);
+            $luar_rab= get_dana_luar_rab($no, $id_data_kas);    //total kas luar rab
             $table .= $luar_rab[0];
             $ttl_saldo1 += $luar_rab[1];
 
-            $table .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS </td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo1 . '</td><td colspan="4"></td></tr>';
+            $table .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS </td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="4"></td></tr>';
             $table .= '</table>';
 
             $table2 = '<table border="1" style="width: 100%;">';
@@ -437,12 +437,12 @@ class Kas extends CI_Controller
 
                             if ($v->id_status == 2) { //RAB
                                 if ($v->nominal_data == 0) {
-                                    $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">-</td><td>-</td><td style="text-align: right;">' . $v->nominal_data . '</td><td style="text-align: right;">' . $v->nominal_data * $v->qty_data . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
+                                    $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">-</td><td>-</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                                 } else {
-                                    $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . (float)$v->qty_data . '</td><td style="text-align: right;">' . $v->nominal_data . '</td><td style="text-align: right;">' . $v->nominal_data * $v->qty_data . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
+                                    $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . (float)$v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                                 }
                             } else { //Luar RAB
-                                $table2 .= '<tr style="text-align: center;font-weight: normal;background-color: #7FFFD4;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . (float)$v->qty_data . '</td><td style="text-align: right;">' . $v->nominal_data . '</td><td style="text-align: right;">' . $v->nominal_data * $v->qty_data . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
+                                $table2 .= '<tr style="text-align: center;font-weight: normal;background-color: #7FFFD4;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . (float)$v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                             }
 
                             $ntipe = $v->nama_tipe;
@@ -454,7 +454,7 @@ class Kas extends CI_Controller
                     }
                 }
 
-                $table2 .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo . '</td><td colspan="4"></td></tr>';
+                $table2 .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo, 0, ',', '.') . '</td><td colspan="4"></td></tr>';
                 $ttl_saldo2 += $ttl_saldo;
                 if ($ttl_pengajuan > 0) {
                     //$table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN DANA ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . $ttl_pengajuan . '</td><td colspan="4"></td></tr>';
@@ -462,9 +462,9 @@ class Kas extends CI_Controller
                 }
             }
 
-            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo1 . '</td><td colspan="4"></td></tr>';
-            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL PENGELUARAN KAS ' . strtoupper($data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo2 . '</td><td colspan="4"></td></tr>';
-            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO RAB ' . strtoupper($data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . ($ttl_saldo1 - $ttl_saldo2) . '</td><td colspan="4"></td></tr>';
+            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="4"></td></tr>';
+            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL PENGELUARAN KAS ' . strtoupper($data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo2, 0, ',', '.') . '</td><td colspan="4"></td></tr>';
+            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO RAB ' . strtoupper($data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format(($ttl_saldo1 - $ttl_saldo2), 0, ',', '.') . '</td><td colspan="4"></td></tr>';
             $table2 .= '</table>';
 
             echo $table . $table2 . '<br><br><center><a href="' . base_url('Kas/download_laporan_periode/' . $id_data_kas) . '" style="background-color: blue; width: 250px; border-radius:5px; color: white;">Download</a></center>';
