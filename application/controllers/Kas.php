@@ -417,7 +417,7 @@ class Kas extends CI_Controller
             $table .= $luar_rab[0];
             $ttl_saldo1 += $luar_rab[1];
 
-            $table .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS ' . strtoupper($data[0]->nama_lokasi) . '</td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo1 . '</td><td colspan="4"></td></tr>';
+            $table .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS </td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo1 . '</td><td colspan="4"></td></tr>';
             $table .= '</table>';
 
             $table2 = '<table border="1" style="width: 100%;">';
@@ -457,8 +457,8 @@ class Kas extends CI_Controller
                 $table2 .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo . '</td><td colspan="4"></td></tr>';
                 $ttl_saldo2 += $ttl_saldo;
                 if ($ttl_pengajuan > 0) {
-                    $table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN DANA ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . $ttl_pengajuan . '</td><td colspan="4"></td></tr>';
-                    $table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . ($ttl_pengajuan - $ttl_saldo) . '</td><td colspan="4"></td></tr>';
+                    //$table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN DANA ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . $ttl_pengajuan . '</td><td colspan="4"></td></tr>';
+                    //$table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . ($ttl_pengajuan - $ttl_saldo) . '</td><td colspan="4"></td></tr>';
                 }
             }
 
@@ -542,7 +542,7 @@ class Kas extends CI_Controller
                 }
             }
 
-            $table .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS ' . strtoupper($data[0]->nama_lokasi) . '</td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo1 . '</td><td colspan="4"></td></tr>';
+            $table .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS </td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo1 . '</td><td colspan="4"></td></tr>';
             $table .= '</table>';
 
             $table2 = '<table border="1" style="width: 100%;">';
@@ -582,8 +582,8 @@ class Kas extends CI_Controller
                 $table2 .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo . '</td><td colspan="4"></td></tr>';
                 $ttl_saldo2 += $ttl_saldo;
                 if ($ttl_pengajuan > 0) {
-                    $table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN DANA ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . $ttl_pengajuan . '</td><td colspan="4"></td></tr>';
-                    $table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . ($ttl_pengajuan - $ttl_saldo) . '</td><td colspan="4"></td></tr>';
+                    //$table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN DANA ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . $ttl_pengajuan . '</td><td colspan="4"></td></tr>';
+                    //$table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . ($ttl_pengajuan - $ttl_saldo) . '</td><td colspan="4"></td></tr>';
                 }
             }
 
