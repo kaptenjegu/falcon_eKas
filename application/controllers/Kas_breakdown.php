@@ -327,11 +327,11 @@ class Kas_breakdown extends CI_Controller
             $id_tipe = 1;
 
             // filename dari pdf ketika didownload
-            $file_pdf = 'Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas;
+            $file_pdf = 'KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas);
 
             $ttl_saldo1 = 0;
             $ttl_saldo2 = 0;
-            $table = '<title>Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas .  '</td></tr>';
+            $table = '<title>KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td></tr>';
             $table .= '<tr style="text-align: center;background-color: #69e842;font-weight: bold;"><td>No</td><td>Tanggal</td><td>Uraian</td><td>Debet</td><td>Kredit(Rp)</td><td>Saldo</td><td>PIC</td><td>Nomor Kas</td></tr>';
             $table .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="8">UANG MASUK</td></tr>';
 
@@ -456,7 +456,7 @@ class Kas_breakdown extends CI_Controller
 
             $ttl_saldo1 = 0;
             $ttl_saldo2 = 0;
-            $table = '<title>Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas .  '</td></tr>';
+            $table = '<title>KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td></tr>';
             $table .= '<tr style="text-align: center;background-color: #69e842;font-weight: bold;"><td>No</td><td>Tanggal</td><td>Uraian</td><td>Debet</td><td>Kredit(Rp)</td><td>Saldo</td><td>PIC</td><td>Nomor Kas</td></tr>';
             $table .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="8">UANG MASUK</td></tr>';
 
@@ -529,7 +529,7 @@ class Kas_breakdown extends CI_Controller
             $table2 .= '</table>';
 
             //konversi ke excel
-            $file = 'Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas . '.xls';
+            $file = 'KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) . '.xls';
             header("Content-type: application/vnd.ms-excel");
             header("Content-Disposition: attachment; filename=$file");
             echo $table . $table2;
