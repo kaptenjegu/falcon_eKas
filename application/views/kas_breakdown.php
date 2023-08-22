@@ -33,6 +33,7 @@
             <div class="table-responsive">
                 <a href="<?= base_url('Kas_breakdown/laporan/' . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Laporan RAB</a>&emsp;
                 <a href="<?= base_url('Kas_breakdown/laporan_xls/' . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-primary"><i class="fa fa-download"></i> Laporan RAB XLS</a>&emsp;
+                <a href="<?= base_url('Kas_breakdown/laporan_pdf/' . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-warning"><i class="fa fa-download"></i> Laporan RAB PDF</a>&emsp;
                 <br><br>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>

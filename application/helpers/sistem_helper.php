@@ -246,3 +246,25 @@ function get_dana_luar_rab($no, $id_data_kas)
 	$result[1] = $ttl;
 	return $result;
 }
+
+function format_nomor_dokumen($kode, $nomor_data, $jenis_data)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+
+	if(strlen($nomor_data) == 1){
+		$n = '00' . $nomor_data;
+	}elseif(strlen($nomor_data) == 2){
+		$n = '0' . $nomor_data;
+	}else{
+		$n = $nomor_data;
+	}
+	
+	if($jenis_data == 1){
+		$jd = 'SR';
+	}else{
+		$jd = 'MR';
+	}
+
+	return $kode . '-' . $n . '-' . $jd;
+}

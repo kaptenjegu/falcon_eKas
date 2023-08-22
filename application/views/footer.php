@@ -303,6 +303,33 @@
 <?php } ?>
 
 
+<?php if ($page == "srmr_manage") { ?>
+  <script>
+    function get_data(id) {
+      $.ajax({
+        url: "<?= base_url() ?>Srmr/get_data/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          document.getElementById('id_detail').value = data['id_detail'];
+          document.getElementById('estimasi_data').value = data['estimasi_data'];
+          document.getElementById('deskripsi_data').value = data['deskripsi_data'];
+          document.getElementById('qty_data').value = data['qty_data'];
+          document.getElementById('satuan_data').value = data['satuan_data'];
+          document.getElementById('nominal_data').value = data['nominal_data'];
+          document.getElementById('remark_data').value = data['remark_data'];
+          $('#editForm').modal('show');
+          console.log(data);
+        },
+        error: function(data) {
+          alert('error')
+          console.log(data);
+        }
+      });
+    }
+  </script>
+<?php } ?>
+
 <?php if ($page == "Dashboard") { ?>
   <script>
     // Set new default font family and font color to mimic Bootstrap's default styling

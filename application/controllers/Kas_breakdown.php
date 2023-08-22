@@ -1,5 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-
+error_reporting(0);
 class Kas_breakdown extends CI_Controller
 {
 
@@ -390,21 +390,159 @@ class Kas_breakdown extends CI_Controller
                 }
             }
 
-            $data_next = get_dana_kas_pengajuan_minggu($data[0]->id_minggu);
+
 
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL PENGELUARAN KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo2, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1 - $ttl_saldo2, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
-            
+
+            $data_next = get_dana_kas_pengajuan_minggu($data[0]->id_minggu);
             if ($data[0]->nama_minggu !== 'Minggu 4') {
                 $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($data_next->nominal_data + ($ttl_saldo1 - $ttl_saldo2), 0, ',', '.') . '</td><td colspan="3"></td></tr>';
                 $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($data_next->nominal_data, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             }
 
+
             $table2 .= '</table>';
 
-            //echo $table . $table2;
+            echo $table . $table2;
+            //$this->pdfgenerator->generate($table . $table2, $file_pdf, $paper, $orientation);
+        } else {
+            echo 'Data kosong';
+        }
+    }
+
+    public function laporan_pdf()
+    {
+        $this->load->library('pdfgenerator');
+
+        // setting paper
+        $paper = 'A4';
+        //orientasi paper potrait / landscape
+        //$orientation = "portrait";
+        $orientation = "landscape";
+
+        $id_minggu = $this->db->escape_str($this->uri->segment(3));
+
+        $this->db->select('*');
+        $this->db->from('fki_data');
+        $this->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+        $this->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
+        $this->db->join('fai_lokasi', 'fai_lokasi.id_lokasi = fki_minggu.id_lokasi');
+        $this->db->join('fki_tipe', 'fki_tipe.id_tipe = fki_data.id_tipe');
+        $this->db->where('fki_minggu.id_lokasi', $_SESSION['id_lokasi']);
+        $this->db->where('fki_data.id_minggu', $id_minggu);
+        $this->db->where('fki_data.tgl_delete', null);
+        $this->db->where('fki_data.id_status', 2);  // RAB
+        $this->db->order_by('fki_data.tgl_data', 'asc');
+        $this->db->order_by('fki_data.id_tipe', 'asc');
+        $n = $this->db->get();
+
+        //echo json_encode($data);
+        //exit();
+
+        if ($n->num_rows() > 0) {
+
+            $this->db->select('fki_data.id_tipe');
+            $this->db->from('fki_data');
+            $this->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+            $this->db->where('fki_minggu.id_lokasi', $_SESSION['id_lokasi']);
+            $this->db->where('fki_data.id_minggu', $id_minggu);
+            $this->db->where('fki_data.tgl_delete', null);
+            $this->db->where('fki_data.id_status', 2);
+            $this->db->where('fki_data.id_tipe <> 1');  //kecuali KAS
+            $this->db->group_by('fki_data.id_tipe');
+            $tipe = $this->db->get()->result();
+            //echo json_encode($tipe);exit();
+
+            $data = $n->result();
+            $kas = '';
+            $non_kas = '';
+
+            $id_tipe = 1;
+
+            // filename dari pdf ketika didownload
+            $file_pdf = 'KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas);
+
+            $ttl_saldo1 = 0;
+            $ttl_saldo2 = 0;
+            $table = '<title>KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td></tr>';
+            $table .= '<tr style="text-align: center;background-color: #69e842;font-weight: bold;"><td>No</td><td>Tanggal</td><td>Uraian</td><td>Debet</td><td>Kredit(Rp)</td><td>Saldo</td><td>PIC</td><td>Nomor Kas</td></tr>';
+            $table .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="8">UANG MASUK</td></tr>';
+
+            $no = 1;
+            foreach ($data as $v) {
+                if ($v->id_tipe == 1) {
+                    $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
+                    $ttl_saldo1 +=  $v->nominal_data * $v->qty_data;
+
+                    if ($v->id_tipe > $id_tipe) {
+                        $id_tipe = $v->id_tipe;
+                    }
+
+                    $no += 1;
+                }
+            }
+
+            $table .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL KAS ' . strtoupper($data[0]->nama_lokasi) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            $table .= '</table>';
+
+            $table2 = '<table border="1" style="width: 100%;">';
+            $table2 .= '<tr style="text-align: center;background-color: #69e842;font-weight: bold;"><td>No</td><td>Tanggal</td><td>Uraian</td><td>Qty</td><td>Harga(Rp)</td><td>Jumlah(Rp)</td><td>PIC</td><td>Nomor Kas</td></tr>';
+
+            foreach ($tipe as $id) {
+                $no = 1;
+                $ttl_saldo = 0;
+                $ttl_pengajuan = 0;
+                $tbl_sisa = '';
+                foreach ($data as $v) {
+                    if ($id->id_tipe == $v->id_tipe) {
+                        if ($v->id_jenis_kas == 1) { //keluar
+                            if ($no == 1) {
+                                $table2 .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="8">' . $v->nama_tipe . '</td></tr>';
+                            }
+
+                            if ($v->nominal_data == 0) {
+                                $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">-</td><td>-</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
+                            } else {
+                                $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . (float)$v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
+                            }
+                            //$table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . $v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
+                            $ntipe = $v->nama_tipe;
+                            $ttl_saldo += $v->nominal_data * $v->qty_data;
+                            $no += 1;
+                        } elseif ($v->id_jenis_kas == 2) {
+                            $ttl_pengajuan += $v->nominal_data * $v->qty_data;
+                        }
+                    }
+                }
+
+                $table2 .= '<tr style="background-color: #79BAEC;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+                $ttl_saldo2 += $ttl_saldo;
+                if ($ttl_pengajuan > 0) {
+                    $table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN DANA ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_pengajuan, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+                    $table2 .= '<tr style="background-color: orange;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO ' . strtoupper($ntipe) . '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_pengajuan - $ttl_saldo, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+                }
+            }
+
+
+
+            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL PENGELUARAN KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo2, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1 - $ttl_saldo2, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+
+            $data_next = get_dana_kas_pengajuan_minggu($data[0]->id_minggu);
+            if ($data[0]->nama_minggu !== 'Minggu 4') {
+                $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($data_next->nominal_data + ($ttl_saldo1 - $ttl_saldo2), 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+                $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($data_next->nominal_data, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            }
+
+
+            $table2 .= '</table>';
+
+            
             $this->pdfgenerator->generate($table . $table2, $file_pdf, $paper, $orientation);
+            echo $table . $table2;
         } else {
             echo 'Data kosong';
         }
@@ -412,7 +550,7 @@ class Kas_breakdown extends CI_Controller
 
     public function laporan_xls()
     {
-       $id_minggu = $this->db->escape_str($this->uri->segment(3));
+        $id_minggu = $this->db->escape_str($this->uri->segment(3));
 
         $this->db->select('*');
         $this->db->from('fki_data');
@@ -520,7 +658,7 @@ class Kas_breakdown extends CI_Controller
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo1 . '</td><td colspan="2"></td></tr>';
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL PENGELUARAN KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . $ttl_saldo2 . '</td><td colspan="2"></td></tr>';
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . ($ttl_saldo1 - $ttl_saldo2) . '</td><td colspan="2"></td></tr>';
-            
+
             if ($data[0]->nama_minggu !== 'Minggu 4') {
                 $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . ($data_next->nominal_data + ($ttl_saldo1 - $ttl_saldo2)) . '</td><td colspan="2"></td></tr>';
                 $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . $data_next->nominal_data . '</td><td colspan="2"></td></tr>';
