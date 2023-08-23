@@ -103,11 +103,11 @@ class Srmr extends CI_Controller
             );
             $this->db->insert('fsrmr_data', $data);
 
-            $data = array();
+            //$data2 = array();
 
             for ($n = 0; $n <= count($deskripsi_data) - 1; $n++) {
-                if ((int)$nominal_data[$n] > 0) {
-                    array_push($data, array(
+                if ($deskripsi_data[$n] !== '') {
+                    $data2 = array(
                         'id_detail' => randid(),
                         'id_data' => $id_data,
                         'deskripsi_data' => $deskripsi_data[$n],
@@ -117,10 +117,12 @@ class Srmr extends CI_Controller
                         'satuan_data' => $satuan_data[$n],
                         'nominal_data' => $nominal_data[$n],
                         'remark_data' => $remark_data[$n]
-                    ));
+                    );
+                    $this->db->insert('fsrmr_detail', $data2);
                 }
             }
-            $this->db->insert_batch('fsrmr_detail', $data);
+            //$this->db->insert_batch('fsrmr_detail', $data);
+
 
             $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
 					<center><b>Data Sudah Disimpan</b></center></div>');
@@ -272,6 +274,7 @@ class Srmr extends CI_Controller
     {
         $this->db->where('kode_proyek', $kode);
         $this->db->where('jenis_data', $jenis_data);
+        $this->db->where('tgl_delete', null);
         $n = $this->db->get('fsrmr_data');
 
         if ($n->num_rows() > 0) {
@@ -460,7 +463,15 @@ class Srmr extends CI_Controller
                     $estimasi = '-';
                 }
 
-                $pdf->Rowsrmr(array($no, $v->deskripsi_data, $v->spek_data, (float)$v->qty_data, $v->satuan_data, $estimasi, number_format($v->nominal_data, 0, ',', '.'), number_format($v->qty_data * $v->nominal_data, 0, ',', '.'), $v->remark_data));
+                if ($v->nominal_data == 0) {
+                    $nominal = '';
+                    $nominal2 = '';
+                } else {
+                    $nominal = number_format($v->nominal_data, 0, ',', '.');
+                    $nominal2 = number_format($v->qty_data * $v->nominal_data, 0, ',', '.');
+                }
+
+                $pdf->Rowsrmr(array($no, $v->deskripsi_data, $v->spek_data, (float)$v->qty_data, $v->satuan_data, $estimasi, $nominal, $nominal2, $v->remark_data));
                 $ttl_saldo1 += ($v->qty_data * $v->nominal_data);
                 $no += 1;
             }
@@ -472,9 +483,15 @@ class Srmr extends CI_Controller
                 }
             }
 
+            if ($v->nominal_data == 0) {
+                $ttl = '';
+            } else {
+                $ttl = number_format($ttl_saldo1, 0, ',', '.');
+            }
+
             $pdf->SetFont('Times', 'B', 10);
             $pdf->Cell(212.5, 5, 'TOTAL BIAYA (Rp)', $brd, 0, 'C');
-            $pdf->Cell(27.5, 5, number_format($ttl_saldo1, 0, ',', '.'), $brd, 0, 'R');
+            $pdf->Cell(27.5, 5, $ttl, $brd, 0, 'R');
             $pdf->Cell(30, 5, '', $brd, 1, 'C');
 
             $xttd = $pdf->getx();
