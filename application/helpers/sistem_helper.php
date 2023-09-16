@@ -92,10 +92,10 @@ function get_total_kas($id_minggu)
 	$data = $ci->db->get()->result();
 
 	foreach ($data as $v) {
-		$ttl +=  $v->nominal_data * $v->qty_data;
+		$ttl +=  ($v->nominal_data * $v->qty_data) ?? 0;
 	}
 
-	return $ttl;
+	return $ttl ?? 0;
 }
 
 function get_total_pengeluaran($id_minggu)

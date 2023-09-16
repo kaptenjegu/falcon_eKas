@@ -168,7 +168,7 @@ class Kas extends CI_Controller
 
             $ttl_saldo1 = 0;
             $ttl_saldo2 = 0;
-            $table = '<title>Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas) .  '</td></tr>';
+            $table = '<title>Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas .  '</title><table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">ALL KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas) .  '</td></tr>';
             $table .= '<tr style="text-align: center;background-color: #69e842;font-weight: bold;"><td>No</td><td>Tanggal</td><td>Uraian</td><td>Debet</td><td>Kredit(Rp)</td><td>Saldo</td><td>PIC</td><td>Nomor Kas</td></tr>';
             $table .= '<tr style="background-color: #FFFF00;font-weight: bold;text-align: left;"><td colspan="8">UANG MASUK</td></tr>';
 
@@ -294,12 +294,12 @@ class Kas extends CI_Controller
             $id_tipe = 1;
 
             // filename dari pdf ketika didownload
-            $file_pdf = 'Laporan Kas ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas;
+            $file_pdf = 'LUAR RAB ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas;
 
             $ttl_saldo1 = 0;
             $ttl_saldo2 = 0;
-            $table2 = '<title>KAS LUAR RAB ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas .  '</title>';
-            $table2 .= '<table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">KAS LUAR RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas) .  '</td></tr>';
+            $table2 = '<title>LUAR RAB ' . $data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas .  '</title>';
+            $table2 .= '<table border="1" style="width: 100%;"><tr style="background-color: gray;color: white;font-weight: bold;text-align: center;"><td colspan="8">LUAR RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas) .  '</td></tr>';
             $table2 .= '<tr style="text-align: center;background-color: #69e842;font-weight: bold;"><td>No</td><td>Tanggal</td><td>Uraian</td><td>Qty</td><td>Harga(Rp)</td><td>Jumlah(Rp)</td><td>PIC</td><td>Nomor Kas</td></tr>';
 
             foreach ($tipe as $id) {

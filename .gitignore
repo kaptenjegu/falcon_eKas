@@ -2311,3 +2311,16 @@ application/libraries/dompdf-master/src/Renderer/TableRowGroup.php
 application/libraries/dompdf-master/src/Renderer/Text.php
 vendor/nota/0c8906fb4342f496b1dd39fb499cc79c.jpg
 vendor/nota/44a9d487e6b44a94d972af71985296e3.jpg
+application/views/errors/index.html
+application/views/errors/cli/error_404.php
+application/views/errors/cli/error_db.php
+application/views/errors/cli/error_exception.php
+application/views/errors/cli/error_general.php
+application/views/errors/cli/error_php.php
+application/views/errors/cli/index.html
+application/views/errors/html/error_404.php
+application/views/errors/html/error_db.php
+application/views/errors/html/error_exception.php
+application/views/errors/html/error_general.php
+application/views/errors/html/error_php.php
+application/views/errors/html/index.html

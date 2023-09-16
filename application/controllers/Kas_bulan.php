@@ -1,5 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-
+error_reporting(0);
 class Kas_bulan extends CI_Controller
 {
 
