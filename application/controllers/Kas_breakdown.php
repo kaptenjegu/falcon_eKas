@@ -462,7 +462,7 @@ class Kas_breakdown extends CI_Controller
             $id_tipe = 1;
 
             // filename dari pdf ketika didownload
-            $file_pdf = 'KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas);
+            $file_pdf = 'MONITORING KAS ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_minggu . ' ' . $data[0]->nama_data_kas);
 
             $ttl_saldo1 = 0;
             $ttl_saldo2 = 0;
