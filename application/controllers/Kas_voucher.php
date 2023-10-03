@@ -213,7 +213,7 @@ class Kas_voucher extends CI_Controller
                 //$pdf2->SetAlpha(1);
                 //$pdf->SetDrawColor(255, 255, 255);
                 //data
-                $pdf->Row_custom(array(date('d-m-Y', strtotime($v->tgl_data)), $v->deskripsi_data, number_format($v->nominal_data, 0, ',', '.')));
+                $pdf->Row_custom(array(date('d-m-Y', strtotime($v->tgl_data)), $v->deskripsi_data, number_format($v->nominal_data * $v->qty_data, 0, ',', '.')));
                 for ($n = 1; $n <= 5; $n++) {
                     $pdf->Row_custom(array('', '', ''));
                     /*$x = $pdf->GetX();
@@ -232,7 +232,7 @@ class Kas_voucher extends CI_Controller
                 //total
                 $terbilang = $pdf->getY();
                 $pdf->Cell(140, 5, 'Total', $brd, 0, 'R');
-                $pdf->Cell(50, 5, 'Rp ' . number_format($v->nominal_data, 0, ',', '.'), $brd, 1, 'C');
+                $pdf->Cell(50, 5, 'Rp ' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.'), $brd, 1, 'C');
                 //$pdf->Cell(50, 5, '', $brd, 0, 'R');
                 //$pdf->Cell(150, 5, '', $brd, 1, 'R');
 
