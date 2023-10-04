@@ -238,7 +238,7 @@ class Kas_voucher extends CI_Controller
 
                 //Terbilang
                 //$pdf->SetFont('Times', 'BI', 12);
-                $pdf->Cell(190, 5, 'Terbilang : ' . ucwords(terbilang($v->nominal_data)), $brd, 1, 'L');
+                $pdf->Cell(190, 5, 'Terbilang : ' . ucwords(terbilang($v->nominal_data * $v->qty_data)), $brd, 1, 'L');
                 // $pdf->SetFont('Times', 'B', 12);
                 ////$pdf->Cell(150, 5, '', $brd, 1, 'C');
 
@@ -390,8 +390,8 @@ class Kas_voucher extends CI_Controller
             $this->db->where('id_data', $id_data[$n]);
             $v = $this->db->get('fki_data')->first_row();
 
-            $pdf->Row_custom(array(date('d/m/y', strtotime($v->tgl_data)), $v->deskripsi_data, number_format($v->nominal_data, 0, ',', '.')));
-            $ttl += $v->nominal_data;
+            $pdf->Row_custom(array(date('d/m/y', strtotime($v->tgl_data)), $v->deskripsi_data, number_format($v->nominal_data * $v->qty_data, 0, ',', '.')));
+            $ttl += $v->nominal_data * $v->qty_data;
         }
 
         //data penambahan manual
