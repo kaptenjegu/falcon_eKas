@@ -539,12 +539,14 @@ class Kas extends CI_Controller
                 if ($v->id_tipe == 1 and $v->id_jenis_kas == 2) {
                     
                     if ($v->nominal_data == 0) {
-                        $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
+                        //$table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                     } else {
                         $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                     }
 
-                    $ttl_saldo1 +=  $v->nominal_data * $v->qty_data;
+                    if ($v->nominal_data > 0 OR $v->nominal_data < 0) {
+                        $ttl_saldo1 +=  $v->nominal_data * $v->qty_data;
+                    }
 
                     if ($v->id_tipe > $id_tipe) {
                         $id_tipe = $v->id_tipe;
@@ -578,7 +580,7 @@ class Kas extends CI_Controller
 
                             if ($v->id_status == 2) { //RAB
                                 if ($v->nominal_data == 0) {
-                                    $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">-</td><td>-</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
+                                    //$table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">-</td><td>-</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                                 } else {
                                     $table2 .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td>' . (float)$v->qty_data . '</td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                                 }
@@ -587,7 +589,11 @@ class Kas extends CI_Controller
                             }
 
                             $ntipe = $v->nama_tipe;
-                            $ttl_saldo += $v->nominal_data * $v->qty_data;
+                            
+                            if ($v->nominal_data > 0 OR $v->nominal_data < 0) {
+                                $ttl_saldo += $v->nominal_data * $v->qty_data;
+                            }
+                            
                             $no += 1;
                         } elseif ($v->id_jenis_kas == 2) {
                             $ttl_pengajuan += $v->nominal_data * $v->qty_data;
