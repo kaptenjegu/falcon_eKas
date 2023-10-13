@@ -18,11 +18,11 @@
         </div>
 
         <div class="card-body">
-            <div class="table-responsive">
-                 <form method="POST" action="<?= base_url('Kas_voucher/cetak_custom_kas/') ?>" target="_blank">
+            <div class="table-responsive" style="overflow-y: auto;height: 450px;">
+                <form method="POST" action="<?= base_url('Kas_voucher/cetak_custom_kas/') ?>" target="_blank">
                     <input type="hidden" name="nama_data_kas" value="<?= $judul_periode->nama_data_kas ?>">
                     <input type="hidden" name="judul" value="<?= 'Voucher Data Kas ' . $judul_periode->nama_data_kas . ' ' . $judul_periode->nama_minggu . ' ' . get_lokasi() ?>">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" width="100%" cellspacing="0">
 
                         <thead>
                             <tr>
@@ -37,7 +37,7 @@
                         <tbody>
 
                             <?php
-                            
+
                             $no = 1;
                             foreach ($hasil as $v) {
                                 echo '<tr>
@@ -123,6 +123,14 @@
     </div>
 
     <div class="card-footer small">
+        <div class="form-group">
+            <label><b>Pilih Mode Cetak</b></label>
+            <select class="form-control" name="mode_cetak">
+                <option value="1">Satu Persatu</option>
+                <option value="2">Gabung</option>
+            </select>
+        </div>
+        <br>
         <button type="submit" class="btn btn-info"><i class="fa fa-download"></i> Download</button>
         </form>
     </div>
