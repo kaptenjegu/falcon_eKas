@@ -746,4 +746,5 @@ class Kas extends CI_Controller
             $file = 'Laporan Kas Periode ' . $data[0]->nama_data_kas . '.xls';
             header("Content-type: application/vnd.ms-excel");
             header("Content-Disposition: attachment; filename=$file");
-
+*/
+}
