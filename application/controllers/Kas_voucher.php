@@ -60,9 +60,16 @@ class Kas_voucher extends CI_Controller
     public function list_kas()
     {
         $id_minggu = $this->db->escape_str($this->uri->segment(3));
+        $id_data_kas = $this->db->escape_str($this->uri->segment(4));
+
         $data['judul'] = 'Voucher Kas';
         $data['page'] = 'Kas_voucher';
         $data['url'] = base_url('Kas_voucher/list_kas/' . $id_minggu);
+
+        $this->db->where('fki_minggu.id_minggu', $id_minggu);
+        $minggu = $this->db->get('fki_minggu')->first_row();
+
+        $nama_minggu = $minggu->nama_minggu;
 
         //get tipe kas, ex: makanan, listrik, bbm
         $this->db->select('*');
@@ -72,7 +79,8 @@ class Kas_voucher extends CI_Controller
         $this->db->where('fki_data.id_jenis_kas', 1);  //keluar
         $this->db->where('fki_data.id_tipe <> 1');  //selain tipe KAS masuk
         $this->db->where('fki_data.id_status', 2);  //RAB
-        $this->db->where('fki_data.id_minggu', $id_minggu);
+        $this->db->where('fki_minggu.nama_minggu', $nama_minggu);
+        $this->db->where('fki_minggu.id_data_kas', $id_data_kas);
         $this->db->where('fki_data.tgl_delete', null);
         $this->db->group_by('fki_data.id_tipe');
         $n = $this->db->get();
@@ -88,21 +96,28 @@ class Kas_voucher extends CI_Controller
             foreach ($n->result() as $v) {
                 $n = 1;
                 $ttl = 0;
-                foreach ($this->get_data_kas($id_minggu, $v->id_tipe) as $a) {
+                $data_kas = $this->get_data_kas($nama_minggu, $v->id_tipe,$id_data_kas);
+                foreach ($data_kas as $a) {
                     if ($n == 1) {
                         $tgl_1 = date('d-m-Y', strtotime($a->tgl_data));
                     }
 
                     $tgl_2 = date('d-m-Y', strtotime($a->tgl_data));
 
-                    $ttl += $a->qty_data * $a->nominal_data;
+                    if($a->nominal_data < 0 OR $a->nominal_data > 0){
+                        $ttl += ($a->qty_data * $a->nominal_data);
+                        //echo $a->qty_data . '*' . $a->nominal_data . '<br>';
+                    }
+
                     $deskripsi = 'Pengeluaran ' . $a->nama_tipe . ' ' . $a->nama_minggu . ' All Kas ' . $a->nama_data_kas;
                     $n += 1;
                 }
                 array_push($hasil, array('tgl' => $tgl_1 . ' s.d ' . $tgl_2, 'deskripsi' => $deskripsi, 'total' => $ttl));
+                //echo $ttl . '<br>';
             }
             $data['hasil'] = $hasil;
-            //echo json_encode((object)$hasil);exit();
+            //echo json_encode((object)$hasil);
+            //exit();
 
             $this->load->view('header', $data);
             $this->load->view('kas_voucher2', $data);
@@ -112,7 +127,7 @@ class Kas_voucher extends CI_Controller
         }
     }
 
-    private function get_data_kas($id_minggu, $id_tipe)
+    private function get_data_kas($nama_minggu, $id_tipe, $id_data_kas)
     {
         $this->db->select('*');
         $this->db->from('fki_data');
@@ -122,10 +137,12 @@ class Kas_voucher extends CI_Controller
         $this->db->where('fki_data.id_jenis_kas', 1);  //keluar
         $this->db->where('fki_data.id_tipe', $id_tipe);  //selain tipe KAS masuk
         $this->db->where('fki_data.id_status', 2);  //RAB
-        $this->db->where('fki_data.id_minggu', $id_minggu);
+        $this->db->where('fki_minggu.nama_minggu', $nama_minggu);        
+        $this->db->where('fki_minggu.id_data_kas', $id_data_kas);
         $this->db->order_by('fki_data.tgl_data', 'asc');
         $this->db->where('fki_data.tgl_delete', null);
         $data = $this->db->get()->result();
+        //echo json_encode($data) . '<br><br>';//exit();
         return $data;
     }
 

@@ -14,7 +14,7 @@
     <div class="card mb-3">
         <div class="card-header">
             <i class="fas fa-table"></i>
-            Voucher Data Kas <?= $judul_periode->nama_data_kas . ' ' . $judul_periode->nama_minggu . ' <b>' . get_lokasi() ?></b>
+            Voucher Data Kas <?= $judul_periode->nama_data_kas . ' ' . $judul_periode->nama_minggu . ' <b>' ?></b>
         </div>
 
         <div class="card-body">
