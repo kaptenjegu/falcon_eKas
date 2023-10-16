@@ -29,6 +29,11 @@ class Kas_bulan extends CI_Controller
 
             $data['judul_periode'] = $n->first_row();
 
+            //get data nominal dana pengajuan asli
+            $this->db->where('id_data_kas', $id_data_kas);
+            $this->db->where('id_lokasi', $_SESSION['id_lokasi']);
+            $data['dana_pengajuan'] = $this->db->get('fki_dana_pengajuan')->first_row();
+
             $this->db->select('*');
             $this->db->from('fki_minggu');
             $this->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
@@ -128,6 +133,52 @@ class Kas_bulan extends CI_Controller
         redirect('Kas_bulan/detail/' . $id_data_kas);
     }
 
+    public function edit_dana_pengajuan()
+    {
+        try {
+            $this->db->trans_start();
+
+            $id_data_kas = $this->db->escape_str($this->input->post('id_data_kas'));
+            $id_lokasi = $this->db->escape_str($this->input->post('id_lokasi'));
+            $nominal = $this->input->post('nominal');
+
+            $this->db->where('id_data_kas', $id_data_kas);
+            $this->db->where('id_lokasi', $id_lokasi);
+            $n_dapeng = $this->db->get('fki_dana_pengajuan')->num_rows();
+
+
+            if ($n_dapeng == 0) {
+                $data = array(
+                    'id_dana_pengajuan' => '',
+                    'id_data_kas' => $id_data_kas,
+                    'id_lokasi' => $id_lokasi,
+                    'nominal' => $nominal
+                );
+                $this->db->insert('fki_dana_pengajuan', $data);
+                
+                $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+                        <center><b>Nominal Dana Pengajuan Asli Sudah Diperbarui</b></center></div>');
+            } else {
+                $this->db->set('nominal', $nominal);
+                $this->db->where('id_data_kas', $id_data_kas);
+                $this->db->where('id_lokasi', $id_lokasi);
+                $this->db->update('fki_dana_pengajuan');
+
+                $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+                        <center><b>Nominal Dana Pengajuan Asli Sudah Diperbarui</b></center></div>');
+            }
+
+            $this->db->trans_complete();
+
+            //logdb($_SESSION['id_akun'], 'Lembur', 'simpan_lembur', 'fai_lembur', 'simpan data lembur - ' . json_encode($data));
+
+        } catch (\Throwable $e) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+        }
+        redirect('Kas_bulan/detail/' . $id_data_kas);
+    }
+
     public function get_data()
     {
         try {
@@ -137,6 +188,27 @@ class Kas_bulan extends CI_Controller
             $data = $this->db->get('fki_minggu')->first_row();
 
             echo json_encode($data);
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function get_data_dapeng()
+    {
+        try {
+            $id_data_kas = $this->db->escape_str($this->uri->segment(3));
+
+            $this->db->where('id_data_kas', $id_data_kas);
+            $this->db->where('id_lokasi', $_SESSION['id_lokasi']);
+            $d = $this->db->get('fki_dana_pengajuan');
+
+            if($d->num_rows() == 0){
+                echo '10';
+            }else{
+                $data = $d->first_row();
+                echo $data->nominal;
+            }
+            
         } catch (\Throwable $e) {
             echo $e->getMessage();
         }

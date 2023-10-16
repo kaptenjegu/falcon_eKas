@@ -18,6 +18,7 @@
 
         <div class="card-body">
             <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addForm"><i class="fa fa-plus"></i> Tambah Minggu</a>
+            <span style="right: 2%; position: absolute;font-weight: bold;font-size: 26px;">Dana Pengajuan : <a href="#" onclick="get_data_dapeng('<?= $judul_periode->id_data_kas ?>')" id="nominal_edit" style="text-decoration: none;color: black;">Rp. <?= number_format($dana_pengajuan->nominal, 0, ',', '.') ?? 0 ?></a></span>
             <br><br>
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -110,6 +111,8 @@
 </div>
 <!-- ADD -->
 
+
+
 <!--  EDIT-->
 <div class="modal fade" id="editForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -140,3 +143,29 @@
     </div>
 </div>
 <!-- EDIT -->
+
+<!-- Dana Pengajuan -->
+<div class="modal fade" id="DanaPengajuanForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Edit Dana Pengajuan Asli</h4>
+            </div>
+            <form method="POST" action="<?= base_url('Kas_bulan/edit_dana_pengajuan/') ?>">
+                <div class="modal-body">
+                    <input type="hidden" name="id_data_kas" value="<?= $this->db->escape_str($this->uri->segment(3)) ?>">
+                    <input type="hidden" name="id_lokasi" value="<?= $_SESSION['id_lokasi'] ?>">
+                    <div class="form-group">
+                        <label>Nominal (Rp.)</label>
+                        <input type="number" class="form-control" name="nominal" id="nominal1" min="1" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Dana Pengajuan -->

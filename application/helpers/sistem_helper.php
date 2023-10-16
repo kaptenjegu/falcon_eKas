@@ -268,3 +268,22 @@ function format_nomor_dokumen($kode, $nomor_data, $jenis_data)
 
 	return $kode . '-' . $n . '-' . $jd;
 }
+
+function get_dana_pengajuan_asli($id_data_kas, $id_lokasi)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+	
+	$ci->db->where('id_data_kas', $id_data_kas);
+	$ci->db->where('id_lokasi', $id_lokasi);
+	$dapeng = $ci->db->get('fki_dana_pengajuan');
+
+	if($dapeng->num_rows() == 0){
+		$hasil = 0;
+	}else{
+		$data = $dapeng->first_row();
+		$hasil = $data->nominal;
+	}
+	
+	return $hasil;
+}

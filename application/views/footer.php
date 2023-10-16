@@ -103,6 +103,25 @@
       });
     }
 
+    function get_data_dapeng(id) {
+      $.ajax({
+        url: "<?= base_url() ?>Kas_bulan/get_data_dapeng/" + id,
+        type: "GET",
+        dataType: "HTML",
+        success: function(data) {
+          //document.getElementById('id_data_kas').value = data['id_data_kas'];
+          document.getElementById('nominal1').value = data;
+          $('#DanaPengajuanForm').modal('show');
+          console.log(data);
+          console.log(id);
+        },
+        error: function(data) {
+          alert('error')
+          console.log(data);
+        }
+      });
+    }
+
     /*rupiah.addEventListener('keyup', function(e) {
       lbl_dana.innerHTML = 'Dana Pengajuan <b>' + formatRupiah(rupiah.value, 'Rp. ') + '</b>';
     });
