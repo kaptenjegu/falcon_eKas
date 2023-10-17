@@ -364,6 +364,7 @@ class Kas extends CI_Controller
         $this->db->where('fki_minggu.id_data_kas', $id_data_kas);
         $this->db->where('fki_data.tgl_delete', null);
         //$this->db->where('fki_data.id_status', 2);  // RAB
+        $this->db->order_by('fki_minggu.nama_minggu', 'asc');
         $this->db->order_by('fai_lokasi.nama_lokasi', 'asc');
         $this->db->order_by('fki_data.tgl_data', 'asc');
         //$this->db->order_by('fki_data.id_tipe', 'asc');
@@ -500,6 +501,7 @@ class Kas extends CI_Controller
         $this->db->where('fki_minggu.id_data_kas', $id_data_kas);
         $this->db->where('fki_data.tgl_delete', null);
         //$this->db->where('fki_data.id_status', 2);  // RAB
+        $this->db->order_by('fki_minggu.nama_minggu', 'asc');
         $this->db->order_by('fai_lokasi.nama_lokasi', 'asc');
         $this->db->order_by('fki_data.tgl_data', 'asc');
         //$this->db->order_by('fki_data.id_tipe', 'asc');
