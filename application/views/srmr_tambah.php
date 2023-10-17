@@ -48,16 +48,19 @@
                 </div>
                 <div class="form-group">
                     <label>Kode Proyek</label>
-                    <input type="text" class="form-control" name="kode_proyek" maxlength="20" required>
+                    <input type="text" class="form-control" name="kode_proyek" id="kode_proyek" onkeyup="get_nomor_data()" maxlength="20" required>
                 </div>
                 <div class="form-group">
                     <label>Jenis Permintaan</label>
-                    <select class="form-control" name="jenis_data" required>
+                    <select class="form-control" name="jenis_data" id="jenis_data" onchange="get_nomor_data()" required>
                         <option value="1">Service Request(SR)</option>
                         <option value="2">Material Request(MR)</option>
                     </select>
                 </div>
-                
+                <div class="form-group">
+                    <label>Nomor Data</label>
+                    <input type="number" class="form-control" name="nomor_data" id="nomor_data" maxlength="11" required>
+                </div>
         </div>
     </div>
 

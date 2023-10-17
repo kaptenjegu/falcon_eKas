@@ -80,6 +80,7 @@ class Srmr extends CI_Controller
             $customer_data = $this->input->post('customer_data');
             $kode_proyek = $this->input->post('kode_proyek');
             $jenis_data = $this->input->post('jenis_data');
+            $nomor_data = $this->input->post('nomor_data');
             $id_data = randid();
             $estimasi_data = $this->input->post('estimasi_data');
             $deskripsi_data = $this->input->post('deskripsi_data');
@@ -92,7 +93,7 @@ class Srmr extends CI_Controller
             $data = array(
                 'id_data' => $id_data,
                 'jenis_data' => $jenis_data,
-                'nomor_data' => $this->penomoran($jenis_data, $kode_proyek),
+                'nomor_data' => $nomor_data,
                 'tgl_data' => $tgl_data,
                 'proyek_data' => $proyek_data,
                 'subject_data' => $subject_data,
@@ -265,6 +266,29 @@ class Srmr extends CI_Controller
             $data = $this->db->get('fsrmr_detail')->first_row();
 
             echo json_encode($data);
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function get_nomor_data()
+    {
+        try {
+            $kode_proyek = $this->db->escape_str($this->uri->segment(3));
+            $jenis_data = $this->db->escape_str($this->uri->segment(4));
+
+            $this->db->where('kode_proyek', $kode_proyek);
+            $this->db->where('jenis_data', $jenis_data);
+            $n = $this->db->get('fsrmr_data');
+
+            if($n->num_rows() == 0){
+                $hasil = 0;
+            }else{
+                $data = $n->first_row();
+                $hasil = $data->nomor_data;
+            }
+            
+            echo $hasil + 1;
         } catch (\Throwable $e) {
             echo $e->getMessage();
         }

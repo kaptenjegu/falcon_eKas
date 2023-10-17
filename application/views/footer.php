@@ -346,6 +346,25 @@
         }
       });
     }
+
+    function get_nomor_data(){
+      var kode_proyek = document.getElementById('kode_proyek').value;
+      var jenis_data = document.getElementById('jenis_data').value;
+
+      $.ajax({
+        url: "<?= base_url() ?>Srmr/get_nomor_data/" + kode_proyek + "/" + jenis_data,
+        type: "GET",
+        dataType: "HTML",
+        success: function(data) {
+          document.getElementById('nomor_data').value = data;
+          console.log("get_nomor_data = " + data);
+        },
+        error: function(data) {
+          alert('error')
+          console.log(data);
+        }
+      });
+    }
   </script>
 <?php } ?>
 
