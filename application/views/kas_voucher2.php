@@ -18,42 +18,46 @@
         </div>
 
         <div class="card-body">
-            <div class="table-responsive" style="overflow-y: auto;height: 450px;">
-                <form method="POST" action="<?= base_url('Kas_voucher/cetak_custom_kas/') ?>" target="_blank">
-                    <input type="hidden" name="nama_data_kas" value="<?= $judul_periode->nama_data_kas ?>">
-                    <input type="hidden" name="judul" value="<?= 'Voucher Data Kas ' . $judul_periode->nama_data_kas . ' ' . $judul_periode->nama_minggu . ' ' . get_lokasi() ?>">
-                    <table class="table table-bordered" width="100%" cellspacing="0">
+            <a href="<?= base_url('Kas_voucher/cetak_vocer_kas_masuk/' . $this->uri->segment(3) . "/" . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Voucher Kas Masuk<a>
+                    <br>
+                    <br>
+                    <div class="table-responsive" style="overflow-y: auto;height: 450px;">
 
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Tanggal</th>
-                                <th>Uraian</th>
-                                <th>Nominal</th>
-                                <th>Opsi</th>
-                            </tr>
-                        </thead>
+                        <form method="POST" action="<?= base_url('Kas_voucher/cetak_custom_kas/') ?>" target="_blank">
+                            <input type="hidden" name="nama_data_kas" value="<?= $judul_periode->nama_data_kas ?>">
+                            <input type="hidden" name="judul" value="<?= 'Voucher Data Kas ' . $judul_periode->nama_data_kas . ' ' . $judul_periode->nama_minggu . ' ' . get_lokasi() ?>">
+                            <table class="table table-bordered" width="100%" cellspacing="0">
 
-                        <tbody>
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Tanggal</th>
+                                        <th>Uraian</th>
+                                        <th>Nominal</th>
+                                        <th>Opsi</th>
+                                    </tr>
+                                </thead>
 
-                            <?php
+                                <tbody>
 
-                            $no = 1;
-                            foreach ($hasil as $v) {
-                                echo '<tr>
+                                    <?php
+
+                                    $no = 1;
+                                    foreach ($hasil as $v) {
+                                        echo '<tr>
                                     <td>' . $no . '</td>
                                     <td>' . $v['tgl'] . '</td>
                                     <td>' . $v['deskripsi'] . '</td>
                                     <td>Rp. ' . number_format($v['total'], 0, ',', '.') . '</td>
                                     <td><input type="checkbox" name="all_data[]"  value="' . $v['tgl'] . '|@|' . $v['deskripsi'] . '|@|' . $v['total'] . '"</td>
                                     </tr>';
-                                $no += 1;
-                            }
-                            ?>
-                        </tbody>
-                    </table>
+                                        $no += 1;
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
 
-            </div>
+                    </div>
         </div>
     </div>
 

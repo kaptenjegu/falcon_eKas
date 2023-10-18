@@ -327,6 +327,157 @@ class Kas_voucher extends CI_Controller
         }
     }
 
+    public function cetak_vocer_kas_masuk()
+    {
+        $id_minggu = $this->db->escape_str($this->uri->segment(3));
+        $id_data_kas = $this->db->escape_str($this->uri->segment(4));
+
+        //konfirmasi apakah datanya ada?
+        $this->db->select('*');
+        $this->db->from('fki_data');
+        $this->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+        $this->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
+        $this->db->where('fki_data.id_tipe', 1);
+        $this->db->where('fki_data.nominal_data > 0');
+        $this->db->where('fki_data.id_minggu', $id_minggu);
+        //$this->db->where('(SUBSTRING(fki_data.deskripsi_data,1,3) = "KAS" OR SUBSTRING(fki_data.deskripsi_data,1,4) = "BPJS")');
+        $this->db->where('fki_data.tgl_delete', null);
+        $n = $this->db->get();
+
+        if ($n->num_rows() > 0) {
+
+            $data = $n->result();
+
+            $pdf = new PDF_MC_Table('P', 'mm', 'a4'); // h ,w
+            //$pdf2 = new AlphaPDF();
+            $pdf->SetTitle('Cetak Voucher Luar RAB ' . $data[0]->nama_data_kas . ' ' . $data[0]->nama_minggu);
+            $brd = 1;
+            $brd2 = 0;
+            $np = 1;
+
+            $pdf->SetFont('Times', 'B', 10);
+            $pdf->SetLineWidth(0.4);
+            $pdf->AddPage();
+
+            $border_color_r = 250;
+            $border_color_g = 0;
+            $border_color_b = 0;
+
+            foreach($data as $v){
+                //per vocer H - 130
+                $pdf->SetTextColor(5, 86, 250);
+                $y_logo1 = $pdf->getY();
+                $x_logo1 = $pdf->getX();
+                $pdf->Cell(190, 5, 'PT. Falcon Prima Tehnik', $brd2, 1, 'R'); //(w,h,txt,border,ln,align) h max 260, w max 190
+                $pdf->SetDrawColor($border_color_r, $border_color_g, $border_color_b);
+                $pdf->SetFont('Times', '', 8);
+                $pdf->Cell(190, 3, 'E-mail. falcon@falcontehnik.com', $brd2, 1, 'R');
+                $pdf->Cell(190, 3, 'falcon.tehnik@gmail.com', $brd2, 1, 'R');
+                $pdf->Cell(190, 3, 'Website. https://falcontehnik.com', $brd2, 1, 'R');
+                $pdf->Cell(190, 3, 'Jl. Klampis Semolo Barat X.71/L.38, Sukolilo, Surabaya, Jawa Timur 60119', $brd2, 1, 'R');
+
+                //gambar
+                $pdf->Image('vendor/image/logo_falcon.png', $x_logo1 + 2, $y_logo1 + 1, 30, 15, '', '#'); //(x,y,w,h)
+                $pdf->Image('vendor/image/logo_2.png', $x_logo1 + 20, $y_logo1 + 33, 150, 65, '', '#'); //watermark
+
+                $pdf->SetFont('Times', 'B', 12);
+                $pdf->SetTextColor(0, 0, 0);
+
+                $pdf->Cell(60, 5, 'Dibayarkan kepada : ', $brd2, 0, 'C');
+                $pdf->Cell(70, 5, 'BUKTI KAS MASUK', 0, 0, 'C');
+                $pdf->Cell(60, 5, 'Nomor : ', $brd, 1, 'L');
+                $pdf->Cell(60, 5, '', 0, 0, 'C');
+                $pdf->Cell(70, 5, 'PT FALCON PRIMA TEHNIK', 0, 0, 'C');
+                $pdf->Cell(60, 5, 'COA : ', $brd, 1, 'L');
+
+                //isi data
+                $pdf->SetWidths(array(40, 100, 50));
+
+                $pdf->Row(array('Tanggal', 'Deskripsi', 'Jumlah'));
+                //$pdf2->SetAlpha(1);
+                //$pdf->SetDrawColor(255, 255, 255);
+                //data
+                $pdf->Row_custom(array(date('d-m-Y', strtotime($v->tgl_data)), $v->deskripsi_data, number_format($v->nominal_data * $v->qty_data, 0, ',', '.')));
+                for ($n = 1; $n <= 5; $n++) {
+                    $pdf->Row_custom(array('', '', ''));
+                }
+
+                //total
+                $terbilang = $pdf->getY();
+                $pdf->Cell(140, 5, 'Total', $brd, 0, 'R');
+                $pdf->Cell(50, 5, 'Rp ' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.'), $brd, 1, 'C');
+                
+                //Terbilang
+                $pdf->Cell(190, 5, 'Terbilang : ' . ucwords(terbilang($v->nominal_data * $v->qty_data)) . ' Rupiah', $brd, 1, 'L');
+                
+                //catatan
+                $pdf->Cell(190, 5, 'Catatan : ', $brd, 1, 'L');
+
+                $pdf->Cell(60, 5, 'Membuat', $brd, 0, 'C');
+                $pdf->Cell(70, 5, 'Mengetahui', $brd, 0, 'C');
+                $pdf->Cell(60, 5, 'Menyetujui', $brd, 1, 'C');
+                $y_kanan_akhir = $pdf->getY();
+                //ttd
+                $pdf->Cell(60, 25, '', $brd, 0, 'C');
+                $pdf->Cell(70, 25, '', $brd, 0, 'C');
+                $pdf->Cell(60, 25, '', $brd, 1, 'C');
+
+                $pdf->Cell(60, 5, '(Admin Finance)', $brd, 0, 'C');
+                $pdf->Cell(70, 5, '(Accounting&Tax)', $brd, 0, 'C');
+                $pdf->Cell(60, 5, '(Direktur Keuangan)', $brd, 1, 'C');
+
+
+                //Line
+                $pdf->SetDrawColor($border_color_r, $border_color_g, $border_color_b);
+                //$pdf->Line(20, 45, 210, 45);    //(float x1, float y1, float x2, float y2)
+
+                //top
+                $pdf->Line($x_logo1, $y_logo1, $x_logo1 + 190, $y_logo1);
+
+                //top2
+                $pdf->Line($x_logo1, $y_logo1 + 17, $x_logo1 + 190, $y_logo1 + 17);
+
+                //left
+                //$pdf->Line(10, 10, 10, $terbilang);
+                $pdf->Line($x_logo1, $y_logo1, $x_logo1, $terbilang);
+
+
+                //left bukti bank
+                //$pdf->Line(70, 27, 70, 37);
+                $pdf->Line(70, $y_logo1 + 17, 70, $y_logo1 + 27);
+
+                //right data tanggal
+                //$pdf->Line(50, 40, 50, $terbilang);
+                $pdf->Line(50, $y_logo1 + 30, 50, $terbilang);
+
+                //left data Jumlah
+                //$pdf->Line(150, 40, 150, $terbilang);
+                $pdf->Line(150, $y_logo1 + 30, 150, $terbilang);
+
+                //right
+                //$pdf->Line(200, 10, 200, $terbilang);
+                $pdf->Line($x_logo1 + 190, $y_logo1, $x_logo1 + 190, $y_kanan_akhir);
+
+                //$pdf->Cell(190, 5, '', $brd2, 1, 'C'); //(w,h,txt,border,ln,align) h max 260, w max 190
+                //$pdf->ln(15);
+
+
+                if ($np == 2) {
+                    $pdf->AddPage();
+                    $np = 1;
+                } else {
+                    $np += 1;
+                    $pdf->Cell(190, 15, '', 0, 1, 'C');
+                }
+            }
+
+
+            $pdf->Output('Voucher Luar RAB ' . $data[0]->nama_data_kas . ' ' . $data[0]->nama_minggu . '.pdf', 'I');
+        } else {
+            echo 'ERROR';
+        }
+    }
+
     public function cetak_custom()
     {
         $id_data = $this->input->post('id_data');
@@ -770,7 +921,7 @@ class Kas_voucher extends CI_Controller
                 } else {
                     $hed_judul = 'BANK KELUAR';
                 }
-                
+
                 //$ttl += (int)$h[2];
 
                 $border_color_r = 5;
