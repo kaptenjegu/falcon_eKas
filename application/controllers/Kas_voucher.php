@@ -327,10 +327,15 @@ class Kas_voucher extends CI_Controller
         }
     }
 
-    public function cetak_vocer_kas_masuk()
+    public function cetak_vocer_kas_masuk() //semua lokasi / site
     {
         $id_minggu = $this->db->escape_str($this->uri->segment(3));
         $id_data_kas = $this->db->escape_str($this->uri->segment(4));
+
+        //get nama minggu
+        $this->db->where('id_minggu', $id_minggu);
+        $minggu = $this->db->get('fki_minggu')->first_row();
+        //echo $minggu->nama_minggu; exit();
 
         //konfirmasi apakah datanya ada?
         $this->db->select('*');
@@ -339,8 +344,10 @@ class Kas_voucher extends CI_Controller
         $this->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
         $this->db->where('fki_data.id_tipe', 1);
         $this->db->where('fki_data.nominal_data > 0');
-        $this->db->where('fki_data.id_minggu', $id_minggu);
+        $this->db->where("(fki_minggu.id_data_kas = '" . $id_data_kas . "' AND fki_minggu.nama_minggu = '" . $minggu->nama_minggu . "')");
+        //$this->db->where('fki_minggu.nama_minggu', $minggu->nama_minggu);        
         //$this->db->where('(SUBSTRING(fki_data.deskripsi_data,1,3) = "KAS" OR SUBSTRING(fki_data.deskripsi_data,1,4) = "BPJS")');
+        $this->db->where('SUBSTRING(fki_data.deskripsi_data,1,4) <> "sisa"');
         $this->db->where('fki_data.tgl_delete', null);
         $n = $this->db->get();
 
