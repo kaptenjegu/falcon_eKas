@@ -9,6 +9,16 @@
         right: 0;
         width: auto;
     }
+
+    .btn-ungu {
+        background-color: purple;
+        color: white;
+    }
+
+    .btn-ungu:hover {
+        background-color: #5c04a0;
+        color: white;
+    }
 </style>
 <div class="container-fluid">
 
@@ -18,7 +28,6 @@
             <a href="<?= base_url('Kas') ?>">Kas</a> / <a href="<?= base_url('Kas_bulan/detail/' . $judul_periode->id_data_kas) ?>"><?= 'Data Kas Bulan ' . $judul_periode->nama_data_kas ?></a> / <a href="<?= $url ?>"><?= $judul . $judul_periode->nama_minggu ?></a>
         </li>
     </ol>
-
 
     <!-- DataTables Example -->
 
@@ -34,6 +43,7 @@
                 <a href="<?= base_url('Kas_breakdown/laporan/' . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-info"><i class="fa fa-download"></i> Laporan RAB</a>&emsp;
                 <a href="<?= base_url('Kas_breakdown/laporan_xls/' . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-primary"><i class="fa fa-download"></i> Laporan RAB XLS</a>&emsp;
                 <a href="<?= base_url('Kas_breakdown/laporan_pdf/' . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-warning"><i class="fa fa-download"></i> Laporan RAB PDF</a>&emsp;
+                <button class="btn btn-ungu" onclick="$('#uploadForm').modal('show')"><i class="fa fa-upload"></i> Import Excel</button>&emsp;
                 <br><br>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -229,3 +239,60 @@
     </div>
 </div>
 <!-- EDIT -->
+
+<!--  Upload -->
+<div class="modal fade" id="uploadForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Import File Excel</h4>
+            </div>
+            <form method="POST" action="<?= base_url('Kas_breakdown/upload_excel/') ?>" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="hidden" name="id_data_kas" value="<?= $this->db->escape_str($this->uri->segment(3)) ?>">
+                    <input type="hidden" name="id_minggu" value="<?= $this->db->escape_str($this->uri->segment(4)) ?>">
+                    <div class="form-group">
+                        <label>Pilih Tipe</label>
+                        <select name="id_tipe" class="form-control" required>
+                            <?= $tipe_list ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status Anggaran</label>
+                        <select name="id_status" class="form-control" required>
+                            <option value="2">RAB</option>
+                            <option value="1">Luar RAB</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Kas</label>
+                        <select name="id_jenis_kas" class="form-control" required>
+                            <option value="1">Keluar</option>
+                            <option value="2">Masuk</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>File Excel</label>
+                        <input type="file" name="file_excel" class="form-control" accept="application/vnd.ms-excel" required>
+                    </div>
+                    <div class="form-group" style="font-weight: bold;">
+                        Catatan :
+                        <ul>
+                            <li>File format hanya bisa XLS (Excel 2003)</li>
+                            <li>Baris ke satu tidak diinput karena header tabel</li>
+                            <li style="color: red;">Perhatikan urutan kolom : No,Tanggal,Uraian,Quantity, Harga, Jumlah, PIC</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                </div>
+                <br>
+                <br>
+
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Upload -->

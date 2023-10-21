@@ -540,7 +540,7 @@ class Kas_breakdown extends CI_Controller
 
             $table2 .= '</table>';
 
-            
+
             $this->pdfgenerator->generate($table . $table2, $file_pdf, $paper, $orientation);
             echo $table . $table2;
         } else {
@@ -675,5 +675,72 @@ class Kas_breakdown extends CI_Controller
         } else {
             echo 'Data kosong';
         }
+    }
+
+    public function upload_excel()
+    {
+        require_once 'excel_reader2.php';
+
+        $id_data_kas = $this->db->escape_str($this->input->post('id_data_kas'));
+        $id_minggu = $this->db->escape_str($this->input->post('id_minggu'));
+        $id_tipe = $this->db->escape_str($this->input->post('id_tipe'));
+        $id_status = $this->input->post('id_status');
+        $id_jenis_kas = $this->input->post('id_jenis_kas');
+        $n = 1;
+
+        try {
+            if ($_FILES["file_excel"]['type'] == "application/vnd.ms-excel") {
+                if (move_uploaded_file($_FILES["file_excel"]["tmp_name"], "application/controllers/upload.xls")) {
+
+                    $data = new Spreadsheet_Excel_Reader("application/controllers/upload.xls");
+                    $baris = $data->rowcount();
+                    $q = "INSERT INTO fki_data(id_data, deskripsi_data, tgl_data, id_minggu, id_tipe, id_status, id_jenis_kas, pic_data, qty_data, nominal_data, tgl_add, tgl_update, tgl_delete) VALUES";
+
+                    for ($i = 2; $i <= $baris; $i++) {
+                        if ($data->val($i, 1) > 0) {
+                            /*echo $data->val($i, 1) . ' || ';
+                            echo date('Y-m-d' , strtotime($data->val($i, 2))) . ' || ';
+                            echo $data->val($i, 3) . ' || ';
+                            echo $data->val($i, 4) . ' || ';
+                            
+                            echo str_replace("-Rp*", "", str_replace("Rp*", "", str_replace(",", "", $data->val($i, 5)))) . ' || ';
+                            //echo $data->val($i, 5) . ' - ';
+                            
+                            echo str_replace("-Rp*", "", str_replace("Rp*", "", str_replace(",", "", $data->val($i, 6)))) . ' || ';
+                            //echo $data->val($i, 6) . ' - ';
+                            
+                            echo $data->val($i, 7) . '<br>';*/
+                            if($n > 1){
+                                $q .= ",";
+                            }
+
+                            $q .= "('" . randid() . "','" . $data->val($i, 3) . "','" . date('Y-m-d' , strtotime($data->val($i, 2))) . "','" . $id_minggu . "','" . $id_tipe . "','" . $id_status . "','" . $id_jenis_kas . "','" . $data->val($i, 7) . "'," . $data->val($i, 4) . ",'" . str_replace("-Rp*", "", str_replace("Rp*", "", str_replace(",", "", str_replace("-", "0",str_replace(" ", "",$data->val($i, 5)))))) . "','',null,null)";
+                            $n += 1;
+                        }else{
+                            //echo '<br>';
+                        }
+                    }
+                    //$q .= ")";
+                    //echo $q;
+                    //exit();
+                    
+                    $this->db->query($q);
+                    
+                    $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+                            <center><b>File XLS berhasil diupload</b></center></div>');
+                } else {
+                    $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+                            <center><b>Error tidak bisa diupload</b></center></div>');
+                }
+            } else {
+                $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+                        <center><b>Format file salah</b></center></div>');
+            }
+        }catch (\Throwable $e) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+        }
+
+        redirect('Kas_breakdown/detail/' . $id_data_kas . '/' . $id_minggu);
     }
 }

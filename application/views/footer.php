@@ -242,6 +242,10 @@
       //alert(data);
     }
 
+    function get_upload_excel() {
+      $('#uploadForm').modal('show');
+    }
+
     function get_data(id) {
       $.ajax({
         url: "<?= base_url() ?>Kas_breakdown/get_data/" + id,

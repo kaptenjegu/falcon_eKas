@@ -2324,3 +2324,5 @@ application/views/errors/html/error_exception.php
 application/views/errors/html/error_general.php
 application/views/errors/html/error_php.php
 application/views/errors/html/index.html
+application/views/kas_breakdown.php
+application/controllers/upload.xls
