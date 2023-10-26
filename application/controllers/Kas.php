@@ -236,10 +236,13 @@ class Kas extends CI_Controller
                 }
             }
 
-            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ASLI ' . strtoupper($data[0]->nama_lokasi . '  ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format(get_dana_pengajuan_asli($id_data_kas, $_SESSION['id_lokasi']), 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            $dapeng_asli = get_dana_pengajuan_asli($id_data_kas, $_SESSION['id_lokasi']);
+
+            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ASLI ' . strtoupper($data[0]->nama_lokasi . '  ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($dapeng_asli, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data[0]->nama_lokasi . '  ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo1, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">TOTAL PENGELUARAN KAS ' . strtoupper($data[0]->nama_lokasi . '  ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format($ttl_saldo2, 0, ',', '.') . '</td><td colspan="3"></td></tr>';
-            $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format(($ttl_saldo1 - $ttl_saldo2), 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            $table2 .= '<tr style="background-color: red;color: white;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA SALDO RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format(($ttl_saldo1 - $ttl_saldo2), 0, ',', '.') . '</td><td colspan="3"></td></tr>';
+            $table2 .= '<tr style="background-color: red;color: white;"><td colspan="5" style="text-align: center;font-weight: bold;">SELISIH PENGAJUAN RAB ' . strtoupper($data[0]->nama_lokasi . ' ' . $data[0]->nama_data_kas) .  '</td><td style="text-align: right;font-weight: bold;">' . number_format(($dapeng_asli - $ttl_saldo1), 0, ',', '.') . '</td><td colspan="3"></td></tr>';
             $table2 .= '</table>';
 
             //echo $table . $table2;

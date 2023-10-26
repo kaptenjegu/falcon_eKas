@@ -189,7 +189,7 @@ function get_dana_kas_pengajuan_minggu($id_minggu)
 	$ci->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
 	$ci->db->where('fki_minggu.id_lokasi', $_SESSION['id_lokasi']);
 	//$ci->db->where('fki_data.id_minggu', $id_minggu);
-	$ci->db->where('fki_data.tgl_data > "' . $data->tgl_data . '"');
+	$ci->db->where('fki_data.tgl_data > "' . $data->tgl_data . '"');	//kunci ambil minggu selanjutnya adalah dari tanggal
 	$ci->db->where('fki_data.id_tipe', 1);  // kas
 	$ci->db->where('fki_data.id_jenis_kas', 2);  // masuk
 	$ci->db->where('fki_data.tgl_delete', null);
