@@ -107,6 +107,35 @@
         </div>
       </li>
 
+      <li class="nav-item dropdown <?php if ($page == 'Asset' or $page == 'Pinjam_aset') {
+                                      echo 'show';
+                                    } ?>">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Srmr' or $page == 'srmr_manage' or $page == 'Riwayat_srmr') {
+                                                                                                                                                    echo 'true';
+                                                                                                                                                  } else {
+                                                                                                                                                    echo 'false';
+                                                                                                                                                  } ?>">
+          <i class="fas fa-fw fa-cubes"></i>
+          <span>Manajemen Aset</span>
+        </a>
+        <div class="dropdown-menu <?php if ($page == 'Asset' or $page == 'Pinjam_aset') {
+                                    echo 'show';
+                                  } ?>" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item <?php if ($page == 'Asset') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Asset') ?>">
+            <i class="fas fa-fw fa-cubes"></i>
+            <span>Data Aset</span>
+          </a>
+          <a class="dropdown-item <?php if ($page == 'Pinjam_aset') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Pinjam_aset') ?>">
+            <i class="fas fa-fw fa-exchange-alt"></i>
+            <span>Data Pinjam</span>
+          </a>
+        </div>
+      </li>
+
     </ul>
 
     <div id="content-wrapper">

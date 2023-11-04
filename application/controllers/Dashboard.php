@@ -7,12 +7,12 @@ class Dashboard extends CI_Controller
 	{
 		parent::__construct();
 		date_default_timezone_set('Asia/Jakarta');
-		cek_login();
+		//cek_login();
 	}
 
 	public function index()
 	{
-		$data['judul'] = 'Dashboard';
+		/*$data['judul'] = 'Dashboard';
 		$data['page'] = 'Dashboard';
 		$data['url'] = base_url('Dashboard');
 
@@ -22,7 +22,8 @@ class Dashboard extends CI_Controller
 
 		$this->load->view('header', $data);
 		$this->load->view('dashboard', $data);
-		$this->load->view('footer');
+		$this->load->view('footer');*/
+		redirect('Kas');
 	}
 	
 }

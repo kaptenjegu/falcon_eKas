@@ -372,6 +372,55 @@
   </script>
 <?php } ?>
 
+<?php if ($page == "Asset") { ?>
+  <script>
+    function get_data(id) {
+      $.ajax({
+        url: "<?= base_url() ?>Asset/get_data/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          document.getElementById('id_barang').value = data['id_barang'];
+          document.getElementById('nama_barang').value = data['nama_barang'];
+          document.getElementById('qty_asli').value = data['qty_asli'];
+
+          if(data['kondisi_barang'] == 1){
+            document.getElementById('kondisi_barang').innerHTML = '<option value="1" selected="selected">Baik</option><option value="2">Rusak</option>';
+          }else{
+            document.getElementById('kondisi_barang').innerHTML = '<option value="1">Baik</option><option value="2" selected="selected">Rusak</option>';
+          }
+
+          $('#editForm').modal('show');
+          console.log(data);
+        },
+        error: function(data) {
+          alert('error')
+          console.log(data);
+        }
+      });
+    }
+
+    function get_nomor_data(){
+      var kode_proyek = document.getElementById('kode_proyek').value;
+      var jenis_data = document.getElementById('jenis_data').value;
+
+      $.ajax({
+        url: "<?= base_url() ?>Srmr/get_nomor_data/" + kode_proyek + "/" + jenis_data,
+        type: "GET",
+        dataType: "HTML",
+        success: function(data) {
+          document.getElementById('nomor_data').value = data;
+          console.log("get_nomor_data = " + data);
+        },
+        error: function(data) {
+          alert('error')
+          console.log(data);
+        }
+      });
+    }
+  </script>
+<?php } ?>
+
 <?php if ($page == "Dashboard") { ?>
   <script>
     // Set new default font family and font color to mimic Bootstrap's default styling
