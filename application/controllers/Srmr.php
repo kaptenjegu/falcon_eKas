@@ -279,6 +279,7 @@ class Srmr extends CI_Controller
 
             $this->db->where('kode_proyek', $kode_proyek);
             $this->db->where('jenis_data', $jenis_data);
+            $this->db->where('tgl_delete', null);
             $n = $this->db->get('fsrmr_data');
 
             if($n->num_rows() == 0){
