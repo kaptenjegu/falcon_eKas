@@ -50,7 +50,7 @@
                                     
                                     <td>' . $v->qty_data . '</td>
                                     <td>Rp. ' . number_format($v->nominal_data, 0, ',', '.') . '</td>
-                                    <td><input type="checkbox" name="id_data[]"  value="' . $v->id_data . '"</td>
+                                    <td><input type="checkbox" name="id_data[]"  value="' . $v->id_data . '"></td>
                                     
                                     </tr>';
                                 $no += 1;

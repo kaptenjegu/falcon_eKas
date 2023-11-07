@@ -49,7 +49,7 @@
                                     <td>' . $v['tgl'] . '</td>
                                     <td>' . $v['deskripsi'] . '</td>
                                     <td>Rp. ' . number_format($v['total'], 0, ',', '.') . '</td>
-                                    <td><input type="checkbox" name="all_data[]"  value="' . $v['tgl'] . '|@|' . $v['deskripsi'] . '|@|' . $v['total'] . '"</td>
+                                    <td><input type="checkbox" name="all_data[]"  value="' . $v['tgl'] . '|@|' . $v['deskripsi'] . '|@|' . $v['total'] . '"></td>
                                     </tr>';
                                         $no += 1;
                                     }
