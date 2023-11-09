@@ -3,7 +3,7 @@
     <!-- Breadcrumbs-->
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-        <a href="<?= $url ?>"><?= $judul ?></a>
+        <a href="<?= base_url('Asset') ?>">Data Aset</a> / <a href="<?= $url ?>"><?= $judul ?></a>
         </li>
     </ol>
 
@@ -13,31 +13,50 @@
     <div class="card mb-3">
         <div class="card-header">
             <i class="fas fa-table"></i>
-            Data Aset <?= get_lokasi() ?>
+            Detail Aset
         </div>
 
         <div class="card-body">
-            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addForm"><i class="fa fa-plus"></i> Tambah Data Aset</a>
+            <div class="form-group">
+                <label>Nama Barang</label>
+                <input type="text" class="form-control" value="<?= $asset->nama_barang ?>" disabled>
+            </div>
+            <div class="form-group">
+                <label>Quantity Asli</label>
+                <input type="text" class="form-control" value="<?= $asset->qty_asli ?>" disabled>
+            </div>
+            <div class="form-group">
+                <label>Quantity Sisa</label>
+                <input type="text" class="form-control" value="<?= $asset->qty_sisa ?>" disabled>
+            </div>
+            <div class="form-group">
+                <label>Kondisi Barang</label>
+                <input type="text" class="form-control" value="<?php if($asset->kondisi_barang == 1){echo 'Baik';}else{echo 'Rusak';} ?>" disabled>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <!--a href="#" class="btn btn-success" data-toggle="modal" data-target="#addForm"><i class="fa fa-plus"></i> Tambah Data Aset</a>
             <br>
-            <br>
+            <br-->
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Barang</th>
-                            <th>Qty Barang</th>
-                            <th>Qty Real</th>
-                            <th>Kondisi Barang</th>
-                            <th>Opsi</th>
+                            <th>Tanggal</th>
+                            <th>Nama PIC</th>
+                            <th>Qty</th>
+                            <th>Kondisi awal</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <?php
                         $no = 1;
-                        foreach ($asset as $v) {
-                            switch ($v->kondisi_barang) {
+                        foreach ($pinjam as $v) {
+                            switch ($v->kondisi_barang_asal) {
                                 case 1:
                                     $kondisi = 'Baik';
                                     break;
@@ -49,16 +68,25 @@
                                     break;
                             }
 
+                            switch ($v->status) {
+                                case 2:
+                                    $status = '<span style="color: red; font-weight: bold;">Dipinjam</span>';
+                                    break;
+                                case 4:
+                                    $status = '<span style="color: green; font-weight: bold;">Dikembalikan</span>';
+                                    break;
+                                default:
+                                    $status = 'tidak terindentifikasi';
+                                    break;
+                            }
+
                             echo '<tr>
                                     <td>' . $no . '</td>
-                                    <td><a href="' . base_url('Asset/detail/' . $v->id_barang) . '">' . $v->nama_barang . '</a></td>
-                                    <td>' . $v->qty_asli . '</td>
-                                    <td>' . $v->qty_sisa . '</td>
+                                    <td>' . date('d-m-Y',strtotime($v->tgl_pinjam)) . '</td>
+                                    <td>' . $v->nama_user . '</td>
+                                    <td>' . $v->qty_pinjam . '</td>
                                     <td>' . $kondisi . '</td>
-                                    <td>
-                                        <a href="#" class="btn btn-warning" onclick="get_data(\'' . $v->id_barang . '\')"><i class="fa fa-edit"></i> Edit</a>&emsp;
-                                        <a href="' . base_url('Asset/hapus_data/' . $v->id_barang) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menghapus data ' . $v->nama_barang . ' ?\')"><i class="fa fa-trash"></i> Hapus</a>&emsp;
-                                    </td>
+                                    <td>' . $status . '</td>
                                     </tr>';
                             $no += 1;
                         }

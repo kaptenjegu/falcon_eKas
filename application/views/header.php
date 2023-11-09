@@ -118,7 +118,7 @@
           <i class="fas fa-fw fa-cubes"></i>
           <span>Manajemen Aset</span>
         </a>
-        <div class="dropdown-menu <?php if ($page == 'Asset' or $page == 'Pinjam_aset') {
+        <div class="dropdown-menu <?php if ($page == 'Asset' or $page == 'Pinjam' or $page == 'Pengembalian') {
                                     echo 'show';
                                   } ?>" aria-labelledby="pagesDropdown">
           <a class="dropdown-item <?php if ($page == 'Asset') {
@@ -127,11 +127,17 @@
             <i class="fas fa-fw fa-cubes"></i>
             <span>Data Aset</span>
           </a>
-          <a class="dropdown-item <?php if ($page == 'Pinjam_aset') {
+          <a class="dropdown-item <?php if ($page == 'Pinjam') {
                                     echo 'active';
-                                  } ?>" href="<?= base_url('Pinjam_aset') ?>">
+                                  } ?>" href="<?= base_url('Pinjam') ?>">
             <i class="fas fa-fw fa-exchange-alt"></i>
             <span>Data Pinjam</span>
+          </a>
+          <a class="dropdown-item <?php if ($page == 'Pengembalian') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Pengembalian') ?>">
+            <i class="fas fa-fw fa-exchange-alt"></i>
+            <span>Data Pengembalian</span>
           </a>
         </div>
       </li>

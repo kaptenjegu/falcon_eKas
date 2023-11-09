@@ -25,6 +25,31 @@ class Asset extends CI_Controller
         $this->load->view('footer');
     }
 
+    public function detail()
+    {
+        $id_barang = $this->db->escape_str($this->uri->segment(3));
+
+        $data['judul'] = 'Detail';
+        $data['page'] = 'Asset';
+        $data['url'] = base_url('Asset/detail/' . $id_barang);
+
+        $this->db->where('id_barang', $id_barang);
+        //$this->db->where('tgl_delete', null);
+        $data['asset'] = $this->db->get('fma_barang')->first_row();
+
+        $this->db->select('*');
+        $this->db->from('fma_pinjam');
+        $this->db->join('fai_akun', 'fma_pinjam.id_user = fai_akun.id_akun');
+        $this->db->where('fma_pinjam.id_barang', $id_barang);
+        $this->db->where('fma_pinjam.status', 2);  //sedang dipinjam
+        $this->db->where('fma_pinjam.tgl_delete', null);
+        $data['pinjam'] = $this->db->get()->result();
+
+        $this->load->view('header', $data);
+        $this->load->view('asset_detail', $data);
+        $this->load->view('footer');
+    }
+
     public function tambah_data()
     {
         try {

@@ -3,7 +3,7 @@
     <!-- Breadcrumbs-->
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-        <a href="<?= $url ?>"><?= $judul ?></a>
+            <a href="<?= $url ?>"><?= $judul ?></a>
         </li>
     </ol>
 
@@ -13,22 +13,19 @@
     <div class="card mb-3">
         <div class="card-header">
             <i class="fas fa-table"></i>
-            Data Aset <?= get_lokasi() ?>
+            Data Pinjam Aset <?= get_lokasi() ?>
         </div>
 
         <div class="card-body">
-            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addForm"><i class="fa fa-plus"></i> Tambah Data Aset</a>
+            <!--a href="#" class="btn btn-success" data-toggle="modal" data-target="#addForm"><i class="fa fa-plus"></i> Tambah Data Aset</a>
             <br>
-            <br>
+            <br-->
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Barang</th>
-                            <th>Qty Barang</th>
-                            <th>Qty Real</th>
-                            <th>Kondisi Barang</th>
+                            <th>User Peminjam / PIC</th>
                             <th>Opsi</th>
                         </tr>
                     </thead>
@@ -36,28 +33,12 @@
                     <tbody>
                         <?php
                         $no = 1;
-                        foreach ($asset as $v) {
-                            switch ($v->kondisi_barang) {
-                                case 1:
-                                    $kondisi = 'Baik';
-                                    break;
-                                case 2:
-                                    $kondisi = 'Rusak';
-                                    break;
-                                default:
-                                    $kondisi = 'tidak terindentifikasi';
-                                    break;
-                            }
-
+                        foreach ($pinjam as $v) {
                             echo '<tr>
                                     <td>' . $no . '</td>
-                                    <td><a href="' . base_url('Asset/detail/' . $v->id_barang) . '">' . $v->nama_barang . '</a></td>
-                                    <td>' . $v->qty_asli . '</td>
-                                    <td>' . $v->qty_sisa . '</td>
-                                    <td>' . $kondisi . '</td>
+                                    <td>' . $v->nama_user . '</td>
                                     <td>
-                                        <a href="#" class="btn btn-warning" onclick="get_data(\'' . $v->id_barang . '\')"><i class="fa fa-edit"></i> Edit</a>&emsp;
-                                        <a href="' . base_url('Asset/hapus_data/' . $v->id_barang) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menghapus data ' . $v->nama_barang . ' ?\')"><i class="fa fa-trash"></i> Hapus</a>&emsp;
+                                        <a href="' . base_url('Pinjam/detail/' . $v->id_akun) . '" class="btn btn-warning"><i class="fa fa-list"></i> Detail</a>&emsp;
                                     </td>
                                     </tr>';
                             $no += 1;
