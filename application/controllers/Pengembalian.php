@@ -77,6 +77,7 @@ class Pengembalian extends CI_Controller
 
             $this->db->set('status', 4);    //disetujui
             $this->db->set('kondisi_barang_kembali', 1);    //baik
+            $this->db->set('tgl_kembali', date('Y_m-d'));    //tgl ACC kembali barang
             $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
             $this->db->where('id_pinjam', $id_pinjam);
             $this->db->update('fma_pinjam');
@@ -115,6 +116,7 @@ class Pengembalian extends CI_Controller
 
             $this->db->set('status', 4);    //disetujui
             $this->db->set('kondisi_barang_kembali', 2);    //rusak
+            $this->db->set('tgl_kembali', date('Y_m-d'));    //tgl ACC kembali barang
             $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
             $this->db->where('id_pinjam', $id_pinjam);
             $this->db->update('fma_pinjam');
@@ -157,6 +159,7 @@ class Pengembalian extends CI_Controller
             foreach ($data as $v) {
                 $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
                 $this->db->set('status', 4);    //disetujui
+                $this->db->set('tgl_kembali', date('Y_m-d'));    //tgl ACC kembali barang
                 $this->db->where('id_pinjam', $v->id_pinjam);
                 $this->db->update('fma_pinjam');
 

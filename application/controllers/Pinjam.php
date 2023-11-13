@@ -37,7 +37,7 @@ class Pinjam extends CI_Controller
 
     public function detail()
     {
-        $data['judul'] = 'Detail Data Pinjam';
+        $data['judul'] = 'Detail';
         $data['page'] = 'Pinjam';
         $data['url'] = base_url('Pinjam/detail/' . $this->db->escape_str($this->uri->segment(3)));
 

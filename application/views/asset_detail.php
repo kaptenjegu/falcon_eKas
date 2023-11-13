@@ -54,10 +54,11 @@
                             <th>No</th>
                             <th>Tanggal</th>
                             <th>Nama PIC</th>
-                            <th>Lokasi Barang Sekarang</th>
+                            <th>Lokasi Barang Dipinjam</th>
                             <th>Qty</th>
                             <th>Kondisi awal</th>
                             <th>Kondisi kembali</th>
+                            <th>Tanggal kembali</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -113,7 +114,8 @@
                                     <td>' . $v->qty_pinjam . '</td>
                                     <td>' . $kondisi . '</td>
                                     <td>' . $kondisi2 . '</td>
-                                    <td>' . $status . '</td>
+                                    <td>' . date('d-m-Y',strtotime($v->tgl_kembali)) . '</td>
+                                    <td>' . $status . '</td>                                    
                                     </tr>';
                             $no += 1;
                         }

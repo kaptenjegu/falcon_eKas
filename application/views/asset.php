@@ -13,7 +13,7 @@
     <div class="card mb-3">
         <div class="card-header">
             <i class="fas fa-table"></i>
-            Data Aset <?= get_lokasi() ?>
+            Data Aset <?//= get_lokasi() ?>
         </div>
 
         <div class="card-body">
@@ -28,7 +28,7 @@
                             <th>Nama Barang</th>
                             <th>Qty Barang</th>
                             <th>Qty Real</th>
-                            <th>Kondisi Barang</th>
+                            <th>Lokasi Asal Barang</th>
                             <th>Opsi</th>
                         </tr>
                     </thead>
@@ -54,7 +54,7 @@
                                     <td><a href="' . base_url('Asset/detail/' . $v->id_barang) . '">' . $v->nama_barang . '</a></td>
                                     <td>' . $v->qty_asli . '</td>
                                     <td>' . $v->qty_sisa . '</td>
-                                    <td>' . $kondisi . '</td>
+                                    <td>' . $v->nama_lokasi . '</td>
                                     <td>
                                         <a href="#" class="btn btn-warning" onclick="get_data(\'' . $v->id_barang . '\')"><i class="fa fa-edit"></i> Edit</a>&emsp;
                                         <a href="' . base_url('Asset/hapus_data/' . $v->id_barang) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menghapus data ' . $v->nama_barang . ' ?\')"><i class="fa fa-trash"></i> Hapus</a>&emsp;

@@ -16,9 +16,12 @@ class Asset extends CI_Controller
         $data['page'] = 'Asset';
         $data['url'] = base_url('Asset');
 
-        $this->db->where('id_lokasi', $_SESSION['id_lokasi']);
-        $this->db->where('tgl_delete', null);
-        $data['asset'] = $this->db->get('fma_barang')->result();
+        $this->db->select('*');
+        $this->db->from('fma_barang');
+        $this->db->join('fai_lokasi', 'fma_barang.id_lokasi = fai_lokasi.id_lokasi');
+        $this->db->where('fma_barang.id_lokasi', $_SESSION['id_lokasi']);
+        $this->db->where('fma_barang.tgl_delete', null);
+        $data['asset'] = $this->db->get()->result();
 
         $this->load->view('header', $data);
         $this->load->view('asset', $data);

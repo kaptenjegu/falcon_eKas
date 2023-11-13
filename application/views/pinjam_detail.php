@@ -3,7 +3,7 @@
     <!-- Breadcrumbs-->
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="<?= $url ?>"><?= $judul ?></a>
+        <a href="<?= base_url('Pinjam') ?>">Data Pinjam</a> / <a href="<?= $url ?>"><?= $judul ?></a>
         </li>
     </ol>
 
@@ -34,6 +34,7 @@
                             <th>No</th>
                             <th>Tanggal</th>
                             <th>Nama Barang</th>
+                            <th>Lokasi Tujuan</th>
                             <th>Qty Barang</th>
                             <th>Qty Pinjam</th>
                             <th>Opsi</th>
@@ -48,6 +49,7 @@
                                     <td>' . $no . '</td>
                                     <td>' . date('d-m-Y', strtotime($v->tgl_pinjam)) . '</td>
                                     <td>' . $v->nama_barang . '</td>
+                                    <td>' . $v->nama_lokasi . '</td>
                                     <td>' . $v->qty_sisa . '</td>
                                     <td>' . $v->qty_pinjam . '</td>
                                     <td>
