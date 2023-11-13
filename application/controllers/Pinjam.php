@@ -49,7 +49,7 @@ class Pinjam extends CI_Controller
         $this->db->from('fma_pinjam');
         $this->db->join('fma_barang', 'fma_barang.id_barang = fma_pinjam.id_barang');
         $this->db->where('fma_pinjam.id_user', $id_akun);
-        $this->db->where('(fma_pinjam.status = 1 OR fma_pinjam.status = 3)');
+        $this->db->where('(fma_pinjam.status = 1)');
         $this->db->where('fma_pinjam.tgl_delete', null);
         $data['data_pinjam'] = $this->db->get()->result();
 
@@ -143,7 +143,7 @@ class Pinjam extends CI_Controller
         $this->db->where('id_barang', $id_barang);
         $data = $this->db->get('fma_barang')->first_row();
 
-        $qty_sisa = $data->qty_asli - $qr;
+        $qty_sisa = $data->qty_sisa - $qr;
 
         $this->db->set('qty_sisa', $qty_sisa);
         $this->db->where('id_barang', $id_barang);

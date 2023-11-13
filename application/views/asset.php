@@ -91,6 +91,10 @@
                         <input type="number" class="form-control" name="qty_asli" step="0.01" required>
                     </div>
                     <div class="form-group">
+                        <label>Tanggal Pembelian Barang</label>
+                        <input type="text" class="form-control" name="tgl_pembelian" required>
+                    </div>
+                    <div class="form-group">
                         <label>Kondisi Barang</label>
                         <select class="form-control" name="kondisi_barang" required>
                             <option value="1">Baik</option>

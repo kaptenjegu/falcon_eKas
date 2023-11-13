@@ -51,6 +51,9 @@
 
 <!-- Custom scripts for all pages-->
 <script src="<?= base_url() ?>vendor/js/sb-admin.min.js"></script>
+<script src="<?= base_url() ?>vendor/js/moment.min.js"></script>
+<script src="<?= base_url() ?>vendor/js/daterangepicker.min.js"></script>
+<link rel="stylesheet" href="<?= base_url() ?>vendor/css/daterangepicker.css" />
 
 <script>
   // Call the dataTables jQuery plugin
@@ -400,24 +403,18 @@
       });
     }
 
-    function get_nomor_data(){
-      var kode_proyek = document.getElementById('kode_proyek').value;
-      var jenis_data = document.getElementById('jenis_data').value;
+    $(function() {
+            $('input[name="tgl_pembelian"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 2022,
+                maxYear: parseInt(moment().format('YYYY'), 5),
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
 
-      $.ajax({
-        url: "<?= base_url() ?>Srmr/get_nomor_data/" + kode_proyek + "/" + jenis_data,
-        type: "GET",
-        dataType: "HTML",
-        success: function(data) {
-          document.getElementById('nomor_data').value = data;
-          console.log("get_nomor_data = " + data);
-        },
-        error: function(data) {
-          alert('error')
-          console.log(data);
-        }
-      });
-    }
+            });
+        });
   </script>
 <?php } ?>
 

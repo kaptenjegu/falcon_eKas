@@ -33,15 +33,19 @@ class Asset extends CI_Controller
         $data['page'] = 'Asset';
         $data['url'] = base_url('Asset/detail/' . $id_barang);
 
-        $this->db->where('id_barang', $id_barang);
+        $this->db->select('*');
+        $this->db->from('fma_barang');
+        $this->db->join('fai_lokasi', 'fma_barang.id_lokasi = fai_lokasi.id_lokasi');
+        $this->db->where('fma_barang.id_barang', $id_barang);
         //$this->db->where('tgl_delete', null);
-        $data['asset'] = $this->db->get('fma_barang')->first_row();
+        $data['asset'] = $this->db->get()->first_row();
 
         $this->db->select('*');
         $this->db->from('fma_pinjam');
         $this->db->join('fai_akun', 'fma_pinjam.id_user = fai_akun.id_akun');
+        $this->db->join('fai_lokasi', 'fma_pinjam.id_lokasi = fai_lokasi.id_lokasi');
         $this->db->where('fma_pinjam.id_barang', $id_barang);
-        $this->db->where('fma_pinjam.status', 2);  //sedang dipinjam
+        $this->db->where('(fma_pinjam.status = 2 OR fma_pinjam.status = 3 OR fma_pinjam.status = 4)');  //sedang dipinjam dan selesai pinjam
         $this->db->where('fma_pinjam.tgl_delete', null);
         $data['pinjam'] = $this->db->get()->result();
 
@@ -58,12 +62,14 @@ class Asset extends CI_Controller
             $nama_barang = $this->input->post('nama_barang');
             $qty_asli = $this->input->post('qty_asli');
             $kondisi_barang = $this->input->post('kondisi_barang');
+            $tgl_pembelian = $this->input->post('tgl_pembelian');
 
             if ($this->cek_data($nama_barang) == 0) {
 
                 $data = array(
                     'id_barang' => randid(),
                     'nama_barang' => $nama_barang,
+                    'tgl_pembelian' => $tgl_pembelian,
                     'qty_asli' => $qty_asli,
                     'qty_sisa' => $qty_asli,
                     'id_lokasi' => $_SESSION['id_lokasi'],

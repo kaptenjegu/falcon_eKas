@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Pinjam extends CI_Controller
+class Pengembalian extends CI_Controller
 {
 
     function __construct()
@@ -12,32 +12,29 @@ class Pinjam extends CI_Controller
 
     public function index()
     {
-        $data['judul'] = 'Data Pinjam';
-        $data['page'] = 'Pinjam';
-        $data['url'] = base_url('Pinjam');
+        $data['judul'] = 'Data Pengembalian';
+        $data['page'] = 'Pengembalian';
+        $data['url'] = base_url('Pengembalian');
 
         $this->db->select('*');
         $this->db->from('fma_pinjam');
         $this->db->join('fai_akun', 'fai_akun.id_akun = fma_pinjam.id_user');
         $this->db->where('fma_pinjam.id_lokasi', $_SESSION['id_lokasi']);
-        $this->db->where('(fma_pinjam.status = 1 OR fma_pinjam.status = 3)');
-        //$this->db->where('fma_pinjam.status', '3');
+        $this->db->where('(fma_pinjam.status = 3)');    //pending kembali
         $this->db->where('fma_pinjam.tgl_delete', null);
         $this->db->group_by('fma_pinjam.id_user');
-        $data['pinjam'] = $this->db->get()->result();
-
-        //echo json_encode($data['pinjam']);exit();
+        $data['pengembalian'] = $this->db->get()->result();
 
         $this->load->view('header', $data);
-        $this->load->view('pinjam', $data);
+        $this->load->view('pengembalian', $data);
         $this->load->view('footer');
     }
 
     public function detail()
     {
-        $data['judul'] = 'Detail Data Pinjam';
-        $data['page'] = 'Pinjam';
-        $data['url'] = base_url('Pinjam/detail/' . $this->db->escape_str($this->uri->segment(3)));
+        $data['judul'] = 'Detail';
+        $data['page'] = 'Pengembalian';
+        $data['url'] = base_url('Pengembalian/detail/' . $this->db->escape_str($this->uri->segment(3)));
 
         $id_akun = $this->db->escape_str($this->uri->segment(3));
         $data['id_akun'] = $id_akun;
@@ -48,15 +45,17 @@ class Pinjam extends CI_Controller
         $this->db->select('*');
         $this->db->from('fma_pinjam');
         $this->db->join('fma_barang', 'fma_barang.id_barang = fma_pinjam.id_barang');
+        $this->db->join('fai_lokasi', 'fma_pinjam.id_lokasi = fai_lokasi.id_lokasi');   //lokasi barang sekarang
         $this->db->where('fma_pinjam.id_user', $id_akun);
-        $this->db->where('(fma_pinjam.status = 1 OR fma_pinjam.status = 3)');
+        //$this->db->where('fma_pinjam.id_lokasi', $_SESSION['id_lokasi']);
+        $this->db->where('(fma_pinjam.status = 3)');
         $this->db->where('fma_pinjam.tgl_delete', null);
-        $data['data_pinjam'] = $this->db->get()->result();
+        $data['data_pengembalian'] = $this->db->get()->result();
 
         //echo json_encode($data['pinjam']);exit();
 
         $this->load->view('header', $data);
-        $this->load->view('pinjam_detail', $data);
+        $this->load->view('pengembalian_detail', $data);
         $this->load->view('footer');
     }
 
@@ -72,28 +71,28 @@ class Pinjam extends CI_Controller
             $this->db->where('id_pinjam', $id_pinjam);
             $v = $this->db->get('fma_pinjam')->first_row();
 
-            if ($this->cek_qty($v->id_barang, $v->qty_pinjam) >= 0) {
+            //if ($this->cek_qty($v->id_barang, $v->qty_pinjam) >= 0) {
 
-                $this->db->set('status', 2);    //disetujui
-                $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
-                $this->db->where('id_pinjam', $id_pinjam);
-                $this->db->update('fma_pinjam');
+            $this->db->set('status', 4);    //disetujui
+            $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
+            $this->db->where('id_pinjam', $id_pinjam);
+            $this->db->update('fma_pinjam');
 
-                $this->kurangi_qty($v->id_barang, $v->qty_pinjam); //kurangi qty sisa barang real
+            $this->tambah_qty($v->id_barang, $v->qty_pinjam); //kurangi qty sisa barang real
 
-                $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
-                        <center><b>Peminjaman berhasil disetujui</b></center></div>');
-            } else {
+            $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+                        <center><b>Pengembalian berhasil disetujui</b></center></div>');
+            /*} else {
                 $this->session->set_flashdata('msg', '<div class="alert alert-warning alert-dismissable">
                         <center><b>Peminjaman gagal disetujui, karena Qty tidak tersedia</b></center></div>');
-            }
+            }*/
 
             $this->db->trans_complete();
         } catch (\Throwable $e) {
             $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
         }
-        redirect('Pinjam/detail/' . $id_akun);
+        redirect('Pengembalian/detail/' . $id_akun);
     }
 
     public function detail_acc_data_semua()
@@ -110,7 +109,7 @@ class Pinjam extends CI_Controller
             $this->db->where('tgl_delete', null);
             $data = $this->db->get('fma_pinjam')->result();
 
-            foreach($data as $v){
+            foreach ($data as $v) {
                 if ($this->cek_qty($v->id_barang, $v->qty_pinjam) >= 0) {
 
                     $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
@@ -138,12 +137,12 @@ class Pinjam extends CI_Controller
     }
 
     //fungsi kurangi qty barang saat ini
-    private function kurangi_qty($id_barang, $qr)
+    private function tambah_qty($id_barang, $qr)
     {
         $this->db->where('id_barang', $id_barang);
         $data = $this->db->get('fma_barang')->first_row();
 
-        $qty_sisa = $data->qty_asli - $qr;
+        $qty_sisa = $data->qty_sisa + $qr;
 
         $this->db->set('qty_sisa', $qty_sisa);
         $this->db->where('id_barang', $id_barang);
@@ -161,6 +160,7 @@ class Pinjam extends CI_Controller
         return $qty_sisa;
     }
 
+    //Hapus, tolak pengembelian
     public function detail_hapus_data()
     {
         try {
@@ -169,19 +169,18 @@ class Pinjam extends CI_Controller
             $id_pinjam = $this->db->escape_str($this->uri->segment(4));
             $id_akun = $this->db->escape_str($this->uri->segment(3));
 
-            $this->db->set('tgl_delete', date('Y-m-d H:i:s'));
-            $this->db->set('id_admin', $_SESSION['id_akun']);    //yg mengeksekusi
+            $this->db->set('status', 2);    //kembali ke PINJAM
             $this->db->where('id_pinjam', $id_pinjam);
             $this->db->update('fma_pinjam');
 
             $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
-					<center><b>Data Aset berhasil dihapus</b></center></div>');
+					<center><b>Data Pengembalian Aset berhasil dihapus dan dikembalikan ke user PIC</b></center></div>');
 
             $this->db->trans_complete();
         } catch (\Throwable $e) {
             $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
 					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
         }
-        redirect('Pinjam/detail/' . $id_akun);
+        redirect('Pengembalian/detail/' . $id_akun);
     }
 }

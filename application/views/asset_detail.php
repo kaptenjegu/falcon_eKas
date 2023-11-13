@@ -30,6 +30,14 @@
                 <input type="text" class="form-control" value="<?= $asset->qty_sisa ?>" disabled>
             </div>
             <div class="form-group">
+                <label>Lokasi Pembelian Barang</label>
+                <input type="text" class="form-control" value="<?= $asset->nama_lokasi ?>" disabled>
+            </div>
+            <div class="form-group">
+                <label>Tanggal Pembelian Barang</label>
+                <input type="text" class="form-control" value="<?= date('d-m-Y', strtotime($asset->tgl_pembelian)) ?>" disabled>
+            </div>
+            <div class="form-group">
                 <label>Kondisi Barang</label>
                 <input type="text" class="form-control" value="<?php if($asset->kondisi_barang == 1){echo 'Baik';}else{echo 'Rusak';} ?>" disabled>
             </div>
@@ -46,8 +54,10 @@
                             <th>No</th>
                             <th>Tanggal</th>
                             <th>Nama PIC</th>
+                            <th>Lokasi Barang Sekarang</th>
                             <th>Qty</th>
                             <th>Kondisi awal</th>
+                            <th>Kondisi kembali</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -68,9 +78,24 @@
                                     break;
                             }
 
+                            switch ($v->kondisi_barang_kembali) {
+                                case 1:
+                                    $kondisi2 = 'Baik';
+                                    break;
+                                case 2:
+                                    $kondisi2 = 'Rusak';
+                                    break;
+                                default:
+                                    $kondisi2 = '-';
+                                    break;
+                            }
+
                             switch ($v->status) {
                                 case 2:
                                     $status = '<span style="color: red; font-weight: bold;">Dipinjam</span>';
+                                    break;
+                                case 3:
+                                    $status = '<span style="font-weight: bold;">Pending Pengembalian</span>';
                                     break;
                                 case 4:
                                     $status = '<span style="color: green; font-weight: bold;">Dikembalikan</span>';
@@ -84,8 +109,10 @@
                                     <td>' . $no . '</td>
                                     <td>' . date('d-m-Y',strtotime($v->tgl_pinjam)) . '</td>
                                     <td>' . $v->nama_user . '</td>
+                                    <td>' . $v->nama_lokasi . '</td>
                                     <td>' . $v->qty_pinjam . '</td>
                                     <td>' . $kondisi . '</td>
+                                    <td>' . $kondisi2 . '</td>
                                     <td>' . $status . '</td>
                                     </tr>';
                             $no += 1;
