@@ -19,7 +19,9 @@ class Pengembalian extends CI_Controller
         $this->db->select('*');
         $this->db->from('fma_pinjam');
         $this->db->join('fai_akun', 'fai_akun.id_akun = fma_pinjam.id_user');
-        $this->db->where('fma_pinjam.id_lokasi', $_SESSION['id_lokasi']);
+        $this->db->join('fma_barang', 'fma_barang.id_barang = fma_pinjam.id_barang');
+        $this->db->where('fma_barang.id_lokasi', $_SESSION['id_lokasi']);   //filter lokasi asal barang
+        //$this->db->where('fma_pinjam.id_lokasi', $_SESSION['id_lokasi']);
         $this->db->where('(fma_pinjam.status = 3)');    //pending kembali
         $this->db->where('fma_pinjam.tgl_delete', null);
         $this->db->group_by('fma_pinjam.id_user');
@@ -47,7 +49,7 @@ class Pengembalian extends CI_Controller
         $this->db->join('fma_barang', 'fma_barang.id_barang = fma_pinjam.id_barang');
         $this->db->join('fai_lokasi', 'fma_pinjam.id_lokasi = fai_lokasi.id_lokasi');   //lokasi barang sekarang
         $this->db->where('fma_pinjam.id_user', $id_akun);
-        //$this->db->where('fma_pinjam.id_lokasi', $_SESSION['id_lokasi']);
+        $this->db->where('fma_barang.id_lokasi', $_SESSION['id_lokasi']);
         $this->db->where('(fma_pinjam.status = 3)');
         $this->db->where('fma_pinjam.tgl_delete', null);
         $data['data_pengembalian'] = $this->db->get()->result();
@@ -74,6 +76,45 @@ class Pengembalian extends CI_Controller
             //if ($this->cek_qty($v->id_barang, $v->qty_pinjam) >= 0) {
 
             $this->db->set('status', 4);    //disetujui
+            $this->db->set('kondisi_barang_kembali', 1);    //baik
+            $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
+            $this->db->where('id_pinjam', $id_pinjam);
+            $this->db->update('fma_pinjam');
+
+            $this->tambah_qty($v->id_barang, $v->qty_pinjam); //kurangi qty sisa barang real
+
+            $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+                        <center><b>Pengembalian berhasil disetujui</b></center></div>');
+            /*} else {
+                $this->session->set_flashdata('msg', '<div class="alert alert-warning alert-dismissable">
+                        <center><b>Peminjaman gagal disetujui, karena Qty tidak tersedia</b></center></div>');
+            }*/
+
+            $this->db->trans_complete();
+        } catch (\Throwable $e) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+        }
+        redirect('Pengembalian/detail/' . $id_akun);
+    }
+
+    //ACC kondisi rusak
+    public function detail_acc_data2()
+    {
+        try {
+            $this->db->trans_start();
+
+            $id_pinjam = $this->db->escape_str($this->uri->segment(4));
+            $id_akun = $this->db->escape_str($this->uri->segment(3));
+
+            //get data pinjam
+            $this->db->where('id_pinjam', $id_pinjam);
+            $v = $this->db->get('fma_pinjam')->first_row();
+
+            //if ($this->cek_qty($v->id_barang, $v->qty_pinjam) >= 0) {
+
+            $this->db->set('status', 4);    //disetujui
+            $this->db->set('kondisi_barang_kembali', 2);    //rusak
             $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
             $this->db->where('id_pinjam', $id_pinjam);
             $this->db->update('fma_pinjam');
@@ -104,28 +145,25 @@ class Pengembalian extends CI_Controller
             $id_akun = $this->db->escape_str($this->uri->segment(3));
 
             //get data pinjam
-            $this->db->where('id_user', $id_akun);
-            $this->db->where('(status = 1 OR status = 3)');
-            $this->db->where('tgl_delete', null);
-            $data = $this->db->get('fma_pinjam')->result();
+            $this->db->select('*');
+            $this->db->from('fma_pinjam');
+            $this->db->join('fma_barang', 'fma_barang.id_barang = fma_pinjam.id_barang');
+            $this->db->where('fma_barang.id_lokasi', $_SESSION['id_lokasi']);   //filter lokasi asal barang
+            $this->db->where('fma_pinjam.id_user', $id_akun);
+            $this->db->where('fma_pinjam.status = 3');
+            $this->db->where('fma_pinjam.tgl_delete', null);
+            $data = $this->db->get()->result();
 
             foreach ($data as $v) {
-                if ($this->cek_qty($v->id_barang, $v->qty_pinjam) >= 0) {
+                $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
+                $this->db->set('status', 4);    //disetujui
+                $this->db->where('id_pinjam', $v->id_pinjam);
+                $this->db->update('fma_pinjam');
 
-                    $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
-                    $this->db->set('status', 2);    //disetujui
-                    $this->db->where('id_pinjam', $id_pinjam);
-                    $this->db->update('fma_pinjam');
+                $this->tambah_qty($v->id_barang, $v->qty_pinjam); //kurangi qty sisa barang real
 
-                    $this->kurangi_qty($v->id_barang, $v->qty_pinjam); //kurangi qty sisa barang real
-
-                    $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
-                            <center><b>Peminjaman berhasil disetujui</b></center></div>');
-                } else {
-                    $this->session->set_flashdata('msg', '<div class="alert alert-warning alert-dismissable">
-                            <center><b>Peminjaman gagal disetujui, karena ada Qty tidak tersedia</b></center></div>');
-                    redirect('Pinjam/detail/' . $id_akun);
-                }
+                $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+                        <center><b>Pengembalian berhasil disetujui</b></center></div>');
             }
 
             $this->db->trans_complete();

@@ -19,8 +19,10 @@ class Pinjam extends CI_Controller
         $this->db->select('*');
         $this->db->from('fma_pinjam');
         $this->db->join('fai_akun', 'fai_akun.id_akun = fma_pinjam.id_user');
-        $this->db->where('fma_pinjam.id_lokasi', $_SESSION['id_lokasi']);
-        $this->db->where('(fma_pinjam.status = 1 OR fma_pinjam.status = 3)');
+        $this->db->join('fma_barang', 'fma_barang.id_barang = fma_pinjam.id_barang');
+        $this->db->where('fma_barang.id_lokasi', $_SESSION['id_lokasi']);   //filter lokasi asal barang
+        //$this->db->where('fma_pinjam.id_lokasi', $_SESSION['id_lokasi']);
+        $this->db->where('(fma_pinjam.status = 1)');    //sedang pengajuan pinjam
         //$this->db->where('fma_pinjam.status', '3');
         $this->db->where('fma_pinjam.tgl_delete', null);
         $this->db->group_by('fma_pinjam.id_user');
@@ -48,7 +50,9 @@ class Pinjam extends CI_Controller
         $this->db->select('*');
         $this->db->from('fma_pinjam');
         $this->db->join('fma_barang', 'fma_barang.id_barang = fma_pinjam.id_barang');
+        $this->db->join('fai_lokasi', 'fma_pinjam.id_lokasi = fai_lokasi.id_lokasi');   //lokasi barang sekarang
         $this->db->where('fma_pinjam.id_user', $id_akun);
+        $this->db->where('fma_barang.id_lokasi', $_SESSION['id_lokasi']);
         $this->db->where('(fma_pinjam.status = 1)');
         $this->db->where('fma_pinjam.tgl_delete', null);
         $data['data_pinjam'] = $this->db->get()->result();
@@ -105,17 +109,21 @@ class Pinjam extends CI_Controller
             $id_akun = $this->db->escape_str($this->uri->segment(3));
 
             //get data pinjam
-            $this->db->where('id_user', $id_akun);
-            $this->db->where('(status = 1 OR status = 3)');
-            $this->db->where('tgl_delete', null);
-            $data = $this->db->get('fma_pinjam')->result();
+            $this->db->select('*');
+            $this->db->from('fma_pinjam');
+            $this->db->join('fma_barang', 'fma_barang.id_barang = fma_pinjam.id_barang');
+            $this->db->where('fma_barang.id_lokasi', $_SESSION['id_lokasi']);   //filter lokasi asal barang
+            $this->db->where('fma_pinjam.id_user', $id_akun);
+            $this->db->where('fma_pinjam.status = 1');
+            $this->db->where('fma_pinjam.tgl_delete', null);
+            $data = $this->db->get()->result();
 
             foreach($data as $v){
                 if ($this->cek_qty($v->id_barang, $v->qty_pinjam) >= 0) {
 
                     $this->db->set('id_admin', $_SESSION['id_akun']);    //yg menyetujui
                     $this->db->set('status', 2);    //disetujui
-                    $this->db->where('id_pinjam', $id_pinjam);
+                    $this->db->where('id_pinjam', $v->id_pinjam);
                     $this->db->update('fma_pinjam');
 
                     $this->kurangi_qty($v->id_barang, $v->qty_pinjam); //kurangi qty sisa barang real

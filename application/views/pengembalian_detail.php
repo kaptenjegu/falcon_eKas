@@ -51,7 +51,8 @@
                                     <td>' . $v->nama_lokasi . '</td>
                                     <td>' . $v->qty_pinjam . '</td>
                                     <td>
-                                        <a href="' . base_url('Pengembalian/detail_acc_data/' .$id_akun . '/' . $v->id_pinjam) . '" class="btn btn-success" onclick="return confirm(\'Apakah anda ingin menyetujui pengembalian barang ' . $v->nama_barang . ' ?\')"><i class="fa fa-check"></i> Setujui</a>&emsp;
+                                        <a href="' . base_url('Pengembalian/detail_acc_data/' .$id_akun . '/' . $v->id_pinjam) . '" class="btn btn-success" onclick="return confirm(\'Apakah anda ingin menyetujui pengembalian barang ' . $v->nama_barang . ' dengan kondisi Baik ?\')"><i class="fa fa-check"></i></a>&emsp;
+                                        <a href="' . base_url('Pengembalian/detail_acc_data2/' .$id_akun . '/' . $v->id_pinjam) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menyetujui pengembalian barang ' . $v->nama_barang . ' dengan kondisi Rusak?\')"><i class="fa fa-check"></i></a>&emsp;
                                         <a href="' . base_url('Pengembalian/detail_hapus_data/' .$id_akun . '/' . $v->id_pinjam) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menghapus dan mengembalikan ke user PIC untuk data ' . $v->nama_barang . ' ?\')"><i class="fa fa-ban"></i> Hapus</a>&emsp;
                                     </td>
                                     </tr>';
@@ -61,7 +62,7 @@
                     </tbody>
                 </table>
             </div>
-            <a href="<?= base_url('Pengembalian/detail_acc_data_semua/' . $id_akun ) ?>" class="btn btn-success"><i class="fa fa-check"></i> Setujui Semua</a>
+            <!--a href="<?//= base_url('Pengembalian/detail_acc_data_semua/' . $id_akun ) ?>" class="btn btn-success"><i class="fa fa-check"></i> Setujui Semua</a-->
         </div>
 
     </div>

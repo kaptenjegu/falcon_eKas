@@ -80,10 +80,10 @@
 
                             switch ($v->kondisi_barang_kembali) {
                                 case 1:
-                                    $kondisi2 = 'Baik';
+                                    $kondisi2 = '<span style="color: green; font-weight: bold;">Baik</span>';
                                     break;
                                 case 2:
-                                    $kondisi2 = 'Rusak';
+                                    $kondisi2 = '<span style="color: red; font-weight: bold;">Rusak</span>';
                                     break;
                                 default:
                                     $kondisi2 = '-';
