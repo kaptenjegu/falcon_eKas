@@ -106,42 +106,42 @@
           </a>
         </div>
       </li>
-
-      <li class="nav-item dropdown <?php if ($page == 'Asset' or $page == 'Pinjam_aset') {
-                                      echo 'show';
-                                    } ?>">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Srmr' or $page == 'srmr_manage' or $page == 'Riwayat_srmr') {
-                                                                                                                                                    echo 'true';
-                                                                                                                                                  } else {
-                                                                                                                                                    echo 'false';
-                                                                                                                                                  } ?>">
-          <i class="fas fa-fw fa-cubes"></i>
-          <span>Manajemen Aset</span>
-        </a>
-        <div class="dropdown-menu <?php if ($page == 'Asset' or $page == 'Pinjam' or $page == 'Pengembalian') {
-                                    echo 'show';
-                                  } ?>" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item <?php if ($page == 'Asset') {
-                                    echo 'active';
-                                  } ?>" href="<?= base_url('Asset') ?>">
+      <?php if (cek_permission($_SESSION['id_akun'], 'aset') == true) { ?>
+        <li class="nav-item dropdown <?php if ($page == 'Asset' or $page == 'Pinjam_aset') {
+                                        echo 'show';
+                                      } ?>">
+          <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Srmr' or $page == 'srmr_manage' or $page == 'Riwayat_srmr') {
+                                                                                                                                                      echo 'true';
+                                                                                                                                                    } else {
+                                                                                                                                                      echo 'false';
+                                                                                                                                                    } ?>">
             <i class="fas fa-fw fa-cubes"></i>
-            <span>Data Aset</span>
+            <span>Manajemen Aset</span>
           </a>
-          <a class="dropdown-item <?php if ($page == 'Pinjam') {
-                                    echo 'active';
-                                  } ?>" href="<?= base_url('Pinjam') ?>">
-            <i class="fas fa-fw fa-exchange-alt"></i>
-            <span>Data Pinjam</span>
-          </a>
-          <a class="dropdown-item <?php if ($page == 'Pengembalian') {
-                                    echo 'active';
-                                  } ?>" href="<?= base_url('Pengembalian') ?>">
-            <i class="fas fa-fw fa-exchange-alt"></i>
-            <span>Data Pengembalian</span>
-          </a>
-        </div>
-      </li>
-
+          <div class="dropdown-menu <?php if ($page == 'Asset' or $page == 'Pinjam' or $page == 'Pengembalian') {
+                                      echo 'show';
+                                    } ?>" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item <?php if ($page == 'Asset') {
+                                      echo 'active';
+                                    } ?>" href="<?= base_url('Asset') ?>">
+              <i class="fas fa-fw fa-cubes"></i>
+              <span>Data Aset</span>
+            </a>
+            <a class="dropdown-item <?php if ($page == 'Pinjam') {
+                                      echo 'active';
+                                    } ?>" href="<?= base_url('Pinjam') ?>">
+              <i class="fas fa-fw fa-exchange-alt"></i>
+              <span>Data Pinjam</span>
+            </a>
+            <a class="dropdown-item <?php if ($page == 'Pengembalian') {
+                                      echo 'active';
+                                    } ?>" href="<?= base_url('Pengembalian') ?>">
+              <i class="fas fa-fw fa-exchange-alt"></i>
+              <span>Data Pengembalian</span>
+            </a>
+          </div>
+        </li>
+      <?php } ?>
     </ul>
 
     <div id="content-wrapper">

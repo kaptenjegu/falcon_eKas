@@ -287,3 +287,19 @@ function get_dana_pengajuan_asli($id_data_kas, $id_lokasi)
 	
 	return $hasil;
 }
+
+function cek_permission($id_akun, $menu)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+	
+	$ci->db->where('id_user', $id_akun);
+	$ci->db->where('id_menu', $menu);
+	$permit = $ci->db->get('fma_permission')->num_rows();
+
+	if($permit == 0){
+		return false;
+	}else{
+		return true;
+	}
+}
