@@ -258,19 +258,23 @@
           document.getElementById('id_data').value = data['id_data'];
           document.getElementById('uraian_data_edit').value = data['deskripsi_data'];
 
-          if (data['id_status'] == 1) {
+          /*if (data['id_status'] == 1) {
             document.getElementById('status_data_edit').value = 'Luar RAB';
           } else {
             document.getElementById('status_data_edit').value = 'RAB';
-          }
-
-          if (data['id_jenis_kas'] == 1) {
+          }*/
+          document.getElementById('status_data_edit').selectedIndex = data['id_status'] - 1; 
+          /*if (data['id_jenis_kas'] == 1) {
             document.getElementById('jenis_kas_edit').value = 'Keluar';
           } else {
             document.getElementById('jenis_kas_edit').value = 'Masuk';
-          }
+          }*/
 
-          document.getElementById('tipe_data_edit').value = data['nama_tipe'];
+          //document.getElementById('jenis_kas_edit').innerHTML = data['ijk'];
+          document.getElementById('jenis_kas_edit').selectedIndex = data['id_jenis_kas'] - 1; 
+
+          //document.getElementById('tipe_data_edit').value = data['nama_tipe'];
+          document.querySelector('#tipe_data_edit').value = data['id_tipe'];
           document.getElementById('tgl_data_edit').value = data['tgl_data'];
           document.getElementById('qty_data_edit').value = data['qty_data'];
           document.getElementById('nominal_data_edit').value = data['nominal_data'];

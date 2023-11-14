@@ -204,15 +204,23 @@
                     </div>
                     <div class="form-group">
                         <label>Status Anggaran</label>
-                        <input type="text" class="form-control" id="status_data_edit" readonly>
+                        <select name="status_data_edit" class="form-control" id="status_data_edit" min="1" required>
+                            <option value="1">Luar RAB</option>
+                            <option value="2">RAB</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Tipe</label>
-                        <input type="text" class="form-control" id="tipe_data_edit" readonly>
+                        <select class="form-control" id="tipe_data_edit" name="tipe_data_edit" required>
+                            <?= $tipe_list ?>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Jenis Kas</label>
-                        <input type="text" class="form-control" id="jenis_kas_edit" readonly>
+                        <select class="form-control" id="jenis_kas_edit" name="jenis_kas_edit" min="1" required>
+                            <option value="1">Keluar</option>
+                            <option value="2">Masuk</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Quantity</label>

@@ -35,6 +35,7 @@ class Kas_breakdown extends CI_Controller
             $data['judul_periode'] = $n->first_row();
 
             $this->db->where('tgl_delete', null);
+            $this->db->order_by('id_tipe', 'asc');
             $data['tipe'] = $this->db->get('fki_tipe')->result();
 
             $this->db->select('*');
@@ -202,12 +203,18 @@ class Kas_breakdown extends CI_Controller
             $qty_data = $this->input->post('qty_data');
             $nominal_data = $this->input->post('nominal_data');
             $pic_data = $this->input->post('pic_data');
+            $id_jenis_kas = $this->input->post('jenis_kas_edit');
+            $id_status = $this->input->post('status_data_edit');
+            $id_tipe = $this->input->post('tipe_data_edit');
 
             $this->db->set('tgl_data', $tgl_data);
             $this->db->set('deskripsi_data', $deskripsi_data);
             $this->db->set('qty_data', $qty_data);
             $this->db->set('nominal_data', $nominal_data);
             $this->db->set('pic_data', $pic_data);
+            $this->db->set('id_jenis_kas', $id_jenis_kas);
+            $this->db->set('id_status', $id_status);
+            $this->db->set('id_tipe', $id_tipe);
             $this->db->where('id_data', $id_data);
             $this->db->update('fki_data');
 
