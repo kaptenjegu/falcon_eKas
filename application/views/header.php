@@ -106,6 +106,7 @@
           </a>
         </div>
       </li>
+
       <?php if (cek_permission($_SESSION['id_akun'], 'aset') == true) { ?>
         <li class="nav-item dropdown <?php if ($page == 'Asset' or $page == 'Pinjam_aset') {
                                         echo 'show';
@@ -142,6 +143,37 @@
           </div>
         </li>
       <?php } ?>
+
+      <?php //if (cek_permission($_SESSION['id_akun'], 'monitoring_bayar') == true) { ?>
+        <li class="nav-item dropdown <?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {
+                                        echo 'show';
+                                      } ?>">
+          <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {
+                                                                                                                                                      echo 'true';
+                                                                                                                                                    } else {
+                                                                                                                                                      echo 'false';
+                                                                                                                                                    } ?>">
+            <i class="fas fa-fw fa-money-bill"></i>
+            <span>Monitoring Bayar</span>
+          </a>
+          <div class="dropdown-menu <?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {
+                                      echo 'show';
+                                    } ?>" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item <?php if ($page == 'Monitoring_bayar') {
+                                      echo 'active';
+                                    } ?>" href="<?= base_url('Monitoring_bayar') ?>">
+              <i class="fas fa-fw fa-money-bill"></i>
+              <span>Data PO / SO</span>
+            </a>
+            <a class="dropdown-item <?php if ($page == 'Monitoring_riwayat_bayar') {
+                                      echo 'active';
+                                    } ?>" href="<?= base_url('Monitoring_bayar/riwayat/') ?>">
+              <i class="fas fa-fw fa-table"></i>
+              <span>Riwayat</span>
+            </a>
+          </div>
+        </li>
+      <?php //} ?>
     </ul>
 
     <div id="content-wrapper">

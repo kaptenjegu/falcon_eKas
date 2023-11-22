@@ -422,6 +422,49 @@
   </script>
 <?php } ?>
 
+<?php if ($page == "Monitoring_bayar") { ?>
+  <script>
+    function get_data(id) {
+      $.ajax({
+        url: "<?= base_url() ?>Monitoring_bayar/get_data/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          document.getElementById('id_project').value = data['id_project'];
+          document.getElementById('nama_project').value = data['nama_project'];
+          document.getElementById('nomor_project').value = data['nomor_project'];
+          document.getElementById('tgl_mulai').value = data['tgl_mulai'];
+          document.getElementById('durasi_project').value = data['durasi_project'];
+          document.getElementById('nama_vendor').value = data['nama_vendor'];
+          document.getElementById('nominal_project').value = data['nominal_project'];
+          document.getElementById('jenis_project').value = data['jenis_project'];
+          document.getElementById('lokasi_project').value = data['lokasi_project'];
+
+          //$('#editForm').modal('show');
+          console.log(data);
+        },
+        error: function(data) {
+          alert('error')
+          console.log(data);
+        }
+      });
+    }
+
+    $(function() {
+            $('input[name="tgl_mulai"]').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 2022,
+                maxYear: parseInt(moment().format('YYYY'), 5),
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
+
+            });
+        });
+  </script>
+<?php } ?>
+
 <?php if ($page == "Dashboard") { ?>
   <script>
     // Set new default font family and font color to mimic Bootstrap's default styling
