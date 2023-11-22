@@ -18,8 +18,10 @@ class Monitoring_bayar extends CI_Controller
 
         if($_SESSION['id_jabatan'] == '6e5dfcdab3ed5991d49692be6442f415'){  //tax,sdm,akunting - mbak Lina
             $this->db->where('status_project', 2);  //lanjut pembayaran
+            $data['step1'] = false;
         }else{
             $this->db->where('status_project', 1);  //procurement - po/so rilis
+            $data['step1'] = true;
         }
         
         $this->db->where('tgl_delete', null);
@@ -29,7 +31,11 @@ class Monitoring_bayar extends CI_Controller
         $data['lokasi'] = $this->db->get('fai_lokasi')->result();
 
         $this->load->view('header', $data);
-        $this->load->view('data_sopo', $data);
+
+        if(cek_permission($_SESSION['id_akun'], 'monitoring_bayar')){
+            $this->load->view('data_sopo', $data);
+        }
+
         $this->load->view('footer');
     }
 
@@ -49,7 +55,11 @@ class Monitoring_bayar extends CI_Controller
         $data['data_sopo'] = $this->db->get('fmp_project')->result();
 
         $this->load->view('header', $data);
-        $this->load->view('data_sopo_riwayat', $data);
+
+        if(cek_permission($_SESSION['id_akun'], 'monitoring_riwayat_bayar')){
+            $this->load->view('data_sopo_riwayat', $data);
+        }
+        
         $this->load->view('footer');
     }
 

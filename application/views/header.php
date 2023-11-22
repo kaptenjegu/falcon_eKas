@@ -107,7 +107,6 @@
         </div>
       </li>
 
-      <?php if (cek_permission($_SESSION['id_akun'], 'aset') == true) { ?>
         <li class="nav-item dropdown <?php if ($page == 'Asset' or $page == 'Pinjam_aset') {
                                         echo 'show';
                                       } ?>">
@@ -142,7 +141,6 @@
             </a>
           </div>
         </li>
-      <?php } ?>
 
       <?php //if (cek_permission($_SESSION['id_akun'], 'monitoring_bayar') == true) { ?>
         <li class="nav-item dropdown <?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {

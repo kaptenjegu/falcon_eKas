@@ -21,7 +21,11 @@ class Tipe extends CI_Controller
         $data['tipe'] = $this->db->get('fki_tipe')->result();
 
         $this->load->view('header', $data);
-        $this->load->view('tipe', $data);
+
+        if(cek_permission($_SESSION['id_akun'], 'kas_tipe')){
+            $this->load->view('tipe', $data);
+        }
+
         $this->load->view('footer');
     }
 

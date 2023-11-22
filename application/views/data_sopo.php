@@ -16,9 +16,11 @@
         </div>
 
         <div class="card-body">
-            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addForm"><i class="fa fa-plus"></i> Tambah Data PO / SO</a>
-            <br>
-            <br>
+            <?php if ($step1) { ?>
+                <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addForm"><i class="fa fa-plus"></i> Tambah Data PO / SO</a>
+                <br>
+                <br>
+            <?php } ?>
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -63,9 +65,9 @@
                                     break;
                             }
 
-                            if($_SESSION['id_jabatan'] == '6e5dfcdab3ed5991d49692be6442f415'){  //tax keu smd
+                            if ($_SESSION['id_jabatan'] == '6e5dfcdab3ed5991d49692be6442f415') {  //tax keu smd
                                 $id_setor = 3;  //pembayaran selesai
-                            }else{
+                            } else {
                                 $id_setor = 2;  // pekerjaan selesai
                             }
 
@@ -76,10 +78,14 @@
                                     <td>' . $tipe . '</td>
                                     <td>' . $status_project . '</td>
                                     <td>
-                                        <a href="' . base_url('Monitoring_bayar/setor_data/' . $v->id_project . '/' . $id_setor) . '" class="btn btn-info" onclick="return confirm(\'Apakah anda ingin menyelesaikan data nomor ' . $v->nomor_project . ' ?\')"><i class="fa fa-forward"></i></a>&emsp;
-                                        <a href="#" data-toggle="modal" data-target="#editForm" class="btn btn-warning" onclick="get_data(\'' . $v->id_project . '\')"><i class="fa fa-edit"></i> Edit</a>&emsp;
-                                        <a href="' . base_url('Monitoring_bayar/hapus_data/' . $v->id_project) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menghapus data nomor ' . $v->nomor_project . ' ?\')"><i class="fa fa-trash"></i> Hapus</a>&emsp;
-                                    </td>
+                                        <a href="' . base_url('Monitoring_bayar/setor_data/' . $v->id_project . '/' . $id_setor) . '" class="btn btn-info" onclick="return confirm(\'Apakah anda ingin menyelesaikan data nomor ' . $v->nomor_project . ' ?\')"><i class="fa fa-forward"></i></a>&emsp;';
+
+                            if ($step1) {
+                                echo '<a href="#" data-toggle="modal" data-target="#editForm" class="btn btn-warning" onclick="get_data(\'' . $v->id_project . '\')"><i class="fa fa-edit"></i> Edit</a>&emsp;
+                                        <a href="' . base_url('Monitoring_bayar/hapus_data/' . $v->id_project) . '" class="btn btn-danger" onclick="return confirm(\'Apakah anda ingin menghapus data nomor ' . $v->nomor_project . ' ?\')"><i class="fa fa-trash"></i> Hapus</a>&emsp;';
+                            }
+
+                            echo '</td>
                                     </tr>';
                             $no += 1;
                         }

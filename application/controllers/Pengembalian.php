@@ -28,7 +28,11 @@ class Pengembalian extends CI_Controller
         $data['pengembalian'] = $this->db->get()->result();
 
         $this->load->view('header', $data);
-        $this->load->view('pengembalian', $data);
+
+        if(cek_permission($_SESSION['id_akun'], 'aset_kembali')){
+            $this->load->view('pengembalian', $data);
+        }
+
         $this->load->view('footer');
     }
 

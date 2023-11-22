@@ -22,7 +22,11 @@ class Kas extends CI_Controller
         $data['data_kas'] = $this->db->get('fki_data_kas')->result();
 
         $this->load->view('header', $data);
-        $this->load->view('data_kas', $data);
+
+        if(cek_permission($_SESSION['id_akun'], 'kas')){
+            $this->load->view('data_kas', $data);
+        }
+
         $this->load->view('footer');
     }
 

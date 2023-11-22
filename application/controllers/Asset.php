@@ -24,7 +24,11 @@ class Asset extends CI_Controller
         $data['asset'] = $this->db->get()->result();
 
         $this->load->view('header', $data);
-        $this->load->view('asset', $data);
+
+        if(cek_permission($_SESSION['id_akun'], 'aset')){
+            $this->load->view('asset', $data);
+        }
+
         $this->load->view('footer');
     }
 

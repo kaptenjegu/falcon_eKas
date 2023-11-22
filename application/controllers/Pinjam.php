@@ -31,7 +31,11 @@ class Pinjam extends CI_Controller
         //echo json_encode($data['pinjam']);exit();
 
         $this->load->view('header', $data);
-        $this->load->view('pinjam', $data);
+
+        if(cek_permission($_SESSION['id_akun'], 'aset_pinjam')){
+            $this->load->view('pinjam', $data);
+        }
+
         $this->load->view('footer');
     }
 
