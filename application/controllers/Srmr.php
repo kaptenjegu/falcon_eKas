@@ -313,6 +313,15 @@ class Srmr extends CI_Controller
         return $nomor;
     }
 
+    private function get_jabatan($id_user){
+        $this->db->select('*');
+        $this->db->from('fai_akun');
+        $this->db->join('fai_jabatan', 'fai_akun.id_jabatan = fai_jabatan.id_jabatan');
+        $this->db->where('fai_akun.id_akun', $id_user);
+        $data = $this->db->get()->first_row();
+        return $data->nama_jabatan;    
+    }
+
     public function download_dokumen()
     {
         //LOAD DATA
@@ -556,7 +565,8 @@ class Srmr extends CI_Controller
             $pdf->Cell(50, 5, 'Ike Wahyu Setiyowati', $brd2, 1, 'C');
 
             $pdf->SetFont('Times', '', 10);
-            $pdf->Cell(50, 5, 'Procurement', $brd2, 0, 'C');
+            //$pdf->Cell(50, 5, 'Procurement', $brd2, 0, 'C');
+            $pdf->Cell(50, 5, $this->get_jabatan($data->id_user), $brd2, 0, 'C');
             $pdf->Cell(50, 5, 'Cost Control', $brd2, 0, 'C');
             $pdf->Cell(70, 5, 'Manager Ops & Engineering', $brd2, 0, 'C');
             $pdf->Cell(50, 5, 'Accounting & Tax', $brd2, 0, 'C');
