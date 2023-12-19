@@ -263,7 +263,7 @@
           } else {
             document.getElementById('status_data_edit').value = 'RAB';
           }*/
-          document.getElementById('status_data_edit').selectedIndex = data['id_status'] - 1; 
+          document.getElementById('status_data_edit').selectedIndex = data['id_status'] - 1;
           /*if (data['id_jenis_kas'] == 1) {
             document.getElementById('jenis_kas_edit').value = 'Keluar';
           } else {
@@ -271,7 +271,7 @@
           }*/
 
           //document.getElementById('jenis_kas_edit').innerHTML = data['ijk'];
-          document.getElementById('jenis_kas_edit').selectedIndex = data['id_jenis_kas'] - 1; 
+          document.getElementById('jenis_kas_edit').selectedIndex = data['id_jenis_kas'] - 1;
 
           //document.getElementById('tipe_data_edit').value = data['nama_tipe'];
           document.querySelector('#tipe_data_edit').value = data['id_tipe'];
@@ -358,7 +358,7 @@
       });
     }
 
-    function get_nomor_data(){
+    function get_nomor_data() {
       var kode_proyek = document.getElementById('kode_proyek').value;
       var jenis_data = document.getElementById('jenis_data').value;
 
@@ -391,9 +391,9 @@
           document.getElementById('nama_barang').value = data['nama_barang'];
           document.getElementById('qty_asli').value = data['qty_asli'];
 
-          if(data['kondisi_barang'] == 1){
+          if (data['kondisi_barang'] == 1) {
             document.getElementById('kondisi_barang').innerHTML = '<option value="1" selected="selected">Baik</option><option value="2">Rusak</option>';
-          }else{
+          } else {
             document.getElementById('kondisi_barang').innerHTML = '<option value="1">Baik</option><option value="2" selected="selected">Rusak</option>';
           }
 
@@ -408,17 +408,17 @@
     }
 
     $(function() {
-            $('input[name="tgl_pembelian"]').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                minYear: 2022,
-                maxYear: parseInt(moment().format('YYYY'), 5),
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
+      $('input[name="tgl_pembelian"]').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: 2022,
+        maxYear: parseInt(moment().format('YYYY'), 5),
+        locale: {
+          format: 'YYYY-MM-DD'
+        }
 
-            });
-        });
+      });
+    });
   </script>
 <?php } ?>
 
@@ -451,17 +451,78 @@
     }
 
     $(function() {
-            $('input[name="tgl_mulai"]').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true,
-                minYear: 2022,
-                maxYear: parseInt(moment().format('YYYY'), 5),
-                locale: {
-                    format: 'YYYY-MM-DD'
-                }
+      $('input[name="tgl_mulai"]').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: 2022,
+        maxYear: parseInt(moment().format('YYYY'), 5),
+        locale: {
+          format: 'YYYY-MM-DD'
+        }
 
-            });
-        });
+      });
+    });
+  </script>
+<?php } ?>
+
+<?php if ($page == "Esp32") { ?>
+  <script>
+    function get_data(id) {
+      $.ajax({
+        url: "<?= base_url() ?>Esp32/get_data/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          document.getElementById('id_esp').value = data['id_esp'];
+          document.getElementById('kode_esp').value = data['kode_esp'];
+          document.getElementById('deskripsi_esp').value = data['deskripsi_esp'];
+          $('#editForm').modal('show');
+          console.log(data);
+        },
+        error: function(data) {
+          alert('error')
+          console.log(data);
+        }
+      });
+    }
+
+    function get_data_user(id) {
+      $.ajax({
+        url: "<?= base_url() ?>Esp32/get_data_user/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          document.getElementById('id_user').value = data['id_user'];
+          document.getElementById('id_esp').value = data['id_esp'];
+          document.getElementById('username').value = data['username'];
+          $('#editFormUser').modal('show');
+          console.log(data);
+        },
+        error: function(data) {
+          alert('error')
+          console.log(data);
+        }
+      });
+    }
+
+    function get_data_variabel(id) {
+      $.ajax({
+        url: "<?= base_url() ?>Esp32/get_data_variabel/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          document.getElementById('id_data_esp').value = data['id_data_esp'];
+          document.getElementById('id_esp').value = data['id_esp'];
+          document.getElementById('nama_data_esp').value = data['nama_data_esp'];
+          $('#editFormVar').modal('show');
+          console.log(data);
+        },
+        error: function(data) {
+          alert('error')
+          console.log(data);
+        }
+      });
+    }
   </script>
 <?php } ?>
 

@@ -142,7 +142,6 @@
           </div>
         </li>
 
-      <?php //if (cek_permission($_SESSION['id_akun'], 'monitoring_bayar') == true) { ?>
         <li class="nav-item dropdown <?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {
                                         echo 'show';
                                       } ?>">
@@ -171,7 +170,29 @@
             </a>
           </div>
         </li>
-      <?php //} ?>
+
+        <li class="nav-item dropdown <?php if ($page == 'Esp32' or $page == 'User_esp') {
+                                        echo 'show';
+                                      } ?>">
+          <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Esp32' or $page == 'User_esp') {
+                                                                                                                                                      echo 'true';
+                                                                                                                                                    } else {
+                                                                                                                                                      echo 'false';
+                                                                                                                                                    } ?>">
+            <i class="fas fa-fw fa-cloud"></i>
+            <span>Monitoring ESP</span>
+          </a>
+          <div class="dropdown-menu <?php if ($page == 'Esp32' or $page == 'User_esp') {
+                                      echo 'show';
+                                    } ?>" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item <?php if ($page == 'Esp32' or $page == 'User_esp') {
+                                      echo 'active';
+                                    } ?>" href="<?= base_url('Esp32') ?>">
+              <i class="fas fa-fw fa-cloud"></i>
+              <span>Data ESP</span>
+            </a>
+          </div>
+        </li>
     </ul>
 
     <div id="content-wrapper">
