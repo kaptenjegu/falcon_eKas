@@ -68,6 +68,10 @@
                         <label>Nama Variabel</label>
                         <input type="text" class="form-control" name="nama_data_esp" maxlength="100" required>
                     </div>
+                    <div class="form-group">
+                        <label>Satuan Nilai</label>
+                        <input type="text" class="form-control" name="satuan_data_esp" required>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -93,6 +97,14 @@
                     <div class="form-group">
                         <label>Nama Variabel</label>
                         <input type="text" class="form-control" name="nama_data_esp" id="nama_data_esp" maxlength="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nilai</label>
+                        <input type="text" class="form-control" id="value_data_esp" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Satuan Nilai</label>
+                        <input type="text" class="form-control" name="satuan_data_esp" id="satuan_data_esp" required>
                     </div>
                 </div>
 

@@ -147,6 +147,7 @@ class Esp32 extends CI_Controller
 
             $id_esp = $this->input->post('id_esp');
             $nama_data_esp = $this->input->post('nama_data_esp');
+            $satuan_data_esp = $this->input->post('satuan_data_esp');
 
             if ($this->cek_data_variabel($nama_data_esp,$id_esp) == 0) {
 
@@ -154,6 +155,7 @@ class Esp32 extends CI_Controller
                     'id_data_esp' => randid(),
                     'id_esp' => $id_esp,
                     'nama_data_esp' => $nama_data_esp,
+                    'satuan_data_esp' => $satuan_data_esp,
                     'value_data_esp' => '0'
                 );
                 $this->db->insert('fesp32_data_esp', $data);
@@ -236,7 +238,9 @@ class Esp32 extends CI_Controller
             $id_esp = $this->db->escape_str($this->input->post('id_esp'));
             $id_data_esp = $this->input->post('id_data_esp');
             $nama_data_esp = $this->input->post('nama_data_esp');
+            $satuan_data_esp = $this->input->post('satuan_data_esp');
 
+            $this->db->set('satuan_data_esp', $satuan_data_esp);
             $this->db->set('nama_data_esp', $nama_data_esp);
             $this->db->where('id_data_esp', $id_data_esp);
             $this->db->update('fesp32_data_esp');

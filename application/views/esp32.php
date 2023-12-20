@@ -68,7 +68,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Kode ESP</label>
-                        <input type="text" class="form-control" name="kode_esp" maxlength="100" required>
+                        <input type="text" class="form-control" name="kode_esp" placeholder="contoh kode : SBY_001" maxlength="100" required>
                     </div>
                     <div class="form-group">
                         <label>Deskripsi ESP</label>

@@ -1,5 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-
+error_reporting(0);
 class Api_esp32 extends CI_Controller
 {
 
@@ -16,21 +16,47 @@ class Api_esp32 extends CI_Controller
         $kode_esp = $this->uri->segment(3);
         $key = $this->uri->segment(4);
         $result = array();
-        $key_server = md5(date('Y-m-d H:i:s') . '@_Api@_FPT@_122023');
+        $key_server = md5(date('Y-m-d') . '@_Api@_FPT@_122023');
+        $cek = $this->cek_esp($kode_esp);
 
-        if(($key == $key_server) AND ($this->cek_esp($kode_esp) == 1)){
-            $this->db->where('tgl_delete', null);
-            $this->db->order_by('tgl_add', 'desc');
-            $data = $this->db->get('fki_tipe')->result();
-        }        
+        try {
+            $this->db->trans_start();
 
+            if (($key == $key_server) and ($cek->num_rows() == 1)) {
+                $data_cek = $cek->first_row();
+                $id_esp = $data_cek->id_esp;
+
+                $this->db->where('id_esp', $id_esp);
+                $this->db->where('tgl_delete', null);
+                $esp = $this->db->get('fesp32_data_esp')->result();
+
+                foreach ($esp as $v) {
+                    $value_data_esp = $_GET[$v->nama_data_esp];
+                    $this->db->set('value_data_esp', $value_data_esp);
+                    $this->db->where('nama_data_esp', $v->nama_data_esp);
+                    $this->db->update('fesp32_data_esp');
+                }
+                $status = 200;
+                $msg = 'Success';
+            }else{
+                $status = 404;
+                $msg = 'Invalid';
+            }
+
+            $this->db->trans_complete();            
+        } catch (\Throwable $e) {
+            $status = 400;
+            $msg = $e->getMessage();
+        }
+        $result = array('status' => $status,'message' => $msg);
         echo json_encode($result);
     }
 
-    private function cek_esp($kode_esp){
+    private function cek_esp($kode_esp)
+    {
         $this->db->where('kode_esp', $kode_esp);
         $this->db->where('tgl_delete', null);
-        $n = $this->db->get('fesp32_esp')->num_rows();
+        $n = $this->db->get('fesp32_esp');
         return $n;
     }
 }

@@ -283,7 +283,7 @@
           console.log(data);
         },
         error: function(data) {
-          alert('error')
+          alert('error');
           console.log(data);
         }
       });
@@ -324,7 +324,7 @@
           console.log(data);
         },
         error: function(data) {
-          alert('error')
+          alert('error');
           console.log(data);
         }
       });
@@ -352,7 +352,7 @@
           console.log(data);
         },
         error: function(data) {
-          alert('error')
+          alert('error');
           console.log(data);
         }
       });
@@ -371,7 +371,7 @@
           console.log("get_nomor_data = " + data);
         },
         error: function(data) {
-          alert('error')
+          alert('error');
           console.log(data);
         }
       });
@@ -401,7 +401,7 @@
           console.log(data);
         },
         error: function(data) {
-          alert('error')
+          alert('error');
           console.log(data);
         }
       });
@@ -444,7 +444,7 @@
           console.log(data);
         },
         error: function(data) {
-          alert('error')
+          alert('error');
           console.log(data);
         }
       });
@@ -480,7 +480,7 @@
           console.log(data);
         },
         error: function(data) {
-          alert('error')
+          alert('error');
           console.log(data);
         }
       });
@@ -499,7 +499,7 @@
           console.log(data);
         },
         error: function(data) {
-          alert('error')
+          alert('error');
           console.log(data);
         }
       });
@@ -514,11 +514,13 @@
           document.getElementById('id_data_esp').value = data['id_data_esp'];
           document.getElementById('id_esp').value = data['id_esp'];
           document.getElementById('nama_data_esp').value = data['nama_data_esp'];
+          document.getElementById('value_data_esp').value = data['value_data_esp'];
+          document.getElementById('satuan_data_esp').value = data['satuan_data_esp'];
           $('#editFormVar').modal('show');
           console.log(data);
         },
         error: function(data) {
-          alert('error')
+          alert('error');
           console.log(data);
         }
       });
