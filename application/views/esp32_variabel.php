@@ -70,7 +70,7 @@
                     </div>
                     <div class="form-group">
                         <label>Satuan Nilai</label>
-                        <input type="text" class="form-control" name="satuan_data_esp" required>
+                        <input type="text" class="form-control" name="satuan_data_esp" maxlength="10" required>
                     </div>
                 </div>
                 <div class="modal-footer">
