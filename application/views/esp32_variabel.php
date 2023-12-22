@@ -66,7 +66,7 @@
                     <input type="hidden" name="id_esp" value="<?= $this->uri->segment(3) ?>">
                     <div class="form-group">
                         <label>Nama Variabel</label>
-                        <input type="text" class="form-control" name="nama_data_esp" maxlength="100" required>
+                        <input type="text" class="form-control" name="nama_data_esp" maxlength="20" required>
                     </div>
                     <div class="form-group">
                         <label>Satuan Nilai</label>
@@ -96,7 +96,7 @@
                     <input type="hidden" name="id_esp" id="id_esp">
                     <div class="form-group">
                         <label>Nama Variabel</label>
-                        <input type="text" class="form-control" name="nama_data_esp" id="nama_data_esp" maxlength="100" required>
+                        <input type="text" class="form-control" name="nama_data_esp" id="nama_data_esp" maxlength="20" required>
                     </div>
                     <div class="form-group">
                         <label>Nilai</label>
@@ -104,7 +104,7 @@
                     </div>
                     <div class="form-group">
                         <label>Satuan Nilai</label>
-                        <input type="text" class="form-control" name="satuan_data_esp" id="satuan_data_esp" required>
+                        <input type="text" class="form-control" name="satuan_data_esp" id="satuan_data_esp" maxlength="10" required>
                     </div>
                 </div>
 
