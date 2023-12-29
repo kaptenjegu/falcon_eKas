@@ -170,7 +170,8 @@
                 <li>Untuk Tipe Kas, agar bisa ditampilkan di All Kas, maka pilih Jenis Kas Masuk</li>
                 <li>Data dengan jenis kas Keluar dan bertipe Kas, tidak akan dihitung di All Kas</li>
                 <li>Pengajuan Dana diatur ke jenis kas masuk</li>
-                <li>Hati-hati dalam mengisi data, karena data dengan fitur pilih, tidak bisa diedit</li>
+                <li>Penutupan kas, harus menggunakan kata awal "Penutupan" agar bisa dihitung</li>
+                <li>Hati-hati dalam mengisi data, beberapa data tidak bisa diedit</li>
             </ul>
 
         </span>

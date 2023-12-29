@@ -200,6 +200,55 @@ function get_dana_kas_pengajuan_minggu($id_minggu)
 	return $h;
 }
 
+function get_data_penutupan($id_minggu)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+	$total = 0;
+
+	$ci->db->where('id_minggu', $id_minggu);
+	$minggu = $ci->db->get('fki_minggu')->first_row();
+
+	$id_data_kas = $minggu->id_data_kas;
+	$id_lokasi = $minggu->id_lokasi;
+
+	//if ($minggu->nama_minggu <> 'Minggu 1') {
+	//manual seleksi untuk mancari kata kunci nama minggu sebelumnya
+	if ($minggu->nama_minggu == 'Minggu 1') {
+		$nm = 'Minggu 2';
+	} elseif ($minggu->nama_minggu == 'Minggu 2') {
+		$nm = 'Minggu 3';
+	} elseif ($minggu->nama_minggu == 'Minggu 3') {
+		$nm = 'Minggu 4';
+	} elseif ($minggu->nama_minggu == 'Minggu 4') {
+		$nm = 'Minggu 5';
+	} elseif ($minggu->nama_minggu == 'Minggu 5') {
+		$nm = 'Minggu 6';
+	} elseif ($minggu->nama_minggu == 'Minggu 6') {
+		$nm = 'Minggu 7';
+	}
+
+	//mencari id minggu sebelumnya
+	$ci->db->where('id_lokasi', $id_lokasi);
+	$ci->db->where('id_data_kas', $id_data_kas);
+	$ci->db->where('nama_minggu', $nm);
+	$id_minggu = $ci->db->get('fki_minggu')->first_row();
+
+	//ambil data minggu sekarang, untuk dicarikan kata kunci Penutupan
+	$ci->db->where('id_minggu', $id_minggu->id_minggu);
+	$ci->db->where('id_tipe', 1);  // kas
+	$ci->db->where('id_jenis_kas', 2);  // masuk
+	$ci->db->where('tgl_delete', null);
+	$ci->db->where('LEFT(deskripsi_data, 9) = "Penutupan"');  // mencari kata awal Penutupan
+	$data = $ci->db->get('fki_data')->result();
+
+	foreach ($data as $v) {
+		$total += $v->nominal_data;
+	}
+	//}
+	return $total;
+}
+
 function get_dana_luar_rab($no, $id_data_kas)
 {
 	date_default_timezone_set('Asia/Jakarta');
@@ -252,17 +301,17 @@ function format_nomor_dokumen($kode, $nomor_data, $jenis_data)
 	date_default_timezone_set('Asia/Jakarta');
 	$ci = get_instance();
 
-	if(strlen($nomor_data) == 1){
+	if (strlen($nomor_data) == 1) {
 		$n = '00' . $nomor_data;
-	}elseif(strlen($nomor_data) == 2){
+	} elseif (strlen($nomor_data) == 2) {
 		$n = '0' . $nomor_data;
-	}else{
+	} else {
 		$n = $nomor_data;
 	}
-	
-	if($jenis_data == 1){
+
+	if ($jenis_data == 1) {
 		$jd = 'SR';
-	}else{
+	} else {
 		$jd = 'MR';
 	}
 
@@ -273,18 +322,18 @@ function get_dana_pengajuan_asli($id_data_kas, $id_lokasi)
 {
 	date_default_timezone_set('Asia/Jakarta');
 	$ci = get_instance();
-	
+
 	$ci->db->where('id_data_kas', $id_data_kas);
 	$ci->db->where('id_lokasi', $id_lokasi);
 	$dapeng = $ci->db->get('fki_dana_pengajuan');
 
-	if($dapeng->num_rows() == 0){
+	if ($dapeng->num_rows() == 0) {
 		$hasil = 0;
-	}else{
+	} else {
 		$data = $dapeng->first_row();
 		$hasil = $data->nominal;
 	}
-	
+
 	return $hasil;
 }
 
@@ -292,14 +341,14 @@ function cek_permission($id_akun, $menu)
 {
 	date_default_timezone_set('Asia/Jakarta');
 	$ci = get_instance();
-	
+
 	$ci->db->where('id_user', $id_akun);
 	$ci->db->where('id_menu', $menu);
 	$permit = $ci->db->get('fma_permission')->num_rows();
 
-	if($permit == 0){
+	if ($permit == 0) {
 		return false;
-	}else{
+	} else {
 		return true;
 	}
 }
