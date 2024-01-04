@@ -17,7 +17,8 @@
         </div>
 
         <div class="card-body">
-            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addForm"><i class="fa fa-plus"></i> Tambah Variabel ESP</a>
+            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addForm"><i class="fa fa-plus"></i> Tambah Variabel ESP</a>&emsp;
+            <a href="#" class="btn btn-info" data-toggle="modal" data-target="#apikey"><i class="fa fa-list"></i> Api Key</a>
             <br>
             <br>
             <div class="table-responsive">
@@ -117,3 +118,24 @@
     </div>
 </div>
 <!-- EDIT -->
+
+<!-- api key -->
+<div class="modal fade" id="apikey" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">API KEY</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Api Key</label>
+                    <input type="text" class="form-control" value="<?= $this->uri->segment(3) ?>">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Api Key -->

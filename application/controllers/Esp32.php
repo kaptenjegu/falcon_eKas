@@ -74,6 +74,29 @@ class Esp32 extends CI_Controller
         $this->load->view('footer');
     }
 
+    public function cmd()
+    {
+        $id_esp = $this->db->escape_str($this->uri->segment(3));
+
+        $this->db->where('id_esp', $id_esp);
+        $this->db->where('tgl_delete', null);
+        $esp = $this->db->get('fesp32_esp')->first_row();
+
+        $data['judul'] = 'Data Control / Command ESP ' . $esp->kode_esp;
+        $data['page'] = 'Esp32';
+        $data['url'] = base_url('Esp32/cmd/' . $id_esp);
+
+        $this->db->where('id_esp', $id_esp);
+        $this->db->where('tgl_delete', null);
+        $data['cmd'] = $this->db->get('fesp32_cmd_esp')->result();
+
+        $data['kode_esp'] = $esp->kode_esp;
+
+        $this->load->view('header', $data);
+        $this->load->view('esp32_cmd', $data);
+        $this->load->view('footer');
+    }
+
     public function tambah_data()
     {
         try {
@@ -175,6 +198,42 @@ class Esp32 extends CI_Controller
         redirect('Esp32/variabel/' . $id_esp);
     }
 
+    public function tambah_data_cmd()
+    {
+        try {
+            $this->db->trans_start();
+
+            $id_esp = $this->input->post('id_esp');
+            $kode_cmd_esp = $this->input->post('kode_cmd_esp');
+            $nama_cmd = $this->input->post('nama_cmd');
+            $reverse_cmd_esp = $this->input->post('reverse_cmd_esp');
+
+            if ($this->cek_data_cmd($kode_cmd_esp,$id_esp) == 0) {
+
+                $data = array(
+                    'id_cmd_esp' => randid(),
+                    'id_esp' => $id_esp,
+                    'kode_cmd_esp' => $kode_cmd_esp,
+                    'nama_cmd' => $nama_cmd,
+                    'reverse_cmd_esp' => $reverse_cmd_esp
+                );
+                $this->db->insert('fesp32_cmd_esp', $data);
+
+                $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Data Control / Command Disimpan</b></center></div>');
+            } else {
+                $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>!!! Error : Data Control / Command sudah ada !!!</b></center></div>');
+            }
+
+            $this->db->trans_complete();
+        } catch (\Throwable $e) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+        }
+        redirect('Esp32/cmd/' . $id_esp);
+    }
+
     public function edit_data()
     {
         try {
@@ -246,7 +305,7 @@ class Esp32 extends CI_Controller
             $this->db->update('fesp32_data_esp');
 
             $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
-					<center><b>Data Variabel Berhasil Diperbarui</b></center></div>');
+					<center><b>Data Variabel Berhasil Diperbarui</b></center></div>');            
 
             $this->db->trans_complete();
         } catch (\Throwable $e) {
@@ -254,6 +313,34 @@ class Esp32 extends CI_Controller
 					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
         }
         redirect('Esp32/variabel/' . $id_esp);
+    }
+
+    public function edit_data_cmd()
+    {
+        try {
+            $this->db->trans_start();
+
+            $id_esp = $this->db->escape_str($this->input->post('id_esp'));
+            $id_cmd_esp = $this->input->post('id_cmd_esp');
+            $kode_cmd_esp = $this->input->post('kode_cmd_esp');
+            $nama_cmd = $this->input->post('nama_cmd');
+            $reverse_cmd_esp = $this->input->post('reverse_cmd_esp');
+
+            $this->db->set('kode_cmd_esp', $kode_cmd_esp);
+            $this->db->set('nama_cmd', $nama_cmd);
+            $this->db->set('reverse_cmd_esp', $reverse_cmd_esp);
+            $this->db->where('id_cmd_esp', $id_cmd_esp);
+            $this->db->update('fesp32_cmd_esp');
+
+            $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissable">
+					<center><b>Data Control / Command Berhasil Diperbarui</b></center></div>');
+
+            $this->db->trans_complete();
+        } catch (\Throwable $e) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+        }
+        redirect('Esp32/cmd/' . $id_esp);
     }
 
     public function hapus_data()
@@ -324,6 +411,29 @@ class Esp32 extends CI_Controller
         redirect('Esp32/variabel/' . $id_esp);
     }
 
+    public function hapus_data_cmd()
+    {
+        try {
+            $this->db->trans_start();
+
+            $id_cmd_esp = $this->db->escape_str($this->uri->segment(3));
+            $id_esp = $this->db->escape_str($this->uri->segment(4));
+
+            $this->db->set('tgl_delete', date('Y-m-d H:i:s'));
+            $this->db->where('id_cmd_esp', $id_cmd_esp);
+            $this->db->update('fesp32_cmd_esp');
+
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Data Control / Command Berhasil Dihapus</b></center></div>');
+
+            $this->db->trans_complete();
+        } catch (\Throwable $e) {
+            $this->session->set_flashdata('msg', '<div class="alert alert-danger alert-dismissable">
+					<center><b>Caught exception: ' .  $e->getMessage() . '</b></center></div>');
+        }
+        redirect('Esp32/cmd/' . $id_esp);
+    }
+
     private function cek_data($kode_esp)
     {
         $this->db->where('kode_esp', $kode_esp);
@@ -343,6 +453,14 @@ class Esp32 extends CI_Controller
         $this->db->where('nama_data_esp', $nama_data_esp);
         $this->db->where('id_esp', $id_esp);
         $n = $this->db->get('fesp32_data_esp')->num_rows();
+        return $n;
+    }
+
+    private function cek_data_cmd($kode_cmd_esp, $id_esp)
+    {
+        $this->db->where('kode_cmd_esp', $kode_cmd_esp);
+        $this->db->where('id_esp', $id_esp);
+        $n = $this->db->get('fesp32_cmd_esp')->num_rows();
         return $n;
     }
 
@@ -384,6 +502,21 @@ class Esp32 extends CI_Controller
             $this->db->where('id_data_esp', $id_data_esp);
             $this->db->where('tgl_delete', null);
             $data = $this->db->get('fesp32_data_esp')->first_row();
+
+            echo json_encode($data);
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function get_data_cmd()
+    {
+        try {
+            $id_cmd_esp = $this->db->escape_str($this->uri->segment(3));
+
+            $this->db->where('id_cmd_esp', $id_cmd_esp);
+            $this->db->where('tgl_delete', null);
+            $data = $this->db->get('fesp32_cmd_esp')->first_row();
 
             echo json_encode($data);
         } catch (\Throwable $e) {

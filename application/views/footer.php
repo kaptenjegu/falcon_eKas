@@ -525,6 +525,27 @@
         }
       });
     }
+
+    function get_data_cmd(id) {
+      $.ajax({
+        url: "<?= base_url() ?>Esp32/get_data_cmd/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          document.getElementById('id_cmd_esp').value = data['id_cmd_esp'];
+          document.getElementById('id_esp').value = data['id_esp'];
+          document.getElementById('kode_cmd_esp').value = data['kode_cmd_esp'];
+          document.getElementById('nama_cmd').value = data['nama_cmd'];
+          document.getElementById('reverse_cmd_esp').value = data['reverse_cmd_esp'];
+          $('#editFormCmd').modal('show');
+          console.log(data);
+        },
+        error: function(data) {
+          alert('error');
+          console.log(data);
+        }
+      });
+    }
   </script>
 <?php } ?>
 

@@ -42,6 +42,7 @@
                                     <td>
                                         <a href="#" class="btn btn-warning" onclick="get_data(\'' . $v->id_esp . '\')"><i class="fa fa-edit"></i> Edit</a>&emsp;
                                         <a href="' . base_url('Esp32/variabel/' . $v->id_esp) . '" class="btn btn-info" style="color: white;"><i class="fa fa-list"></i> Variabel</a>&emsp;
+                                        <a href="' . base_url('Esp32/cmd/' . $v->id_esp) . '" class="btn btn-success" style="color: white;"><i class="fa fa-list"></i> Control</a>&emsp;
                                         <a href="' . base_url('Esp32/user/' . $v->id_esp) . '" class="btn btn-primary" style="color: white;"><i class="fa fa-users"></i> Pengguna</a>&emsp;
                                     </td>
                                     </tr>';
