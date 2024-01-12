@@ -26,9 +26,15 @@ class Api_esp32 extends CI_Controller
                 $data_cek = $cek->first_row();
                 $id_esp = $data_cek->id_esp;
 
+                //data
                 $this->db->where('id_esp', $id_esp);
                 $this->db->where('tgl_delete', null);
                 $esp = $this->db->get('fesp32_data_esp')->result();
+
+                //command
+                $this->db->where('id_esp', $id_esp);
+                $this->db->where('tgl_delete', null);
+                $cmd_esp = $this->db->get('fesp32_cmd_esp')->result();
 
                 foreach ($esp as $v) {
                     $value_data_esp = $_GET[$v->nama_data_esp];
@@ -38,9 +44,11 @@ class Api_esp32 extends CI_Controller
                 }
                 $status = 200;
                 $msg = 'Success';
+                $data = $cmd_esp;
             }else{
                 $status = 404;
                 $msg = 'Invalid';
+                $data = '';
             }
 
             $this->db->trans_complete();            
@@ -48,7 +56,7 @@ class Api_esp32 extends CI_Controller
             $status = 400;
             $msg = $e->getMessage();
         }
-        $result = array('status' => $status,'message' => $msg);
+        $result = array('status' => $status,'message' => $msg, 'data' => $data);
         echo json_encode($result);
     }
 

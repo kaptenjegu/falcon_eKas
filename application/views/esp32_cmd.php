@@ -66,7 +66,7 @@
                     <input type="hidden" name="id_esp" value="<?= $this->uri->segment(3) ?>">
                     <div class="form-group">
                         <label>Kode Control / Command</label>
-                        <input type="text" class="form-control" name="kode_cmd_esp" maxlength="100" placeholder="Untuk variabel dalam program" required>
+                        <input type="text" class="form-control" name="kode_cmd_esp" maxlength="100" placeholder="Untuk variabel dalam program, diawali dengan cmd_, ex: cmd_var_1" required>
                     </div>
                     <div class="form-group">
                         <label>Nama Control / Command</label>

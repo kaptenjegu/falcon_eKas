@@ -668,7 +668,7 @@ class Kas_breakdown extends CI_Controller
 
             if ($data[0]->nama_minggu !== 'Minggu 4') {
                 $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . ($data_next->nominal_data + ($ttl_saldo1 - $ttl_saldo2) + get_data_penutupan($data[0]->id_minggu)) . '</td><td colspan="2"></td></tr>';
-                $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . $data_next->nominal_data + get_data_penutupan($data[0]->id_minggu) . '</td><td colspan="2"></td></tr>';
+                $table2 .= '<tr style="background-color: #0ebc12;"><td colspan="5" style="text-align: center;font-weight: bold;">SISA PENGAJUAN RAB ' . strtoupper($data_next->nama_minggu . ' ' . $data[0]->nama_lokasi) .  '</td><td style="text-align: right;font-weight: bold;">' . ($data_next->nominal_data + get_data_penutupan($data[0]->id_minggu)) . '</td><td colspan="2"></td></tr>';
             }
 
             $table2 .= '</table>';
