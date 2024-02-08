@@ -16,7 +16,8 @@ class Api_esp32 extends CI_Controller
         $kode_esp = $this->uri->segment(3);
         $key = $this->uri->segment(4);
         $result = array();
-        $key_server = md5(date('Y-m-d') . '@_Api@_FPT@_122023');
+        //$key_server = md5(date('Y-m-d') . '@_Api@_FPT@_122023');
+        $key_server = '8e470a6910a6b346d414dcea384b017f';
         $cek = $this->cek_esp($kode_esp);
 
         try {

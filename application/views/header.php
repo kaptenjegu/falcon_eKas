@@ -60,7 +60,7 @@
           <i class="fas fa-fw fa-table"></i>
           <span>KAS</span>
         </a>
-        <div class="dropdown-menu <?php if ($page == 'Kas' or $page == 'Kas_bulan' or $page == 'Kas_breakdown' or $page == 'Kas_voucher' or $page == 'Tipe') {
+        <div class="dropdown-menu <?php if ($page == 'Kas' or $page == 'Kas_bulan' or $page == 'Kas_breakdown' or $page == 'Kas_voucher' or $page == 'Tipe' or $page == 'Report_kas_periode') {
                                     echo 'show';
                                   } ?>" aria-labelledby="pagesDropdown">
           <a class="dropdown-item <?php if ($page == 'Kas' or $page == 'Kas_bulan' or $page == 'Kas_breakdown' or $page == 'Kas_voucher') {
@@ -74,6 +74,12 @@
                                   } ?>" href="<?= base_url('Tipe') ?>">
             <i class="fas fa-fw fa-tag"></i>
             <span>Data Tipe Kas</span>
+          </a>
+          <a class="dropdown-item <?php if ($page == 'Report_kas_periode') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Kas/Report_kas_periode') ?>">
+            <i class="fas fa-fw fa-download"></i>
+            <span>Report Periode</span>
           </a>
         </div>
       </li>

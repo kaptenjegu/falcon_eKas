@@ -23,7 +23,7 @@ class Kas extends CI_Controller
 
         $this->load->view('header', $data);
 
-        if(cek_permission($_SESSION['id_akun'], 'kas')){
+        if (cek_permission($_SESSION['id_akun'], 'kas')) {
             $this->load->view('data_kas', $data);
         }
 
@@ -185,7 +185,7 @@ class Kas extends CI_Controller
                         $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td></tr>';
                     }
 
-                    if ($v->nominal_data > 0 OR $v->nominal_data < 0) {
+                    if ($v->nominal_data > 0 or $v->nominal_data < 0) {
                         $ttl_saldo1 +=  $v->nominal_data * $v->qty_data;
                     }
 
@@ -222,7 +222,7 @@ class Kas extends CI_Controller
                             }
                             $ntipe = $v->nama_tipe;
 
-                            if ($v->nominal_data > 0 OR $v->nominal_data < 0) {
+                            if ($v->nominal_data > 0 or $v->nominal_data < 0) {
                                 $ttl_saldo += $v->nominal_data * $v->qty_data;
                             }
                             $no += 1;
@@ -412,14 +412,14 @@ class Kas extends CI_Controller
             //data KAS saja
             foreach ($data as $v) {
                 if ($v->id_tipe == 1 and $v->id_jenis_kas == 2) {
-                    
+
                     if ($v->nominal_data == 0) {
                         //$table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . $v->nominal_data . '</td><td style="text-align: right;">' . 0 . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                     } else {
                         $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                     }
 
-                    if ($v->nominal_data > 0 OR $v->nominal_data < 0) {
+                    if ($v->nominal_data > 0 or $v->nominal_data < 0) {
                         $ttl_saldo1 +=  $v->nominal_data * $v->qty_data;
                     }
 
@@ -431,7 +431,7 @@ class Kas extends CI_Controller
                 }
             }
 
-            $luar_rab= get_dana_luar_rab($no, $id_data_kas);    //total kas luar rab
+            $luar_rab = get_dana_luar_rab($no, $id_data_kas);    //total kas luar rab
             $table .= $luar_rab[0];
             $ttl_saldo1 += $luar_rab[1];
 
@@ -464,7 +464,7 @@ class Kas extends CI_Controller
                             }
 
                             $ntipe = $v->nama_tipe;
-                            if ($v->nominal_data > 0 OR $v->nominal_data < 0) {
+                            if ($v->nominal_data > 0 or $v->nominal_data < 0) {
                                 $ttl_saldo += $v->nominal_data * $v->qty_data;
                             }
                             $no += 1;
@@ -488,7 +488,6 @@ class Kas extends CI_Controller
             $table2 .= '</table>';
 
             echo $table . $table2 . '<br><br><center><a href="' . base_url('Kas/download_laporan_periode/' . $id_data_kas) . '" style="background-color: blue; width: 250px; border-radius:5px; color: white;">Download</a></center>';
-            
         } else {
             echo 'Data kosong';
         }
@@ -549,14 +548,14 @@ class Kas extends CI_Controller
             //data KAS saja
             foreach ($data as $v) {
                 if ($v->id_tipe == 1 and $v->id_jenis_kas == 2) {
-                    
+
                     if ($v->nominal_data == 0) {
                         //$table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>-</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                     } else {
                         $table .= '<tr style="text-align: center;font-weight: normal;"><td style="font-weight: bold;">' . $no . '</td><td>' . date('d-m-Y', strtotime($v->tgl_data)) . '</td><td style="text-align: left;font-weight: normal;">' . $v->deskripsi_data . '</td><td></td><td style="text-align: right;">' . number_format($v->nominal_data, 0, ',', '.') . '</td><td style="text-align: right;">' . number_format($v->nominal_data * $v->qty_data, 0, ',', '.') . '</td><td>' . $v->pic_data . '</td><td style="font-weight: bold;">00' . date('m', strtotime($v->tgl_data)) . '</td><td>' . $v->nama_lokasi . '</td><td>' . ucwords(strtolower($v->nama_minggu)) . '</td></tr>';
                     }
 
-                    if ($v->nominal_data > 0 OR $v->nominal_data < 0) {
+                    if ($v->nominal_data > 0 or $v->nominal_data < 0) {
                         $ttl_saldo1 +=  $v->nominal_data * $v->qty_data;
                     }
 
@@ -568,7 +567,7 @@ class Kas extends CI_Controller
                 }
             }
 
-            $luar_rab= get_dana_luar_rab($no, $id_data_kas);    //total kas luar rab
+            $luar_rab = get_dana_luar_rab($no, $id_data_kas);    //total kas luar rab
             $table .= $luar_rab[0];
             $ttl_saldo1 += $luar_rab[1];
 
@@ -601,11 +600,11 @@ class Kas extends CI_Controller
                             }
 
                             $ntipe = $v->nama_tipe;
-                            
-                            if ($v->nominal_data > 0 OR $v->nominal_data < 0) {
+
+                            if ($v->nominal_data > 0 or $v->nominal_data < 0) {
                                 $ttl_saldo += $v->nominal_data * $v->qty_data;
                             }
-                            
+
                             $no += 1;
                         } elseif ($v->id_jenis_kas == 2) {
                             $ttl_pengajuan += $v->nominal_data * $v->qty_data;
@@ -635,6 +634,102 @@ class Kas extends CI_Controller
         } else {
             echo 'Data kosong';
         }
+    }
+
+    public function Report_kas_periode()
+    {
+        $data['judul'] = 'Download Laporan Kas Periode';
+        $data['page'] = 'Report_kas_periode';
+        $data['url'] = base_url('Kas/Report_kas_periode');
+
+        $this->db->select('RIGHT(nama_data_kas,4) as tahun');
+        $this->db->where('tgl_delete', null);
+        $this->db->group_by('tahun');
+        $data['tahun'] = $this->db->get('fki_data_kas')->result();
+
+        $this->load->view('header', $data);
+        $this->load->view('report_kas_periode', $data);
+        $this->load->view('footer');
+    }
+
+    public function download_kas_periode()
+    {
+        $this->load->library('pdfgenerator');
+
+        $paper = 'A4';
+        $orientation = "landscape";
+
+        $tahun = (int)$this->uri->segment(3);
+        $list_bulan = array();
+        $bulan = '[';
+        $tipe = '[';
+        $dataset = '[';
+        $n = 0;
+        $tabel = '<center><table border="1" style="font-size: 13px;text-align: center;"><tr style="background-color: yellow;"><td>PERIODE</td>';
+
+        $this->db->where('tgl_delete', null);
+        $this->db->like('nama_data_kas', $tahun);
+        $this->db->order_by('tgl_add', 'asc');
+        $data_kas = $this->db->get('fki_data_kas')->result();
+
+        $this->db->where('tgl_delete', null);
+        $data_tipe = $this->db->get('fki_tipe')->result();
+
+        foreach($this->get_tipe() as $v){
+            $tabel .= '<td>' . $v->nama_tipe . '</td>';
+            $tipe .= '"' . $v->nama_tipe . '",';
+        }
+
+        $tabel .= '</tr>';
+
+        //ektrak per bulan
+        foreach ($data_kas as $k) {
+
+            $list_tipe = array();
+            $rand_color = randcolor($n);
+            $tabel .= '<tr><td style="color : '. $rand_color . ';font-weight: bold;">' . $k->nama_data_kas . '</td>';
+            $dataset .= '{data: [';
+            //ekstrak per tipe kas
+            foreach ($this->get_tipe() as $t) {
+                //totalan, all lokasi
+                $this->db->select('sum(fki_data.qty_data * fki_data.nominal_data) as total');
+                $this->db->from('fki_data');
+                $this->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+                $this->db->where('fki_data.id_tipe', $t->id_tipe);
+                $this->db->where('fki_minggu.id_data_kas', $k->id_data_kas);
+                $d = $this->db->get()->first_row();
+                $nominal_total = $d->total ?? 0;
+
+                $tabel .= '<td style="text-align: right;">' . number_format($nominal_total,0,",",".") . '</td>';
+                $dataset .= $nominal_total . ',';
+                array_push($list_tipe, array($t->id_tipe => $nominal_total));
+            }
+            $tabel .= '</tr>';
+            $dataset .= '],borderColor: "' . $rand_color . '",fill: false},';
+            $bulan .= '"' . $k->nama_data_kas . '",';
+            $n += 1;
+            array_push($list_bulan, array($k->nama_data_kas => $list_tipe));
+        }
+        $tabel .= '</table></center>';
+        $tipe .= ']';
+        $bulan .= ']';
+        $dataset .= ']';
+        
+        $data['tipe'] = $tipe;
+        $data['bulan'] = $bulan;
+        $data['dataset'] = $dataset;
+        $data['tabel'] = $tabel;
+        $data['list_bulan'] = $list_bulan;
+
+        $this->load->view('download_kas_periode', $data);
+    }
+
+    private function get_tipe()
+    {
+        $this->db->where('tgl_delete', null);
+        $this->db->order_by('nama_tipe', 'asc');
+        $data_tipe = $this->db->get('fki_tipe')->result();
+        return $data_tipe;
     }
     /*public function download_laporan_periode()
     {

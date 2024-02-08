@@ -23,6 +23,12 @@ function randid()
 	return $id;
 }
 
+function randcolor($n)
+{
+	$color = ["DarkSlateGray","red","Chocolate","SlateGray","blue","navy", "olive", "maroon", "purple", "fushsia", "green", "lime", "yellow", "teal", "aqua","AliceBlue"];
+	return $color[$n];
+}
+
 function get_lokasi()
 {
 	date_default_timezone_set('Asia/Jakarta');
