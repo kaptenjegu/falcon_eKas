@@ -39,6 +39,7 @@
 
 <!-- Bootstrap core JavaScript-->
 <script src="<?= base_url() ?>vendor/jquery/jquery.min.js"></script>
+<script src="<?= base_url() ?>vendor/jquery/jquery.autocomplete.js"></script>
 <script src="<?= base_url() ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
@@ -546,6 +547,62 @@
         }
       });
     }
+  </script>
+<?php } ?>
+
+<?php if ($page == "Tender" OR $page == "Riwayat_tender") { ?>
+  <script>
+    $(document).ready(function() {
+        // Data yang ditampilkan pada autocomplete.
+        var customer = <?= $list_cust ?>;
+
+        // Selector input yang akan menampilkan autocomplete.
+        $( "#cust_name_add" ).autocomplete({
+            lookup: customer
+        });
+    })
+
+    function get_data(id) {
+      $.ajax({
+        url: "<?= base_url() ?>Tender/get_data/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          document.getElementById('id_tender').value = data['id_tender'];
+          document.getElementById('no_penawaran').value = data['no_penawaran'];
+          document.getElementById('kontak_person').value = data['kontak_person'];
+          document.getElementById('email').value = data['email'];
+          document.getElementById('cust_name').value = data['cust_name'];
+          document.getElementById('deskripsi').value = data['deskripsi'];
+          document.getElementById('nominal').value = data['nominal'];
+          document.getElementById('tgl_kirim').value = data['tgl_kirim'];
+          document.getElementById('tipe_tender').value = data['tipe_tender'];
+          document.getElementById('pajak').value = data['pajak'];
+          document.getElementById('status').value = data['status'];
+          document.getElementById('alasan_status').value = data['alasan_status'];
+
+          $('#editForm').modal('show');
+          console.log(data);
+        },
+        error: function(data) {
+          alert('error');
+          console.log(data);
+        }
+      });
+    }
+
+    $(function() {
+      $('input[name="tgl_kirim"]').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        minYear: 2022,
+        maxYear: parseInt(moment().format('YYYY'), 5),
+        locale: {
+          format: 'YYYY-MM-DD'
+        }
+
+      });
+    });
   </script>
 <?php } ?>
 

@@ -17,6 +17,37 @@
 
   <!-- Custom styles for this template-->
   <link href="<?= base_url() ?>vendor/css/sb-admin.css" rel="stylesheet">
+  <style>
+    .autocomplete-suggestions {
+      border: 1px solid #999;
+      background: #FFF;
+      overflow: auto;
+    }
+
+    .autocomplete-suggestion {
+      padding: 2px 5px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .autocomplete-selected {
+      background: #F0F0F0;
+    }
+
+    .autocomplete-suggestions strong {
+      font-weight: normal;
+      color: #3399FF;
+    }
+
+    .autocomplete-group {
+      padding: 2px 5px;
+    }
+
+    .autocomplete-group strong {
+      display: block;
+      border-bottom: 1px solid #000;
+    }
+  </style>
 
 
 
@@ -84,6 +115,35 @@
         </div>
       </li>
 
+      <li class="nav-item dropdown <?php if ($page == 'Tender' or $page == 'Tender_manage' or $page == 'Riwayat_tender') {
+                                      echo 'show';
+                                    } ?>">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Tender' or $page == 'Tender_manage' or $page == 'Riwayat_tender') {
+                                                                                                                                                    echo 'true';
+                                                                                                                                                  } else {
+                                                                                                                                                    echo 'false';
+                                                                                                                                                  } ?>">
+          <i class="fas fa-fw fa-fax"></i>
+          <span>Marketing</span>
+        </a>
+        <div class="dropdown-menu <?php if ($page == 'Tender' or $page == 'Tender_manage' or $page == 'Riwayat_tender') {
+                                    echo 'show';
+                                  } ?>" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item <?php if ($page == 'Tender' or $page == 'Tender_manage') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Tender') ?>">
+            <i class="fas fa-fw fa-handshake"></i>
+            <span>Tender</span>
+          </a>
+          <a class="dropdown-item <?php if ($page == 'Riwayat_tender') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Tender/riwayat/') ?>">
+            <i class="fas fa-fw fa-list"></i>
+            <span>Riwayat Tender</span>
+          </a>
+        </div>
+      </li>
+
       <li class="nav-item dropdown <?php if ($page == 'Srmr' or $page == 'srmr_manage' or $page == 'Riwayat_srmr') {
                                       echo 'show';
                                     } ?>">
@@ -113,92 +173,92 @@
         </div>
       </li>
 
-        <li class="nav-item dropdown <?php if ($page == 'Asset' or $page == 'Pinjam_aset') {
-                                        echo 'show';
-                                      } ?>">
-          <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Srmr' or $page == 'srmr_manage' or $page == 'Riwayat_srmr') {
-                                                                                                                                                      echo 'true';
-                                                                                                                                                    } else {
-                                                                                                                                                      echo 'false';
-                                                                                                                                                    } ?>">
+      <li class="nav-item dropdown <?php if ($page == 'Asset' or $page == 'Pinjam_aset') {
+                                      echo 'show';
+                                    } ?>">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Srmr' or $page == 'srmr_manage' or $page == 'Riwayat_srmr') {
+                                                                                                                                                    echo 'true';
+                                                                                                                                                  } else {
+                                                                                                                                                    echo 'false';
+                                                                                                                                                  } ?>">
+          <i class="fas fa-fw fa-cubes"></i>
+          <span>Manajemen Aset</span>
+        </a>
+        <div class="dropdown-menu <?php if ($page == 'Asset' or $page == 'Pinjam' or $page == 'Pengembalian') {
+                                    echo 'show';
+                                  } ?>" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item <?php if ($page == 'Asset') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Asset') ?>">
             <i class="fas fa-fw fa-cubes"></i>
-            <span>Manajemen Aset</span>
+            <span>Data Aset</span>
           </a>
-          <div class="dropdown-menu <?php if ($page == 'Asset' or $page == 'Pinjam' or $page == 'Pengembalian') {
-                                      echo 'show';
-                                    } ?>" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item <?php if ($page == 'Asset') {
-                                      echo 'active';
-                                    } ?>" href="<?= base_url('Asset') ?>">
-              <i class="fas fa-fw fa-cubes"></i>
-              <span>Data Aset</span>
-            </a>
-            <a class="dropdown-item <?php if ($page == 'Pinjam') {
-                                      echo 'active';
-                                    } ?>" href="<?= base_url('Pinjam') ?>">
-              <i class="fas fa-fw fa-exchange-alt"></i>
-              <span>Data Pinjam</span>
-            </a>
-            <a class="dropdown-item <?php if ($page == 'Pengembalian') {
-                                      echo 'active';
-                                    } ?>" href="<?= base_url('Pengembalian') ?>">
-              <i class="fas fa-fw fa-exchange-alt"></i>
-              <span>Data Pengembalian</span>
-            </a>
-          </div>
-        </li>
+          <a class="dropdown-item <?php if ($page == 'Pinjam') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Pinjam') ?>">
+            <i class="fas fa-fw fa-exchange-alt"></i>
+            <span>Data Pinjam</span>
+          </a>
+          <a class="dropdown-item <?php if ($page == 'Pengembalian') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Pengembalian') ?>">
+            <i class="fas fa-fw fa-exchange-alt"></i>
+            <span>Data Pengembalian</span>
+          </a>
+        </div>
+      </li>
 
-        <li class="nav-item dropdown <?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {
-                                        echo 'show';
-                                      } ?>">
-          <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {
-                                                                                                                                                      echo 'true';
-                                                                                                                                                    } else {
-                                                                                                                                                      echo 'false';
-                                                                                                                                                    } ?>">
+      <li class="nav-item dropdown <?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {
+                                      echo 'show';
+                                    } ?>">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {
+                                                                                                                                                    echo 'true';
+                                                                                                                                                  } else {
+                                                                                                                                                    echo 'false';
+                                                                                                                                                  } ?>">
+          <i class="fas fa-fw fa-money-bill"></i>
+          <span>Monitoring Bayar</span>
+        </a>
+        <div class="dropdown-menu <?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {
+                                    echo 'show';
+                                  } ?>" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item <?php if ($page == 'Monitoring_bayar') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Monitoring_bayar') ?>">
             <i class="fas fa-fw fa-money-bill"></i>
-            <span>Monitoring Bayar</span>
+            <span>Data PO / SO</span>
           </a>
-          <div class="dropdown-menu <?php if ($page == 'Monitoring_bayar' or $page == 'Monitoring_riwayat_bayar') {
-                                      echo 'show';
-                                    } ?>" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item <?php if ($page == 'Monitoring_bayar') {
-                                      echo 'active';
-                                    } ?>" href="<?= base_url('Monitoring_bayar') ?>">
-              <i class="fas fa-fw fa-money-bill"></i>
-              <span>Data PO / SO</span>
-            </a>
-            <a class="dropdown-item <?php if ($page == 'Monitoring_riwayat_bayar') {
-                                      echo 'active';
-                                    } ?>" href="<?= base_url('Monitoring_bayar/riwayat/') ?>">
-              <i class="fas fa-fw fa-table"></i>
-              <span>Riwayat</span>
-            </a>
-          </div>
-        </li>
+          <a class="dropdown-item <?php if ($page == 'Monitoring_riwayat_bayar') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Monitoring_bayar/riwayat/') ?>">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Riwayat</span>
+          </a>
+        </div>
+      </li>
 
-        <li class="nav-item dropdown <?php if ($page == 'Esp32' or $page == 'User_esp') {
-                                        echo 'show';
-                                      } ?>">
-          <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Esp32' or $page == 'User_esp') {
-                                                                                                                                                      echo 'true';
-                                                                                                                                                    } else {
-                                                                                                                                                      echo 'false';
-                                                                                                                                                    } ?>">
-            <i class="fas fa-fw fa-cloud"></i>
-            <span>Monitoring ESP</span>
-          </a>
-          <div class="dropdown-menu <?php if ($page == 'Esp32' or $page == 'User_esp') {
+      <li class="nav-item dropdown <?php if ($page == 'Esp32' or $page == 'User_esp') {
                                       echo 'show';
-                                    } ?>" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item <?php if ($page == 'Esp32' or $page == 'User_esp') {
-                                      echo 'active';
-                                    } ?>" href="<?= base_url('Esp32') ?>">
-              <i class="fas fa-fw fa-cloud"></i>
-              <span>Data ESP</span>
-            </a>
-          </div>
-        </li>
+                                    } ?>">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Esp32' or $page == 'User_esp') {
+                                                                                                                                                    echo 'true';
+                                                                                                                                                  } else {
+                                                                                                                                                    echo 'false';
+                                                                                                                                                  } ?>">
+          <i class="fas fa-fw fa-cloud"></i>
+          <span>Monitoring ESP</span>
+        </a>
+        <div class="dropdown-menu <?php if ($page == 'Esp32' or $page == 'User_esp') {
+                                    echo 'show';
+                                  } ?>" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item <?php if ($page == 'Esp32' or $page == 'User_esp') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Esp32') ?>">
+            <i class="fas fa-fw fa-cloud"></i>
+            <span>Data ESP</span>
+          </a>
+        </div>
+      </li>
     </ul>
 
     <div id="content-wrapper">
