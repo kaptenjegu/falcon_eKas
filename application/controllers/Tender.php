@@ -25,8 +25,8 @@ class Tender extends CI_Controller
         $this->db->select('cust_name');
         $cust = $this->db->get('fmp_tender')->result();
 
-        foreach($cust as $v){
-            array_push($list_cust, array('value' => $v->cust_name,'data' => $v->cust_name));
+        foreach ($cust as $v) {
+            array_push($list_cust, array('value' => $v->cust_name, 'data' => $v->cust_name));
         }
         $data['list_cust'] = json_encode($list_cust);
         //echo json_encode($list_cust);exit();
@@ -45,11 +45,20 @@ class Tender extends CI_Controller
         $data['judul'] = 'Data Riwayat Tender dan Marketing';
         $data['page'] = 'Riwayat_tender';
         $data['url'] = base_url('Tender/riwayat/');
+        $list_cust = array();
 
         $this->db->where('status = 2 OR status = 3');
         $this->db->where('tgl_delete', null);
         $this->db->order_by('tgl_add', 'desc');
         $data['tender'] = $this->db->get('fmp_tender')->result();
+
+        $this->db->select('cust_name');
+        $cust = $this->db->get('fmp_tender')->result();
+
+        foreach ($cust as $v) {
+            array_push($list_cust, array('value' => $v->cust_name, 'data' => $v->cust_name));
+        }
+        $data['list_cust'] = json_encode($list_cust);
 
         $this->load->view('header', $data);
 
@@ -69,11 +78,13 @@ class Tender extends CI_Controller
             $kontak_person = $this->input->post('kontak_person');
             $email = $this->input->post('email');
             $cust_name = $this->input->post('cust_name');
+            $alamat = $this->input->post('alamat');
             $nominal = $this->input->post('nominal');
             $tgl_kirim = $this->input->post('tgl_kirim');
             $pajak = $this->input->post('pajak');
             $deskripsi = $this->input->post('deskripsi');
             $tipe_tender = $this->input->post('tipe_tender');
+            $top = $this->input->post('top');
 
             $data = array(
                 'id_tender' => randid(),
@@ -81,11 +92,13 @@ class Tender extends CI_Controller
                 'kontak_person' => $kontak_person,
                 'email' => $email,
                 'cust_name' => $cust_name,
+                'alamat' => $alamat,
                 'nominal' => $nominal,
                 'tgl_kirim' => $tgl_kirim,
                 'pajak' => $pajak,
                 'deskripsi' => $deskripsi,
                 'tipe_tender' => $tipe_tender,
+                'top' => $top,
                 'status' => 1  //menunggu
             );
             $this->db->insert('fmp_tender', $data);
@@ -115,6 +128,7 @@ class Tender extends CI_Controller
             $kontak_person = $this->input->post('kontak_person');
             $email = $this->input->post('email');
             $cust_name = $this->input->post('cust_name');
+            $alamat = $this->input->post('alamat');
             $deskripsi = $this->input->post('deskripsi');
             $nominal = $this->input->post('nominal');
             $tgl_kirim = $this->input->post('tgl_kirim');
@@ -122,11 +136,13 @@ class Tender extends CI_Controller
             $pajak = $this->input->post('pajak');
             $status = $this->input->post('status');
             $alasan_status = $this->input->post('alasan_status');
+            $top = $this->input->post('top');
 
             $this->db->set('no_penawaran', $no_penawaran);
             $this->db->set('kontak_person', $kontak_person);
             $this->db->set('email', $email);
             $this->db->set('cust_name', $cust_name);
+            $this->db->set('alamat', $alamat);
             $this->db->set('deskripsi', $deskripsi);
             $this->db->set('nominal', $nominal);
             $this->db->set('tgl_kirim', $tgl_kirim);
@@ -134,6 +150,7 @@ class Tender extends CI_Controller
             $this->db->set('pajak', $pajak);
             $this->db->set('status', $status);
             $this->db->set('alasan_status', $alasan_status);
+            $this->db->set('top', $top);
             $this->db->where('id_tender', $id_tender);
             $this->db->update('fmp_tender');
 
@@ -161,6 +178,7 @@ class Tender extends CI_Controller
             $kontak_person = $this->input->post('kontak_person');
             $email = $this->input->post('email');
             $cust_name = $this->input->post('cust_name');
+            $alamat = $this->input->post('alamat');
             $deskripsi = $this->input->post('deskripsi');
             $nominal = $this->input->post('nominal');
             $tgl_kirim = $this->input->post('tgl_kirim');
@@ -173,6 +191,7 @@ class Tender extends CI_Controller
             $this->db->set('kontak_person', $kontak_person);
             $this->db->set('email', $email);
             $this->db->set('cust_name', $cust_name);
+            $this->db->set('alamat', $alamat);
             $this->db->set('deskripsi', $deskripsi);
             $this->db->set('nominal', $nominal);
             $this->db->set('tgl_kirim', $tgl_kirim);
@@ -232,6 +251,28 @@ class Tender extends CI_Controller
             $data = $this->db->get('fmp_tender')->first_row();
 
             echo json_encode($data);
+        } catch (\Throwable $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function download()
+    {
+        try {
+            $this->load->library('pdfgenerator');
+
+            $paper = 'A4';
+            $orientation = "landscape";
+
+            $id = $this->db->escape_str($this->uri->segment(3));
+
+            $this->db->where('id_tender', $id);
+            $this->db->where('tgl_delete', null);
+            $data = $this->db->get('fmp_tender')->first_row();
+
+            $file_pdf = 'PENAWARAN ' . strtoupper($data->deskripsi);
+
+            echo $data->top;
         } catch (\Throwable $e) {
             echo $e->getMessage();
         }

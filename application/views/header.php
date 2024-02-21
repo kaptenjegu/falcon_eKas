@@ -17,6 +17,8 @@
 
   <!-- Custom styles for this template-->
   <link href="<?= base_url() ?>vendor/css/sb-admin.css" rel="stylesheet">
+  <script src="https://cdn.tiny.cloud/1/hxe5np4d3ld28isormowwrrr0xev1iy3o8jwliwk35rwi6va/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
   <style>
     .autocomplete-suggestions {
       border: 1px solid #999;

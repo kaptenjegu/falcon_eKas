@@ -6,6 +6,7 @@
             <a href="<?= $url ?>"><?= $judul ?></a>
         </li>
     </ol>
+    <span id="link" style="display: none;"><?= $url ?></span>
 
 
     <!-- DataTables Example -->
@@ -15,7 +16,7 @@
             <i class="fas fa-table"></i>
             <?= $judul ?>
         </div>
-
+        
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -64,6 +65,7 @@
 </div>
 <!-- /.container-fluid -->
 
+
 <!--  EDIT-->
 <div class="modal fade" id="editForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -73,6 +75,7 @@
             </div>
             <form method="POST" action="<?= base_url('Tender/edit_data_riwayat/') ?>">
                 <div class="modal-body">
+                <a href="#" target="_blank" id="btn_download" class="btn btn-success"><i class="fa fa-download"></i> Download</a>
                     <input type="hidden" name="id_tender" id="id_tender">
                     <div class="form-group">
                         <label>Nomor Penawaran</label>
@@ -91,12 +94,16 @@
                         <input type="text" class="form-control" name="cust_name" id="cust_name" required>
                     </div>
                     <div class="form-group">
+                        <label>Alamat</label>
+                        <input type="text" class="form-control" name="alamat" id="alamat" placeholder="Hanya diisi ketika data tersedia">
+                    </div>
+                    <div class="form-group">
                         <label>Deskripsi</label>
                         <input type="text" class="form-control" name="deskripsi" id="deskripsi" required>
                     </div>
                     <div class="form-group">
-                        <label>Nominal</label>
-                        <input type="number" class="form-control" name="nominal" id="nominal" placeholder="Hanya diisi ketika data tersedia">
+                        <label id="label_edit">Nominal</label>
+                        <input type="number" class="form-control" name="nominal" onkeyup="nominal_add('nominal','label_edit')" onfocus="nominal_add('nominal','label_edit')" id="nominal" placeholder="Hanya diisi ketika data tersedia">
                     </div>
                     <div class="form-group">
                         <label>Tanggal Penawaran dibuat / dikirim</label>
@@ -128,7 +135,12 @@
                         <label>Alasan Status</label>
                         <input type="text" class="form-control" name="alasan_status" id="alasan_status" maxlength="200">
                     </div>
+                    <div class="form-group">
+                        <label>Term Of Payment</label>
+                        <textarea id="top_edit" name="top"></textarea>
+                    </div>
                 </div>
+                
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>

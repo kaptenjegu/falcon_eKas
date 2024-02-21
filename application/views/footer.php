@@ -550,19 +550,43 @@
   </script>
 <?php } ?>
 
-<?php if ($page == "Tender" OR $page == "Riwayat_tender") { ?>
+<?php if ($page == "Tender" or $page == "Riwayat_tender") { ?>
   <script>
     $(document).ready(function() {
-        // Data yang ditampilkan pada autocomplete.
-        var customer = <?= $list_cust ?>;
+      // Data yang ditampilkan pada autocomplete.
+      var customer = <?= $list_cust ?>;
 
-        // Selector input yang akan menampilkan autocomplete.
-        $( "#cust_name_add" ).autocomplete({
-            lookup: customer
-        });
+      // Selector input yang akan menampilkan autocomplete.
+      $("#cust_name_add").autocomplete({
+        lookup: customer
+      });
     })
 
+    tinymce.init({
+      selector: 'textarea',
+      //selector: 'textarea#tiny2',
+      plugins: 'lists',
+      toolbar: 'numlist bullist'
+    });
+
+    function nominal_add(lbl_nominal, lbl_id) {
+      let nominal = document.getElementById(lbl_nominal).value;
+      let lbl_add = document.getElementById(lbl_id);
+
+      nominal = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+      }).format(
+        nominal,
+      )
+      //let lbl_edit = document.getElementById('label_edit');
+
+      lbl_add.innerHTML = "Nominal (" + nominal + ")";
+
+    }
+
     function get_data(id) {
+      let btn_download = document.getElementById('btn_download');
       $.ajax({
         url: "<?= base_url() ?>Tender/get_data/" + id,
         type: "GET",
@@ -573,6 +597,7 @@
           document.getElementById('kontak_person').value = data['kontak_person'];
           document.getElementById('email').value = data['email'];
           document.getElementById('cust_name').value = data['cust_name'];
+          document.getElementById('alamat').value = data['alamat'];
           document.getElementById('deskripsi').value = data['deskripsi'];
           document.getElementById('nominal').value = data['nominal'];
           document.getElementById('tgl_kirim').value = data['tgl_kirim'];
@@ -580,6 +605,16 @@
           document.getElementById('pajak').value = data['pajak'];
           document.getElementById('status').value = data['status'];
           document.getElementById('alasan_status').value = data['alasan_status'];
+          
+          tinymce.get('top_edit').setContent(data['top'] ?? '');
+
+          if(data['tipe_tender'] == 2){
+            btn_download.style = "display: none;";            
+          }else{
+            btn_download.style = "display: ;";
+            btn_download.setAttribute("href", document.getElementById('link').innerHTML + '/download/' + data['id_tender']);
+            //btn_download.setAttribute("href", '/Tender/download/' + data['id_tender']);
+          }
 
           $('#editForm').modal('show');
           console.log(data);
