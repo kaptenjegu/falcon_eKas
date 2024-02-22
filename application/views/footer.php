@@ -585,6 +585,11 @@
 
     }
 
+    function get_download(id) {
+      document.getElementById('id_tender_download').value = id;
+      $('#downloadForm').modal('show');
+    }
+
     function get_data(id) {
       let btn_download = document.getElementById('btn_download');
       $.ajax({
@@ -608,13 +613,13 @@
           
           tinymce.get('top_edit').setContent(data['top'] ?? '');
 
-          if(data['tipe_tender'] == 2){
+          /*if(data['tipe_tender'] == 2){
             btn_download.style = "display: none;";            
           }else{
             btn_download.style = "display: ;";
             btn_download.setAttribute("href", document.getElementById('link').innerHTML + '/download/' + data['id_tender']);
             //btn_download.setAttribute("href", '/Tender/download/' + data['id_tender']);
-          }
+          }*/
 
           $('#editForm').modal('show');
           console.log(data);

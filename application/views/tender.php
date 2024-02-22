@@ -45,7 +45,7 @@
                             echo '<tr>
                                     <td>' . $no . '</td>
                                     <td>' . date('d-m-Y', strtotime($v->tgl_kirim)) . '</td>
-                                    <td>' . $v->deskripsi . '</td>
+                                    <td onclick="get_download(\'' . $v->id_tender . '\')">' . $v->deskripsi . '</td>
                                     <td>' . $v->cust_name . '</td>
                                     <td>' . $tipe . '</td>                                    
                                     <td>
@@ -145,7 +145,6 @@
             </div>
             <form method="POST" action="<?= base_url('Tender/edit_data/') ?>">
                 <div class="modal-body">
-                <a href="#" target="_blank" id="btn_download" class="btn btn-success"><i class="fa fa-download"></i> Download</a>
                     <input type="hidden" name="id_tender" id="id_tender">
                     <div class="form-group">
                         <label>Nomor Penawaran</label>
@@ -210,7 +209,7 @@
                         <textarea id="top_edit" name="top"></textarea>
                     </div>
                 </div>
-                
+
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
@@ -220,3 +219,29 @@
     </div>
 </div>
 <!-- EDIT -->
+
+<!-- DOWNLOAD -->
+<div class="modal fade" id="downloadForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Download File</h4>
+            </div>
+            <form method="GET" target="_blank" action="<?= base_url('Tender/download/') ?>">
+                <div class="modal-body">
+                    <input type="hidden" name="id_tender" id="id_tender_download">
+                    <div class="form-group">
+                        <label>Jumlah Lampiran</label>
+                        <input type="number" class="form-control" name="lampiran" value="1" placeholder="wajib isi jumlah lampiran" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Download</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- DOWNLOAD -->
