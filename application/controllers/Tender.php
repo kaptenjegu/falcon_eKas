@@ -367,11 +367,18 @@ class Tender extends CI_Controller
             $pdf->Cell(170, 5, 'Notes:', $brd, 0, 'L');
             $pdf->Cell(10, 5, '', $brd, 1, 'L');
 
+            //filter pajak
+            if($data->pajak == 1){
+                $ket_pajak = 'sudah';
+            }else{
+                $ket_pajak = 'belum';
+            }
+
             $pdf->Cell(11, 5, '', $brd, 0, 'L');
             $pdf->Cell(169, 5, '1. Rincian harga ada di lampiran.', $brd, 0, 'L');
             $pdf->Cell(10, 5, '', $brd, 1, 'L');
             $pdf->Cell(11, 5, '', $brd, 0, 'L');
-            $pdf->Cell(169, 5, '2. Harga tersebut sudah termasuk pajak.', $brd, 0, 'L');
+            $pdf->Cell(169, 5, '2. Harga tersebut ' . $ket_pajak . ' termasuk pajak.', $brd, 0, 'L');
             $pdf->Cell(10, 5, '', $brd, 1, 'L');
             $pdf->Cell(11, 5, '', $brd, 0, 'L');
             $pdf->Cell(169, 5, '3. Masa berlaku Penawaran adalah 30 hari.', $brd, 0, 'L');

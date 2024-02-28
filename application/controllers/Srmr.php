@@ -558,8 +558,8 @@ class Srmr extends CI_Controller
             $pdf->Cell(50, 5, '', $brd2, 0, 'C');
             $pdf->Cell(50, 5, '', $brd2, 1, 'C');
 
-            $pdf->Cell(50, 5, $data->nama_user, $brd2, 0, 'C');
-            $pdf->Cell(50, 5, 'Feby Oktavia', $brd2, 0, 'C');
+            $pdf->Cell(50, 5, ucwords(strtolower($data->nama_user)), 0, 'C');
+            $pdf->Cell(50, 5, 'Heni Parida', $brd2, 0, 'C');
             $pdf->Cell(70, 5, 'M. Rohman Majid', $brd2, 0, 'C');
             $pdf->Cell(50, 5, 'Kurnia Dwi Aprilina', $brd2, 0, 'C');
             $pdf->Cell(50, 5, 'Ike Wahyu Setiyowati', $brd2, 1, 'C');
