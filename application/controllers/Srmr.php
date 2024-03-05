@@ -23,6 +23,7 @@ class Srmr extends CI_Controller
         }
 
         $this->db->where('tgl_delete', null);
+        $this->db->order_by('tgl_add', 'desc');
         $data['srmr'] = $this->db->get('fsrmr_data')->result();
 
         $this->load->view('header', $data);
