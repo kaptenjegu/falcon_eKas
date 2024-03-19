@@ -427,16 +427,19 @@ class Tender extends CI_Controller
 
 
             //$top = str_replace(PHP_EOL, '', $data->top);
-            $top = trim(preg_replace('/\s+/', '',  $data->top));
-            $top = explode('</li><li>', $top);
+            $top = str_replace('<li>','@',$data->top);
+            $top = str_replace('</li>','#',$top);
+            //$pdf->Cell(10, 5, $top, $brd, 1, 'L');
+            $top = explode('@', $top);
+            
 
-            for ($t = 0; $t < count($top); $t++) {
+            for ($t = 1; $t < count($top); $t++) {
                 $pdf->Cell(20, 5, '', $brd, 0, 'L');
                 $y_top = $pdf->getY();
                 $x_top = $pdf->getX();
                 $pdf->RoundedRect($x_top + 0.5, $y_top + 2, 1, 1, 0.5, 'DF'); //x,y,w,h,radius
                 $pdf->Cell(2, 5, '', $brd, 0, 'L');
-                $pdf->Cell(158, 5, str_replace(array('<ul>', '</ul>', '<li>', '</li>'), '', $top[$t]), $brd, 0, 'L');
+                $pdf->Cell(158, 5, str_replace(array('<ul>', '</ul>', '<li>', '</li>','#'), '', $top[$t]), $brd, 0, 'L');
                 $pdf->Cell(10, 5, '', $brd, 1, 'L');
             }
 
@@ -517,7 +520,7 @@ class Tender extends CI_Controller
                 }else{
                     $h = 180;
                 }
-                
+
                 //Lampiran
                 $pdf->Image('vendor/lampiran/' . $vl->id_lampiran . '.png', 20, 60, $w, $h, '', '#');
             }
