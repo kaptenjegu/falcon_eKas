@@ -137,7 +137,39 @@ class Tender extends CI_Controller
             $status = $this->input->post('status');
             $alasan_status = $this->input->post('alasan_status');
             $top = $this->input->post('top');
+            $lampiran = $this->input->post('lampiran');
 
+            //Proses Lampiran
+            for ($n = 0; $n < count($lampiran); $n++) {
+                //image/png
+                //image/jpeg
+
+                //clear semua data
+                if ($n == 0) {
+                    $this->db->where('id_tender', $id_tender);
+                    $this->db->delete('fmp_tender_lampiran');
+                }
+
+                $file = base64_decode(str_replace("data:image/png;base64,", "", $lampiran[$n]));
+                //echo $file;
+                //exit();
+                if ($file) {
+                    $id_lampiran = randid();
+                    //file_put_contents(base_url() . "/vendor/lampiran/" . $id_lampiran . ".png", $file);
+                    file_put_contents("vendor/lampiran/" . $id_lampiran . ".png", $file);
+
+                    //add data baru
+                    $data = array(
+                        'id_lampiran' => $id_lampiran,
+                        'id_tender' => $id_tender,
+                        'format' => '',
+                        'nomor' => $n
+                    );
+                    $this->db->insert('fmp_tender_lampiran', $data);
+                }
+            }
+
+            //Proses data
             $this->db->set('no_penawaran', $no_penawaran);
             $this->db->set('kontak_person', $kontak_person);
             $this->db->set('email', $email);
@@ -263,11 +295,17 @@ class Tender extends CI_Controller
 
             //$id = $this->db->escape_str($this->uri->segment(3));
             $id = $this->db->escape_str($_GET['id_tender']);
-            $lampiran = (int)$_GET['lampiran'];
+
 
             $this->db->where('id_tender', $id);
             $this->db->where('tgl_delete', null);
             $data = $this->db->get('fmp_tender')->first_row();
+
+            //Lampiran
+            $this->db->where('id_tender', $id);
+            $this->db->order_by('nomor', 'asc');
+            $dl = $this->db->get('fmp_tender_lampiran');
+            $lampiran = $dl->num_rows();
 
             $file_pdf = 'PENAWARAN ' . strtoupper($data->deskripsi);
             $pdf->SetTitle($file_pdf);
@@ -322,7 +360,7 @@ class Tender extends CI_Controller
             $pdf->Cell(10, 5, '', $brd, 0, 'R');
             $pdf->Cell(30, 5, 'Lampiran', $brd, 0, 'L');
             $pdf->Cell(5, 5, ':', $brd, 0, 'C');
-            $pdf->Cell(135, 5,$lampiran ?? 0, $brd, 0, 'L');
+            $pdf->Cell(135, 5, $lampiran ?? 0, $brd, 0, 'L');
             $pdf->Cell(10, 5, '', $brd, 1, 'R');
 
             $pdf->Cell(190, 5, '', $brd, 1, 'R');
@@ -334,12 +372,12 @@ class Tender extends CI_Controller
             //$pdf->Cell(10, 5, '', $brd, 0, 'R');
             //$pdf->Cell(180, 5, $data->cust_name, $brd, 1, 'L');
             $pdf->SetWidths(array(10, 170, 10));
-            $pdf->Row_tender(array('',$data->cust_name,''));
+            $pdf->Row_tender(array('', $data->cust_name, ''));
 
             //$pdf->Cell(10, 5, '', $brd, 0, 'R');
             //$pdf->Cell(180, 5, $data->alamat, $brd, 1, 'L');
             $pdf->SetWidths(array(10, 170, 10));
-            $pdf->Row_tender(array('',$data->alamat,''));
+            $pdf->Row_tender(array('', $data->alamat, ''));
             $pdf->SetFont('Times', '', 12);
 
             $pdf->Cell(190, 5, '', $brd, 1, 'R');
@@ -357,8 +395,8 @@ class Tender extends CI_Controller
             //$pdf->Cell(10, 5, '', $brd, 0, 'R');
             //$pdf->Cell(170, 5, '(' . ucwords(terbilang($data->nominal)) . ' Rupiah)', $brd, 0, 'C');
             //$pdf->Cell(10, 5, '', $brd, 1, 'R');
-            $pdf->SetWidths(array(5,5, 170, 10));
-            $pdf->Row_tender(array('','','(' . ucwords(terbilang($data->nominal)) . ' Rupiah)',''));
+            $pdf->SetWidths(array(5, 5, 170, 10));
+            $pdf->Row_tender(array('', '', '(' . ucwords(terbilang($data->nominal)) . ' Rupiah)', ''));
 
             $pdf->SetFont('Times', '', 12);
             $pdf->Cell(10, 5, '', $brd, 1, 'R');
@@ -368,9 +406,9 @@ class Tender extends CI_Controller
             $pdf->Cell(10, 5, '', $brd, 1, 'L');
 
             //filter pajak
-            if($data->pajak == 1){
+            if ($data->pajak == 1) {
                 $ket_pajak = 'sudah';
-            }else{
+            } else {
                 $ket_pajak = 'belum';
             }
 
@@ -392,8 +430,8 @@ class Tender extends CI_Controller
             $top = trim(preg_replace('/\s+/', '',  $data->top));
             $top = explode('</li><li>', $top);
 
-            for ($t = 0; $t < count($top); $t++) {                
-                $pdf->Cell(20, 5, '', $brd, 0, 'L');                
+            for ($t = 0; $t < count($top); $t++) {
+                $pdf->Cell(20, 5, '', $brd, 0, 'L');
                 $y_top = $pdf->getY();
                 $x_top = $pdf->getX();
                 $pdf->RoundedRect($x_top + 0.5, $y_top + 2, 1, 1, 0.5, 'DF'); //x,y,w,h,radius
@@ -405,7 +443,7 @@ class Tender extends CI_Controller
             $pdf->Cell(10, 5, '', $brd, 1, 'L');
 
             $pdf->SetWidths(array(10, 170, 10));
-            $pdf->Row_tender(array('','Demikian Surat Penawaran dari kami, atas kesempatan yang diberikan dan kerjasamanya kami sampaikan terimakasih.',''));
+            $pdf->Row_tender(array('', 'Demikian Surat Penawaran dari kami, atas kesempatan yang diberikan dan kerjasamanya kami sampaikan terimakasih.', ''));
 
             $pdf->Cell(10, 5, '', $brd, 1, 'L');
 
@@ -432,9 +470,70 @@ class Tender extends CI_Controller
             $pdf->Cell(40, 5, 'Direktur Utama', $brd, 0, 'C');
             $pdf->Cell(10, 5, '', $brd, 1, 'L');
 
+            foreach ($dl->result() as $vl) {
+                $pdf->SetTextColor(22, 134, 183);
+                $pdf->SetLineWidth(0.4);
+                $pdf->AddPage();
+
+                $y_logo1 = $pdf->getY();
+                $x_logo1 = $pdf->getX();
+                $pdf->SetFont('Arial', 'B', 12);
+                $pdf->Cell(190, 5, 'PT. Falcon Prima Tehnik', $brd2, 1, 'R'); //(w,h,txt,border,ln,align) h max 260, w max 190
+                $pdf->SetFont('Arial', '', 9);
+                $pdf->Cell(190, 4, 'Telp. 031-59178698', $brd2, 1, 'R');
+                $pdf->Cell(190, 4, 'E-mail. falcon@falcontehnik.com', $brd2, 1, 'R');
+                $pdf->Cell(190, 4, 'falcon.tehnik@gmail.com', $brd2, 1, 'R');
+                $pdf->Cell(190, 4, 'Website. https://falcontehnik.com', $brd2, 1, 'R');
+                $pdf->Cell(190, 4, 'Jl. Klampis Semolo Barat X.71/L.38, Sukolilo, Surabaya, Jawa Timur 60119', $brd2, 1, 'R');
+
+                //gambar
+                $pdf->Image('vendor/image/logo_falcon.png', $x_logo1 + 2, $y_logo1 + 1, 45, 25, '', '#'); //(x,y,w,h) w = h + 20
+                //$pdf->Image('vendor/image/logo_2.png', $x_logo1 + 20, $y_logo1 + 33, 150, 65, '', '#'); //watermark
+
+                $pdf->SetDrawColor(255, 0, 0);
+                $pdf->Line($x_logo1, $y_logo1 + 27, $x_logo1 + 190, $y_logo1 + 27);
+                $pdf->Line($x_logo1, $y_logo1 + 27.5, $x_logo1 + 190, $y_logo1 + 27.5);
+                $pdf->SetDrawColor(0, 0, 0);
+                $pdf->SetTextColor(0, 0, 0);
+                $pdf->SetFont('Times', 'B', 12);
+                $pdf->cell(190, 5, '', $brd2, 1, 'c');
+
+                $pdf->SetWidths(array(5, 5, 170, 10));
+                $pdf->Row_custom(array('', '', 'HARGA PEKERJAAN ' . strtoupper($data->deskripsi), ''));
+                $pdf->SetWidths(array(5, 5, 170, 10));
+                $pdf->Row_custom(array('', '', strtoupper($data->cust_name), ''));
+
+                //cek ukuran gambar
+                $im = $this->getsize('vendor/lampiran/' . $vl->id_lampiran . '.png');
+                //$pdf->cell(190, 5, floor($im[0] * 0.2645833333) . ' - ' . floor($im[1] * 0.2645833333), $brd2, 1, 'c');
+                if(floor($im[0] * 0.2645833333) <= 170){
+                    $w = floor($im[0] * 0.2645833333);
+                }else{
+                    $w = 170;
+                }
+
+                if(floor($im[1] * 0.2645833333) <= 180){
+                    $h = floor($im[1] * 0.2645833333);
+                }else{
+                    $h = 180;
+                }
+                
+                //Lampiran
+                $pdf->Image('vendor/lampiran/' . $vl->id_lampiran . '.png', 20, 60, $w, $h, '', '#');
+            }
+
             $pdf->Output($file_pdf . '.pdf', 'I');
         } catch (\Throwable $e) {
             echo $e->getMessage();
         }
+    }
+
+    private function getsize($image_link)
+    {
+        $image_details = getimagesize($image_link);
+        $width = $image_details[0];
+        $height = $image_details[1];
+        //echo "$width x $height";
+        return $image_details;
     }
 }

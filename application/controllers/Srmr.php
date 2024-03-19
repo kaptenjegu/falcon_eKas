@@ -562,7 +562,7 @@ class Srmr extends CI_Controller
 
             $pdf->Cell(50, 5, ucwords(strtolower($data->nama_user)), 0, 'C');
             $pdf->Cell(50, 5, 'Heni Parida', $brd2, 0, 'C');
-            $pdf->Cell(70, 5, 'M. Rohman Majid', $brd2, 0, 'C');
+            $pdf->Cell(70, 5, 'Yosin Alfa S ', $brd2, 0, 'C');
             $pdf->Cell(50, 5, 'Kurnia Dwi Aprilina', $brd2, 0, 'C');
             $pdf->Cell(50, 5, 'Ike Wahyu Setiyowati', $brd2, 1, 'C');
 
@@ -570,7 +570,7 @@ class Srmr extends CI_Controller
             //$pdf->Cell(50, 5, 'Procurement', $brd2, 0, 'C');
             $pdf->Cell(50, 5, $this->get_jabatan($data->id_user), $brd2, 0, 'C');
             $pdf->Cell(50, 5, 'Cost Control', $brd2, 0, 'C');
-            $pdf->Cell(70, 5, 'Manager Ops & Engineering', $brd2, 0, 'C');
+            $pdf->Cell(70, 5, 'Senior Engineer', $brd2, 0, 'C');
             $pdf->Cell(50, 5, 'Accounting & Tax', $brd2, 0, 'C');
             $pdf->Cell(50, 5, 'Direktur Operasional', $brd2, 1, 'C');
 
@@ -594,8 +594,8 @@ class Srmr extends CI_Controller
             $pdf->Cell(170, 35, '', $brd, 0, 'C');
             $pdf->Cell(50, 35, '', $brd, 0, 'C');
 
-            //ttd mas Majid
-            $pdf->Image('vendor/image2/ttd1.png', 129, 143, 30, 15, '', '#'); //(x,y,w,h)
+            //ttd senior engineeer
+            $pdf->Image('vendor/image2/24bd8785e7709f1086ebfc433af8d19a.png', 129, 143, 30, 15, '', '#'); //(x,y,w,h)
 
             //ttd pembuat
             $pdf->Image('vendor/image2/' . $data->id_user . '.png', 20, 143, 30, 15, '', '#'); //(x,y,w,h)

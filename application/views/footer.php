@@ -54,8 +54,40 @@
 <script src="<?= base_url() ?>vendor/js/sb-admin.min.js"></script>
 <script src="<?= base_url() ?>vendor/js/moment.min.js"></script>
 <script src="<?= base_url() ?>vendor/js/daterangepicker.min.js"></script>
+<script src="<?= base_url() ?>vendor/js/paste.js"></script>
 <link rel="stylesheet" href="<?= base_url() ?>vendor/css/daterangepicker.css" />
-
+<script type="text/javascript">
+    $(function(){
+      //$('.demo-noninputable').pastableNonInputable();
+      $('.demo-textarea').on('focus', function(){
+        var isFocused = $(this).hasClass('pastable-focus');
+        console && console.log('[textarea] focus event fired! ' + (isFocused ? 'fake onfocus' : 'real onfocus'));
+      }).pastableTextarea().on('blur', function(){
+        var isFocused = $(this).hasClass('pastable-focus');
+        console && console.log('[textarea] blur event fired! ' + (isFocused ? 'fake onblur' : 'real onblur'));
+      });
+      //$('.demo-contenteditable').pastableContenteditable();
+      $('.demo').on('pasteImage', function(ev, data){
+        var blobUrl = URL.createObjectURL(data.blob);
+        var name = data.name != null ? ', name: ' + data.name : '';
+        //$('<div class="result" style="width: 100em;height:100em;">image: ' + data.width + ' x ' + data.height + name + '<img src="' + data.dataURL +'" ><a href="' + blobUrl + '">' + blobUrl + '</div>').insertAfter(this);
+        $('<div class="result" style="margin-top:1em;"><input type="hidden" name="lampiran[]" value="' + data.dataURL + '"><img src="' + data.dataURL +'" style="width: 10em;height:5em;">&emsp;<a href="' + blobUrl + '" target="_blank">Lihat</a></div>').insertAfter(this);
+      }).on('pasteImageError', function(ev, data){
+        alert('Oops: ' + data.message);
+        if(data.url){
+          alert('But we got its url anyway:' + data.url)
+        }
+      }).on('pasteText', function(ev, data){
+        //$('<div class="result"></div>').text('text: "' + data.text + '"').insertAfter(this);
+        $('#lampiran').val('')
+        alert('Hanya paste gambar saja')        
+      }).on('pasteTextHtml', function(ev, data){
+        //$('<div class="result"></div>').text('html: "' + data.text + '"').insertAfter(this);
+        //alert('Hanya paste gambar saja')
+        $('#lampiran').val('')
+      });
+    });
+  </script>
 <script>
   // Call the dataTables jQuery plugin
   $(document).ready(function() {
@@ -560,7 +592,9 @@
       $("#cust_name_add").autocomplete({
         lookup: customer
       });
+
     })
+
 
     tinymce.init({
       selector: 'textarea',
@@ -598,6 +632,7 @@
         dataType: "JSON",
         success: function(data) {
           document.getElementById('id_tender').value = data['id_tender'];
+          document.getElementById('id_tender2').value = data['id_tender'];
           document.getElementById('no_penawaran').value = data['no_penawaran'];
           document.getElementById('kontak_person').value = data['kontak_person'];
           document.getElementById('email').value = data['email'];
@@ -610,7 +645,8 @@
           document.getElementById('pajak').value = data['pajak'];
           document.getElementById('status').value = data['status'];
           document.getElementById('alasan_status').value = data['alasan_status'];
-          
+          //document.getElementById('top_edit').innerHTML = data['top'];
+
           tinymce.get('top_edit').setContent(data['top'] ?? '');
 
           /*if(data['tipe_tender'] == 2){
