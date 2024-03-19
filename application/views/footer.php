@@ -497,8 +497,6 @@
 
       });
     });
-
-    
   </script>
 <?php } ?>
 
@@ -699,7 +697,7 @@
         var name = data.name != null ? ', name: ' + data.name : '';
         n_lampiran += 1;
         //$('<div class="result" style="width: 100em;height:100em;">image: ' + data.width + ' x ' + data.height + name + '<img src="' + data.dataURL +'" ><a href="' + blobUrl + '">' + blobUrl + '</div>').insertAfter(this);
-        $('<div class="result" id="n_lampiran_' + n_lampiran + '" style="margin-top:1em;"><input type="hidden" name="lampiran[]" value="' + data.dataURL + '"><img src="' + data.dataURL + '" style="width: 10em;height:5em;">&emsp;<a href="' + blobUrl + '" target="_blank">Lihat</a></div>').insertAfter(this);
+        $('<div class="result" id="n_lampiran_' + n_lampiran + '" style="margin-top:1em;"><input type="hidden" name="lampiran[]" value="' + data.dataURL + '"><img src="' + data.dataURL + '" style="width: 10em;height:5em;">&emsp;<a href="' + blobUrl + '" target="_blank">Lihat</a>&emsp;<span class="btn btn-danger" onclick="delete_lampiran(\'n_lampiran_' + n_lampiran + '\')"><i class="fa fa-trash"></i></span></div>').insertAfter(this);
       }).on('pasteImageError', function(ev, data) {
         alert('Oops: ' + data.message);
         if (data.url) {
@@ -715,6 +713,11 @@
         $('#lampiran').val('')
       });
     });
+
+    function delete_lampiran(id_name) {
+      document.getElementById(id_name).remove();
+      //element.classList.remove(id_name);
+    }
   </script>
 <?php } ?>
 
