@@ -82,10 +82,10 @@
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
 
-      <li class="nav-item dropdown <?php if ($page == 'Kas' or $page == 'Kas_bulan' or $page == 'Kas_breakdown' or $page == 'Kas_voucher' or $page == 'Tipe') {
+      <li class="nav-item dropdown <?php if ($page == 'Kas' or $page == 'Kas_bulan' or $page == 'Kas_breakdown' or $page == 'Kas_voucher' or $page == 'Tipe' or $page == 'Bpjs') {
                                       echo 'show';
                                     } ?>">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Kas' or $page == 'Kas_bulan' or $page == 'Kas_breakdown' or $page == 'Kas_voucher' or $page == 'Tipe') {
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="<?php if ($page == 'Kas' or $page == 'Kas_bulan' or $page == 'Kas_breakdown' or $page == 'Kas_voucher' or $page == 'Tipe'  or $page == 'Bpjs') {
                                                                                                                                                     echo 'true';
                                                                                                                                                   } else {
                                                                                                                                                     echo 'false';
@@ -93,7 +93,7 @@
           <i class="fas fa-fw fa-table"></i>
           <span>KAS</span>
         </a>
-        <div class="dropdown-menu <?php if ($page == 'Kas' or $page == 'Kas_bulan' or $page == 'Kas_breakdown' or $page == 'Kas_voucher' or $page == 'Tipe' or $page == 'Report_kas_periode') {
+        <div class="dropdown-menu <?php if ($page == 'Kas' or $page == 'Kas_bulan' or $page == 'Kas_breakdown' or $page == 'Kas_voucher' or $page == 'Tipe' or $page == 'Report_kas_periode' or $page == 'Bpjs') {
                                     echo 'show';
                                   } ?>" aria-labelledby="pagesDropdown">
           <a class="dropdown-item <?php if ($page == 'Kas' or $page == 'Kas_bulan' or $page == 'Kas_breakdown' or $page == 'Kas_voucher') {
@@ -101,6 +101,12 @@
                                   } ?>" href="<?= base_url('Kas') ?>">
             <i class="fas fa-fw fa-table"></i>
             <span>Data Kas</span>
+          </a>
+          <a class="dropdown-item <?php if ($page == 'Bpjs') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('Bpjs') ?>">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Data BPJS</span>
           </a>
           <a class="dropdown-item <?php if ($page == 'Tipe') {
                                     echo 'active';

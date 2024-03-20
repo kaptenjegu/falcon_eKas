@@ -721,6 +721,112 @@
   </script>
 <?php } ?>
 
+<?php if ($page == "Bpjs") { ?>
+  <script>
+    function form_data() {
+      var data = document.getElementById('data_isi').innerHTML;
+      var tgl = document.getElementsByName('tgl_data[]');
+      var uraian = document.getElementsByName('uraian_data[]');
+      var qty = document.getElementsByName('qty_data[]');
+      var nominal = document.getElementsByName('nominal_data[]');
+      var pic = document.getElementsByName('pic_data[]');
+      var idjk = document.getElementsByName('id_jenis_kas[]');
+      var id_minggu = document.getElementById('id_data_kas').value;
+      var t = [];
+      var u = [];
+      var q = [];
+      var n = [];
+      var p = [];
+      var it = [];
+      var is = [];
+      var ijk = [];
+
+      //console.log(tgl.length);end;
+
+      for (var i = 0; i < tgl.length; i++) {
+        if ((tgl[i].value == null || tgl[i].value == "") || (uraian[i].value == null || uraian[i].value == "")) {
+          alert("Ada Data yang belum diisi, mohon diperiksa lagi.");
+          console.log(i);
+          return false;
+        }
+        t.push(tgl[i].value);
+        u.push(uraian[i].value);
+        q.push(qty[i].value);
+        n.push(nominal[i].value);
+        p.push(pic[i].value);
+        ijk.push(idjk[i].value);
+      }
+
+      $.ajax({
+        url: "<?= base_url() ?>Bpjs/tambah_data/",
+        type: "POST",
+        dataType: "json",
+        data: {
+          tgl_data: t,
+          uraian_data: u,
+          id_minggu: id_minggu,
+          id_jenis_kas: ijk,
+          pic_data: p,
+          qty_data: q,
+          nominal_data: n
+        },
+        success: function(data) {
+          console.log(data);
+          if (data['status'] == '200') {
+            document.getElementById('msg').innerHTML = '<div class="alert alert-success alert-dismissable"><center><b>Data sudah disimpan</b></center></div>';
+            location.reload();
+          } else {
+            document.getElementById('msg').innerHTML = '<div class="alert alert-alert alert-dismissable"><center><b>Error : ' + str(data['data']) + '</b></center></div>';
+          }
+        },
+        error: function(data) {
+          console.log('error');
+          console.log(data);
+          document.getElementById('msg').innerHTML = '<div class="alert alert-danger alert-dismissable"><center><b>!!! Error cek log !!!</b></center></div>';
+        }
+      });
+    }
+
+    $(document).ready(function() {
+      var add_row = document.getElementById("data_isi").innerHTML;
+
+      $(".add-1").click(function() {
+        $("#data_isi").append(add_row);
+        console.log('tabel');
+      });
+
+      $("body").on("click", ".remove", function() {
+        $(this).parents(".control-group").remove();
+      });
+    });
+
+    function get_data(id) {
+      let btn_download = document.getElementById('btn_download');
+      $.ajax({
+        url: "<?= base_url() ?>Bpjs/get_data/" + id,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+          document.getElementById('id_bpjs').value = data['id_bpjs'];
+          document.getElementById('uraian_data_edit').value = data['deskripsi_data'];
+          document.getElementById('jenis_kas_edit').selectedIndex = data['id_jenis_kas'] - 1;
+          document.getElementById('tgl_data_edit').value = data['tgl_data'];
+          document.getElementById('qty_data_edit').value = data['qty_data'];
+          document.getElementById('nominal_data_edit').value = data['nominal_data'];
+          document.getElementById('pic_data_edit').value = data['pic_data'];
+
+          $('#editForm').modal('show');
+          console.log(data);
+        },
+        error: function(data) {
+          alert('error');
+          console.log(data);
+        }
+      });
+    }
+  </script>
+<?php } ?>
+
 <?php if ($page == "Dashboard") { ?>
   <script>
     // Set new default font family and font color to mimic Bootstrap's default styling
