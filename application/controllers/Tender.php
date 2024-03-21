@@ -343,7 +343,8 @@ class Tender extends CI_Controller
             $pdf->Cell(190, 5, '', 0, 1, 'L');
 
             $pdf->Cell(10, 5, '', $brd, 0, 'R');
-            $pdf->Cell(170, 5, 'Surabaya, ' . date('d M Y', strtotime($data->tgl_kirim)), $brd, 0, 'R');
+            //$pdf->Cell(170, 5, 'Surabaya, ' . date('d m Y', strtotime($data->tgl_kirim)), $brd, 0, 'R');
+            $pdf->Cell(170, 5, 'Surabaya, ' . header_tgl($data->tgl_kirim), $brd, 0, 'R');
             $pdf->Cell(10, 5, '', $brd, 1, 'R');
 
             $pdf->Cell(190, 5, '', $brd, 1, 'R');
@@ -388,7 +389,7 @@ class Tender extends CI_Controller
 
             $pdf->SetFont('Times', 'B', 13);
             $pdf->Cell(190, 3, '', $brd, 1, 'R');
-            $pdf->Cell(190, 7, 'Rp. ' . number_format($data->nominal, 0, '', ',') . ',-', $brd, 1, 'C');
+            $pdf->Cell(190, 7, 'Rp. ' . number_format($data->nominal, 0, '', '.') . ',-', $brd, 1, 'C');
             $pdf->Cell(190, 2, '', $brd, 1, 'R');
 
             $pdf->SetFont('Times', 'I', 13);

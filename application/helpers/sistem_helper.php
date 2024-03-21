@@ -25,7 +25,7 @@ function randid()
 
 function randcolor($n)
 {
-	$color = ["DarkSlateGray","red","Chocolate","SlateGray","blue","navy", "olive", "maroon", "purple", "fushsia", "green", "lime", "yellow", "teal", "aqua","AliceBlue"];
+	$color = ["DarkSlateGray", "red", "Chocolate", "SlateGray", "blue", "navy", "olive", "maroon", "purple", "fushsia", "green", "lime", "yellow", "teal", "aqua", "AliceBlue"];
 	return $color[$n];
 }
 
@@ -357,4 +357,53 @@ function cek_permission($id_akun, $menu)
 	} else {
 		return true;
 	}
+}
+
+function header_tgl($tgl)
+{
+	date_default_timezone_set('Asia/Jakarta');
+	$ci = get_instance();
+
+	$t = date('m', strtotime($tgl));
+	switch ((int)$t) {
+		case 1:
+			$bln = 'Januari';
+			break;
+		case 2:
+			$bln = 'Februari';
+			break;
+		case 3:
+			$bln = 'Maret';
+			break;
+		case 4:
+			$bln = 'April';
+			break;
+		case 5:
+			$bln = 'Mei';
+			break;
+		case 6:
+			$bln = 'Juni';
+			break;
+		case 7:
+			$bln = 'Juli';
+			break;
+		case 8:
+			$bln = 'Agustus';
+			break;
+		case 9:
+			$bln = 'September';
+			break;
+		case 10:
+			$bln = 'Oktober';
+			break;
+		case 11:
+			$bln = 'November';
+			break;
+		case 12:
+			$bln = 'Desember';
+			break;
+	}
+
+	$result = date('d', strtotime($tgl)) . ' ' . $bln . ' ' . date('Y', strtotime($tgl));
+	return $result;
 }
