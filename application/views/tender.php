@@ -211,6 +211,15 @@
                         <input type="text" class="form-control" name="alasan_status" id="alasan_status" maxlength="200">
                     </div>
                     <div class="form-group">
+                        <!--label>Notes</label>
+                        <br-->
+                        <span class="btn btn-success add-notes" id=""><i class="fa fa-plus"></i> Tambah Notes</span>
+                        <br><br>
+                        <div id="notes_edit">
+                            <input type="text" class="form-control" placeholder="tulis notes disini, tanpa nomor, data bersifat overwrite" name="notes[]"><br>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label>Term Of Payment</label>
                         <textarea id="top_edit" name="top"></textarea>
                     </div>

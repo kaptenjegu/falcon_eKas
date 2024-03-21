@@ -136,36 +136,61 @@ class Tender extends CI_Controller
             $pajak = $this->input->post('pajak');
             $status = $this->input->post('status');
             $alasan_status = $this->input->post('alasan_status');
+            $notes = $this->input->post('notes');
             $top = $this->input->post('top');
             $lampiran = $this->input->post('lampiran');
 
-            //Proses Lampiran
-            for ($n = 0; $n < count($lampiran); $n++) {
-                //image/png
-                //image/jpeg
+            //Proses Notes
+            if (count($notes) > 0) {
+                for ($n = 0; $n < count($notes); $n++) {
+                    if ($notes[$n] !== '') {
+                        //clear semua data ketika n = 0
+                        if ($n == 0) {
+                            $this->db->where('id_tender', $id_tender);
+                            $this->db->delete('fmp_tender_notes');
+                        }
 
-                //clear semua data
-                if ($n == 0) {
-                    $this->db->where('id_tender', $id_tender);
-                    $this->db->delete('fmp_tender_lampiran');
+                        //add data baru
+                        $data = array(
+                            'id_notes' => randid(),
+                            'id_tender' => $id_tender,
+                            'isi_notes' => $notes[$n],
+                            'nomor_notes' => $n
+                        );
+                        $this->db->insert('fmp_tender_notes', $data);
+                    }
                 }
+            }
 
-                $file = base64_decode(str_replace("data:image/png;base64,", "", $lampiran[$n]));
-                //echo $file;
-                //exit();
-                if ($file) {
-                    $id_lampiran = randid();
-                    //file_put_contents(base_url() . "/vendor/lampiran/" . $id_lampiran . ".png", $file);
-                    file_put_contents("vendor/lampiran/" . $id_lampiran . ".png", $file);
+            //Proses Lampiran
+            if (count($lampiran) > 0) {
+                for ($n = 0; $n < count($lampiran); $n++) {
+                    //image/png
+                    //image/jpeg
 
-                    //add data baru
-                    $data = array(
-                        'id_lampiran' => $id_lampiran,
-                        'id_tender' => $id_tender,
-                        'format' => '',
-                        'nomor' => $n
-                    );
-                    $this->db->insert('fmp_tender_lampiran', $data);
+                    //clear semua data
+                    if ($n == 0) {
+                        $this->db->where('id_tender', $id_tender);
+                        $this->db->delete('fmp_tender_lampiran');
+                    }
+
+                    $file = base64_decode(str_replace("data:image/png;base64,", "", $lampiran[$n]));
+                    //echo $file;
+                    //exit();
+                    if ($file) {
+                        $id_lampiran = randid();
+                        //file_put_contents(base_url() . "/vendor/lampiran/" . $id_lampiran . ".png", $file);
+                        file_put_contents("vendor/lampiran/" . $id_lampiran . ".png", $file);
+
+                        //add data baru
+                        $data = array(
+                            'id_lampiran' => $id_lampiran,
+                            'id_tender' => $id_tender,
+                            'format' => '',
+                            'nomor' => $n
+                        );
+                        $this->db->insert('fmp_tender_lampiran', $data);
+                    }
                 }
             }
 
@@ -413,6 +438,9 @@ class Tender extends CI_Controller
                 $ket_pajak = 'belum';
             }
 
+            //get notes
+            $notes = $this->get_notes($id);
+
             $pdf->Cell(11, 5, '', $brd, 0, 'L');
             $pdf->Cell(169, 5, '1. Rincian harga ada di lampiran.', $brd, 0, 'L');
             $pdf->Cell(10, 5, '', $brd, 1, 'L');
@@ -421,18 +449,34 @@ class Tender extends CI_Controller
             $pdf->Cell(10, 5, '', $brd, 1, 'L');
             $pdf->Cell(11, 5, '', $brd, 0, 'L');
             $pdf->Cell(169, 5, '3. Masa berlaku Penawaran adalah 30 hari.', $brd, 0, 'L');
-            $pdf->Cell(10, 5, '', $brd, 1, 'L');
-            $pdf->Cell(11, 5, '', $brd, 0, 'L');
-            $pdf->Cell(169, 5, '4. Term Of Payment : ', $brd, 0, 'L');
-            $pdf->Cell(10, 5, '', $brd, 1, 'L');
+            $pdf->Cell(10, 5, '', $brd, 1, 'L');           
+
+            if ($notes->num_rows() > 0) {
+                $n_nt = 4;
+                foreach ($notes->result() as $nt) {
+                    /*$pdf->Cell(11, 5, '', $brd, 0, 'L');
+                    $pdf->Cell(169, 5, $n_nt . '. ' . $nt->isi_notes, $brd, 0, 'L');
+                    $pdf->Cell(10, 5, '', $brd, 1, 'L');*/
+                    $pdf->SetWidths(array(11, 169, 10));
+                    $pdf->Row_tender(array('', $n_nt . '. ' . $nt->isi_notes,''));
+                    $n_nt += 1;
+                }
+                $pdf->Cell(11, 5, '', $brd, 0, 'L');
+                $pdf->Cell(169, 5, $n_nt . '. Term Of Payment : ', $brd, 0, 'L');
+                $pdf->Cell(10, 5, '', $brd, 1, 'L');
+            } else {
+                $pdf->Cell(11, 5, '', $brd, 0, 'L');
+                $pdf->Cell(169, 5, '4. Term Of Payment : ', $brd, 0, 'L');
+                $pdf->Cell(10, 5, '', $brd, 1, 'L');
+            }
 
 
             //$top = str_replace(PHP_EOL, '', $data->top);
-            $top = str_replace('<li>','@',$data->top);
-            $top = str_replace('</li>','#',$top);
+            $top = str_replace('<li>', '@', $data->top);
+            $top = str_replace('</li>', '#', $top);
             //$pdf->Cell(10, 5, $top, $brd, 1, 'L');
             $top = explode('@', $top);
-            
+
 
             for ($t = 1; $t < count($top); $t++) {
                 $pdf->Cell(20, 5, '', $brd, 0, 'L');
@@ -440,7 +484,7 @@ class Tender extends CI_Controller
                 $x_top = $pdf->getX();
                 $pdf->RoundedRect($x_top + 0.5, $y_top + 2, 1, 1, 0.5, 'DF'); //x,y,w,h,radius
                 $pdf->Cell(2, 5, '', $brd, 0, 'L');
-                $pdf->Cell(158, 5, str_replace(array('<ul>', '</ul>', '<li>', '</li>','#'), '', $top[$t]), $brd, 0, 'L');
+                $pdf->Cell(158, 5, str_replace(array('<ul>', '</ul>', '<li>', '</li>', '#'), '', $top[$t]), $brd, 0, 'L');
                 $pdf->Cell(10, 5, '', $brd, 1, 'L');
             }
 
@@ -510,15 +554,15 @@ class Tender extends CI_Controller
                 //cek ukuran gambar
                 $im = $this->getsize('vendor/lampiran/' . $vl->id_lampiran . '.png');
                 //$pdf->cell(190, 5, floor($im[0] * 0.2645833333) . ' - ' . floor($im[1] * 0.2645833333), $brd2, 1, 'c');
-                if(floor($im[0] * 0.2645833333) <= 170){
+                if (floor($im[0] * 0.2645833333) <= 170) {
                     $w = floor($im[0] * 0.2645833333);
-                }else{
+                } else {
                     $w = 170;
                 }
 
-                if(floor($im[1] * 0.2645833333) <= 180){
+                if (floor($im[1] * 0.2645833333) <= 180) {
                     $h = floor($im[1] * 0.2645833333);
-                }else{
+                } else {
                     $h = 180;
                 }
 
@@ -539,5 +583,12 @@ class Tender extends CI_Controller
         $height = $image_details[1];
         //echo "$width x $height";
         return $image_details;
+    }
+
+    private function get_notes($id_tender)
+    {
+        $this->db->where('id_tender', $id_tender);
+        $data = $this->db->get('fmp_tender_notes');
+        return $data;
     }
 }

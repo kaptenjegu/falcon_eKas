@@ -594,7 +594,19 @@
       $("#cust_name_add").autocomplete({
         lookup: customer
       });
-    })
+
+      //notes
+      var add_row = document.getElementById("notes_edit").innerHTML;
+
+      $(".add-notes").click(function() {
+        $("#notes_edit").append(add_row);
+        console.log('add notes ');
+      });
+
+      $("body").on("click", ".remove", function() {
+        $(this).parents(".form-control").remove();
+      });
+    });
 
     tinymce.init({
       selector: 'textarea',
