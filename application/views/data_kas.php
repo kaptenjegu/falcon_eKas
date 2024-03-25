@@ -40,9 +40,11 @@
                       <a href="#" class="btn btn-warning" onclick="get_data(\'' . $v->id_data_kas . '\')"><i class="fa fa-edit"></i> Edit</a>&emsp;
                         <a href="' . base_url('Kas_bulan/detail/' . $v->id_data_kas) . '" class="btn btn-primary"><i class="fa fa-list"></i> Detail</a>&emsp;
                         <a href="' . base_url('Kas/laporan/' . $v->id_data_kas) . '" class="btn btn-info" target="_blank"><i class="fa fa-download"></i> All Kas</a>&emsp;
+                        <a href="' . base_url('Kas/laporan_non_bpjs/' . $v->id_data_kas) . '" class="btn btn-info" target="_blank"><i class="fa fa-download"></i> All Non Bpjs</a>&emsp;
                         <a href="' . base_url('Kas/laporan2/' . $v->id_data_kas) . '" class="btn btn-warning" target="_blank" style="background-color:khaki"><i class="fa fa-download"></i> Luar RAB</a>&emsp;
-                        <a href="' . base_url('Kas_voucher/list/' . $v->id_data_kas) . '" class="btn btn-info" target="_blank" style="background-color:purple"><i class="fa fa-newspaper"></i> Voucher Luar RAB</a>&emsp;
-                        <a href="' . base_url('Kas/laporan_periode/' . $v->id_data_kas) . '" class="btn btn-danger" target="_blank" style="background-color:gray"><i class="fa fa-download"></i> Kas Periode</a>
+                        <a href="' . base_url('Kas_voucher/list/' . $v->id_data_kas) . '" class="btn btn-warning" target="_blank" style="background-color:khaki"><i class="fa fa-newspaper"></i> Vcr Luar RAB</a>&emsp;
+                        <a href="' . base_url('Kas/laporan_periode/' . $v->id_data_kas) . '" class="btn btn-danger" target="_blank" style="background-color:gray"><i class="fa fa-download"></i> Kas Periode</a>&emsp;
+                        <a href="' . base_url('Bpjs/laporan_pdf/' . $v->id_data_kas) . '" class="btn btn-success" target="_blank"><i class="fa fa-download"></i> BPJS</a>
                       </td>
                     </tr>';
               $no += 1;

@@ -198,11 +198,19 @@ class Bpjs extends CI_Controller
         $id_data_kas = $this->db->escape_str($this->uri->segment(3));
 
         $this->db->select('*');
-        $this->db->from('fki_bpjs');
-        $this->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_bpjs.id_data_kas');
-        $this->db->where('fki_bpjs.id_data_kas', $id_data_kas);
-        $this->db->where('fki_bpjs.tgl_delete', null);
-        $this->db->order_by('fki_bpjs.tgl_data', 'asc');
+        $this->db->from('fki_data');
+        $this->db->join('fki_minggu', 'fki_minggu.id_minggu = fki_data.id_minggu');
+        $this->db->join('fki_data_kas', 'fki_data_kas.id_data_kas = fki_minggu.id_data_kas');
+        $this->db->join('fai_lokasi', 'fai_lokasi.id_lokasi = fki_minggu.id_lokasi');
+        $this->db->join('fki_tipe', 'fki_tipe.id_tipe = fki_data.id_tipe');
+        $this->db->where('fki_minggu.id_lokasi', $_SESSION['id_lokasi']);
+        $this->db->where('fki_minggu.id_data_kas', $id_data_kas);
+        $this->db->where('fki_data.tgl_delete', null);
+        $this->db->where('fki_data.id_status', 2);  // RAB
+        //$this->db->where('fki_data.id_tipe = 8 OR (fki_data.id_tipe = 8 AND fki_data.deskripsi_data)');  // bpjs
+        $this->db->where('substr(fki_data.deskripsi_data,1,4) = "BPJS"');  // bpjs
+        $this->db->order_by('fki_data.tgl_data', 'asc');
+        $this->db->order_by('fki_data.id_tipe', 'asc');
         $n = $this->db->get();
 
         //echo json_encode($data);

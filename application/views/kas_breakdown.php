@@ -44,6 +44,7 @@
                 <a href="<?= base_url('Kas_breakdown/laporan_xls/' . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-primary"><i class="fa fa-download"></i> Laporan RAB XLS</a>&emsp;
                 <a href="<?= base_url('Kas_breakdown/laporan_pdf/' . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-warning"><i class="fa fa-download"></i> Laporan RAB PDF</a>&emsp;
                 <button class="btn btn-ungu" onclick="$('#uploadForm').modal('show')"><i class="fa fa-upload"></i> Import Excel</button>&emsp;
+                <a href="<?= base_url('Kas_breakdown/laporan_pdf_non_bpjs/' . $this->uri->segment(4)) ?>" target="_blank" class="btn btn-danger"><i class="fa fa-download"></i> Laporan Non BPJS PDF</a>&emsp;
                 <br><br>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -170,6 +171,7 @@
                 <li>Untuk Tipe Kas, agar bisa ditampilkan di All Kas, maka pilih Jenis Kas Masuk</li>
                 <li>Data dengan jenis kas Keluar dan bertipe Kas, tidak akan dihitung di All Kas</li>
                 <li>Pengajuan Dana diatur ke jenis kas masuk</li>
+                <li>Data BPJS wajib diawali dengan kalimat awal BPJS</li>
                 <li>Penutupan kas, harus menggunakan kata awal "Penutupan" agar bisa dihitung</li>
                 <li>Hati-hati dalam mengisi data, beberapa data tidak bisa diedit</li>
             </ul>

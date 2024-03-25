@@ -102,12 +102,12 @@
             <i class="fas fa-fw fa-table"></i>
             <span>Data Kas</span>
           </a>
-          <a class="dropdown-item <?php if ($page == 'Bpjs') {
+          <!--a class="dropdown-item <?php if ($page == 'Bpjs') {
                                     echo 'active';
                                   } ?>" href="<?= base_url('Bpjs') ?>">
             <i class="fas fa-fw fa-table"></i>
             <span>Data BPJS</span>
-          </a>
+          </a-->
           <a class="dropdown-item <?php if ($page == 'Tipe') {
                                     echo 'active';
                                   } ?>" href="<?= base_url('Tipe') ?>">
